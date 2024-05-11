@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { Button } from "~/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const World = dynamic(() => import("./ui/globe").then((m) => m.World), {
   ssr: false,
@@ -394,6 +395,7 @@ export default function GlobeShowcase() {
       color: colors[Math.floor(Math.random() * (colors.length - 1))],
     },
   ];
+  const router = useRouter()
 
   return (
     <div className="flex flex-row items-center justify-center h-screen md:h-auto dark:bg-black bg-white relative w-full">
@@ -418,13 +420,13 @@ export default function GlobeShowcase() {
           <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
           The leading AI personality matcher in the world.
           </p>
-          <div className="flex w-full justify-center space-x-12 my-5">
-          <Button variant="secondary">Sign Up</Button>
-          <Button>Log In</Button>
+          <div className="flex w-full justify-center space-x-12 mt-5">
+          <Button variant="secondary" onClick={() => router.push('/signup')}>Sign Up</Button>
+          <Button onClick={() => router.push('/login')}>Log In</Button>
           </div>
         </motion.div>
         <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40" />
-        <div className="absolute w-full -bottom-20 h-72 md:h-full z-10">
+        <div className="absolute w-full -bottom-20 h-72 md:h-full z-10 mt-5">
           <World data={sampleArcs} globeConfig={globeConfig} />;
         </div>
       </div>
