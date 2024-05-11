@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   //TODO default is dark now we can add toggle support if we want
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark bg-background">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
