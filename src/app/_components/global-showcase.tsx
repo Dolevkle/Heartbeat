@@ -418,7 +418,7 @@ export default function GlobeShowcase() {
           <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
           The leading AI personality matcher in the world.
           </p>
-          <div className="flex w-full justify-center space-x-12 py-5">
+          <div className="flex w-full justify-center space-x-12 my-5">
           <Button variant="secondary">Sign Up</Button>
           <Button>Log In</Button>
           </div>
