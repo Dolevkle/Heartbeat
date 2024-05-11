@@ -1,12 +1,17 @@
+"use client"
 
 import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
+// import { api } from "~/trpc/server";
 import GlobeShowcase from "./_components/global-showcase";
+import { motion } from "framer-motion";
+import { Button } from "~/components/ui/button";
+import { useRouter } from "next/navigation";
 
-export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-  const session = await getServerAuthSession();
+export default function Home() {
+  const router = useRouter()
+  // const hello = await api.post.hello({ text: "from tRPC" });
+  // const session = await getServerAuthSession();
 
 
   return (
@@ -20,6 +25,31 @@ export default async function Home() {
           &nbsp;<span className="text-primary">Hearts</span>&nbsp;
            with music worldwide
         </h2>
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 1,
+          }}
+          className="div"
+        >
+          {/* <h2 className="text-center text-xl md:text-4xl font-bold text-black dark:text-white">
+          The leading AI personality matcher in the world.
+          </h2> */}
+          <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
+          The leading AI personality matcher in the world.
+          </p>
+          <div className="flex w-full justify-center space-x-12 mt-5">
+          <Button variant="secondary" onClick={() => router.push('/signup')}>Sign Up</Button>
+          <Button onClick={() => router.push('/login')}>Log In</Button>
+          </div>
+        </motion.div>
         {/* <h3 className="mx-auto mt-2 max-w-md text-center text-base font-normal text-neutral-700 dark:text-neutral-200 md:text-lg">
           The leading AI personality matcher in the world.
         </h3> */}
@@ -34,21 +64,21 @@ export default async function Home() {
   );
 }
 
-async function CrudShowcase() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
+// async function CrudShowcase() {
+//   const session = await getServerAuthSession();
+//   if (!session?.user) return null;
 
-  const latestPost = await api.post.getLatest();
+//   const latestPost = await api.post.getLatest();
 
-  return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
+//   return (
+//     <div className="w-full max-w-xs">
+//       {latestPost ? (
+//         <p className="truncate">Your most recent post: {latestPost.name}</p>
+//       ) : (
+//         <p>You have no posts yet.</p>
+//       )}
 
-      <CreatePost />
-    </div>
-  );
-}
+//       <CreatePost />
+//     </div>
+//   );
+// }
