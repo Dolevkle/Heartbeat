@@ -16,6 +16,8 @@
     "@auth/prisma-adapter": "^1.4.0",
     "@prisma/client": "^5.10.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.6",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.25.0",
     "@trpc/client": "next",
@@ -23,7 +25,9 @@
     "@trpc/server": "next",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.1.9",
     "lucide-react": "^0.378.0",
+    "mini-svg-data-uri": "^1.4.4",
     "next": "^14.2.1",
     "next-auth": "^4.24.6",
     "react": "18.2.0",
@@ -32,6 +36,8 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.164.1",
+    "three-globe": "^2.31.0",
     "zod": "^3.23.3"
   },
   "devDependencies": {
