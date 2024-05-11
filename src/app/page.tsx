@@ -1,10 +1,8 @@
-import Link from "next/link";
 
 import { CreatePost } from "~/app/_components/create-post";
-import { Button } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import GlobeShowcase from "./_components/GlobeShowcase";
+import GlobeShowcase from "./_components/global-showcase";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
