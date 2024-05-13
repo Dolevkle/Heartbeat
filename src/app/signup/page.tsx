@@ -107,7 +107,7 @@ export default function SignUp() {
                         <Label htmlFor="email">Email</Label>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="m@example.com" {...field} />
+                        <Input type='email' placeholder="m@example.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
