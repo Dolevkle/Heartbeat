@@ -41,9 +41,6 @@ const userSchema = z.object({
 export default function SignUp() {
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
-    defaultValues: {
-      firstName: "",
-    },
   });
 
   const onSubmit = (values: z.infer<typeof userSchema>) => {
