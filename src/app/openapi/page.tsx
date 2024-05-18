@@ -52,6 +52,7 @@ export default function Poc() {
     genre: string,
     songs: string[],
   ): Promise<string> => {
+    // TODO keep in mind this costs money we will need to change the api key sometime
     const data = {
       model: "gpt-3.5-turbo",
       messages: [
