@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Post {
-    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
     name      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -28,7 +28,7 @@ model Post {
 
 // Necessary for Next auth
 model Account {
-    id                String   @id @default(auto()) @map("_id") @db.ObjectId
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
     userId            String
     type              String
     provider          String
@@ -54,18 +54,21 @@ model Session {
 }
 
 model User {
-    id            String     @id @default(auto()) @map("_id") @db.ObjectId
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
+    id               String    @id @default(auto()) @map("_id") @db.ObjectId
+    name             String?
+    age              Int
+    gender           String
+    sexualPreference String
+    email            String?   @unique
+    emailVerified    DateTime?
+    image            String?
+    accounts         Account[]
+    sessions         Session[]
+    posts            Post[]
 }
 
 model VerificationToken {
-    identifier String @id @default(auto()) @map("_id") @db.ObjectId
+    identifier String   @id @default(auto()) @map("_id") @db.ObjectId
     token      String   @unique
     expires    DateTime
 
