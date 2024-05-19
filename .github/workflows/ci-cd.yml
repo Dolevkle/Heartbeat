@@ -25,12 +25,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Extract pnpm version from lock file
-        id: pnpm-version
-        run: echo "::set-output name=VERSION::$(grep pnpmVersion pnpm-lock.yaml | awk '{print $2}')"
-
       - name: Install pnpm
-        run: npm install -g pnpm@${{ steps.pnpm-version.outputs.VERSION }}
+        run: npm install -g pnpm@9.1.0
 
       - name: Verify pnpm installation
         run: pnpm --version
@@ -79,12 +75,8 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: Extract pnpm version from lock file
-        id: pnpm-version
-        run: echo "::set-output name=VERSION::$(grep pnpmVersion pnpm-lock.yaml | awk '{print $2}')"
-
       - name: Install pnpm
-        run: npm install -g pnpm@${{ steps.pnpm-version.outputs.VERSION }}
+        run: npm install -g pnpm@9.1.0
 
       - name: Verify pnpm installation
         run: pnpm --version
