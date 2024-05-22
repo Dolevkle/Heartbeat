@@ -41,7 +41,7 @@ export default function Poc() {
   });
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "songs",
+    name: "songs" as never,
   });
 
   const [personality, setPersonality] = useState<string[]>([]);
