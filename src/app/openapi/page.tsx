@@ -73,6 +73,7 @@ export default function Poc() {
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return response.data.choices[0].message.content as string;
   };
 
