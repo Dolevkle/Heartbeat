@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
-import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three.js";
+import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, type Object3DNode, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
