@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
-import { useThree, type Object3DNode, Canvas, extend } from "@react-three/fiber";
+import { useThree, Object3DNode, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "../ui/globe.json";
 declare module "@react-three/fiber" {
@@ -109,18 +107,17 @@ export function Globe({ globeConfig, data }: WorldProps) {
       emissiveIntensity: number;
       shininess: number;
     };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
     globeMaterial.color = new Color(globeConfig.globeColor);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
     globeMaterial.emissive = new Color(globeConfig.emissive);
-    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity ?? 0.1;
-    globeMaterial.shininess = globeConfig.shininess ?? 0.9;
+    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
+    globeMaterial.shininess = globeConfig.shininess || 0.9;
   };
 
   const _buildData = () => {
     const arcs = data;
-    const points = [];
-    for (const arc of arcs) {
+    let points = [];
+    for (let i = 0; i < arcs.length; i++) {
+      const arc = arcs[i];
       const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
       points.push({
         size: defaultProps.pointSize,
@@ -170,25 +167,23 @@ export function Globe({ globeConfig, data }: WorldProps) {
   const startAnimation = () => {
     if (!globeRef.current || !globeData) return;
 
-
     globeRef.current
       .arcsData(data)
-      .arcStartLat((d) => (d as { startLat: number }).startLat)
-      .arcStartLng((d) => (d as { startLng: number }).startLng)
-      .arcEndLat((d) => (d as { endLat: number }).endLat)
-      .arcEndLng((d) => (d as { endLng: number }).endLng)
-      .arcColor((e: unknown) => (e as { color: string }).color)
+      .arcStartLat((d) => (d as { startLat: number }).startLat * 1)
+      .arcStartLng((d) => (d as { startLng: number }).startLng * 1)
+      .arcEndLat((d) => (d as { endLat: number }).endLat * 1)
+      .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
+      .arcColor((e: any) => (e as { color: string }).color)
       .arcAltitude((e) => {
-        return (e as { arcAlt: number }).arcAlt;
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      })    // @ts-expect-error
-      .arcStroke(() => {
+        return (e as { arcAlt: number }).arcAlt * 1;
+      })
+      .arcStroke((e) => {
         return [0.32, 0.28, 0.3][Math.round(Math.random() * 2)];
       })
       .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((e) => (e as { order: number }).order)
+      .arcDashInitialGap((e) => (e as { order: number }).order * 1)
       .arcDashGap(15)
-      .arcDashAnimateTime(() => defaultProps.arcTime);
+      .arcDashAnimateTime((e) => defaultProps.arcTime);
 
     globeRef.current
       .pointsData(data)
@@ -197,14 +192,9 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .pointAltitude(0.0)
       .pointRadius(2);
 
-
-
     globeRef.current
       .ringsData([])
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-      .ringColor((e: unknown) => (t: unknown) => e.color(t))
+      .ringColor((e: any) => (t: any) => e.color(t))
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
@@ -254,28 +244,22 @@ export function WebGLRendererConfig() {
 
 export function World(props: WorldProps) {
   const { globeConfig } = props;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
   const scene = new Scene();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
   scene.fog = new Fog(0xffffff, 400, 2000);
   return (
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
     <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
-          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
         position={new Vector3(-400, 100, 400)}
       />
       <directionalLight
         color={globeConfig.directionalTopLight}
-          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
         position={new Vector3(-200, 500, 200)}
       />
       <pointLight
         color={globeConfig.pointLight}
-          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
         position={new Vector3(-200, 500, 200)}
         intensity={0.8}
       />
@@ -295,24 +279,16 @@ export function World(props: WorldProps) {
 }
 
 export function hexToRgb(hex: string) {
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return r + r + g + g + b + b;
   });
 
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         r: parseInt(result[1], 16),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         g: parseInt(result[2], 16),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         b: parseInt(result[3], 16),
       }
     : null;
