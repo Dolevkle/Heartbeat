@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [ 20.x ]
 
     steps:
       - name: Checkout code
@@ -42,7 +42,9 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: node_modules
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
           key: pnpm-deps-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-deps-${{ matrix.node-version }}-
