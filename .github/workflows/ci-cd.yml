@@ -8,6 +8,13 @@ on:
     branches:
       - main
 
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+  DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+  DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+  NEXT_PUBLIC_OPEN_API_KEY: ${{ secrets.NEXT_PUBLIC_OPEN_API_KEY }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
