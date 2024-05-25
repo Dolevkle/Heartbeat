@@ -1,135 +1,45 @@
-name: CI/CD Pipeline
+name: Deploy and Test with Vercel and Playwright
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
+  push:
+
+    branches:
+
+      - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [ 20.x ]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install pnpm
-        run: npm install -g pnpm@9.1.0
-
-      - name: Verify pnpm installation
-        run: pnpm --version
-
-      - name: Cache pnpm store
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: pnpm-store-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-store-${{ matrix.node-version }}-
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            ~/.cache/ms-playwright
-          key: pnpm-deps-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-deps-${{ matrix.node-version }}-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: Build application
-        run: pnpm build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-          NEXT_PUBLIC_OPEN_API_KEY: ${{ secrets.NEXT_PUBLIC_OPEN_API_KEY }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-
-      - name: Cache build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: .next
-
-      - name: Run Playwright tests
-        run: pnpm test:e2e
-        env:
-            DATABASE_URL: ${{ secrets.DATABASE_URL }}
-            NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-            DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-            DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-            NEXT_PUBLIC_OPEN_API_KEY: ${{ secrets.NEXT_PUBLIC_OPEN_API_KEY }}
-            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-
 
   deploy:
+
     runs-on: ubuntu-latest
-    needs: build
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+
+      - uses: vercel/action@v20
+
         with:
-          node-version: 20.x
 
-      - name: Install pnpm
-        run: npm install -g pnpm@9.1.0
+          vercel_token: ${{ secrets.VERCEL_TOKEN }}
 
-      - name: Verify pnpm installation
-        run: pnpm --version
+          vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: build-artifacts
-          path: .next
+  test:
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: pnpm-deps-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-deps-
+    needs: deploy
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          pnpm add -g vercel
-          vercel --token $VERCEL_TOKEN --prod
+        run: npm install
+
+      - name: Run Playwright tests
+
+        run: npx playwright test
