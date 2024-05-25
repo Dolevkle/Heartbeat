@@ -53,6 +53,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
 
       - name: Build application
         run: pnpm build
@@ -69,9 +71,6 @@ jobs:
         with:
           name: build-artifacts
           path: .next
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
         run: pnpm test:e2e
