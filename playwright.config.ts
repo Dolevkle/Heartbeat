@@ -31,11 +31,11 @@ export default defineConfig({
         trace: 'on-first-retry',
     },
     webServer: {
-        command: 'pnpm start',
+        command: 'pnpm dev',
         port: 3000,
         timeout: 120 * 1000,
         reuseExistingServer: !process.env.CI,
-        env: env
+        // env: env
     },
 
     /* Configure projects for major browsers */
