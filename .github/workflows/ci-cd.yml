@@ -53,26 +53,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: pnpm test:e2e
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-          NEXT_PUBLIC_OPEN_API_KEY: ${{ secrets.NEXT_PUBLIC_OPEN_API_KEY }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
 
       - name: Build application
         run: pnpm build
@@ -89,6 +69,26 @@ jobs:
         with:
           name: build-artifacts
           path: .next
+            - name: Install Playwright Browsers
+              run: pnpm exec playwright install --with-deps
+      - name: Run Playwright tests
+        run: pnpm test:e2e
+        env:
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
+            NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+            DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+            DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+            NEXT_PUBLIC_OPEN_API_KEY: ${{ secrets.NEXT_PUBLIC_OPEN_API_KEY }}
+            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
 
   deploy:
     runs-on: ubuntu-latest
