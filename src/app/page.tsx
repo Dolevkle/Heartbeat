@@ -7,6 +7,9 @@ import GlobeShowcase from "./_components/global-showcase";
 import { motion } from "framer-motion";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
+import { signIn, signOut } from "next-auth/react";
+
+
 
 export default function Home() {
   const router = useRouter()
@@ -46,7 +49,8 @@ export default function Home() {
           The leading AI personality matcher in the world.
           </p>
           <div className="flex w-full justify-center space-x-12 mt-5">
-          <Button variant="secondary" onClick={() => router.push('/signup')}>Sign Up</Button>
+            <Button onClick={ () => signOut()}>kaki</Button>
+          <Button variant="secondary" onClick={ () => signIn('spotify', { callbackUrl: "/signup" })}>Sign Up</Button>
           <Button onClick={() => router.push('/login')}>Log In</Button>
           </div>
         </motion.div>

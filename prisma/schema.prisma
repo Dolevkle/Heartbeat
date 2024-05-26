@@ -56,9 +56,9 @@ model Session {
 model User {
     id               String    @id @default(auto()) @map("_id") @db.ObjectId
     name             String?
-    age              Int
-    gender           String
-    sexualPreference String
+    age              Int?
+    gender           String?
+    sexualPreference String?
     email            String?   @unique
     emailVerified    DateTime?
     image            String?
