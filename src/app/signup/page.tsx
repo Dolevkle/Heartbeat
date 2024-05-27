@@ -32,6 +32,8 @@ import {
   SelectItem,
   SelectValue,
 } from "@components/select";
+import { UploadButton } from "~/utils/uploadthing";
+import { useRouter } from "next/navigation";
 
 const userSchema = z.object({
   age: z.coerce
@@ -46,6 +48,7 @@ const userSchema = z.object({
 });
 
 export default function SignUp() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
@@ -174,7 +177,34 @@ export default function SignUp() {
                   )}
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <UploadButton
+                className="ut-button:bg-secondary ut-button:ut-readying:bg-secondary ut-button:w-full w-full"
+                endpoint="imageUploader"
+                content={{
+                  button({ ready }) {
+                    if (ready) return <div>Upload image</div>;
+
+                    return "loading...";
+                  },
+                  allowedContent({ ready, fileTypes, isUploading }) {
+                    // if (!ready) return "Checking what you allow";
+                    if (isUploading) return "uploading the profile picture";
+                    return "";
+                    // return `Stuff you can upload: ${fileTypes.join(", ")}`;
+                  },
+                }}
+                onClientUploadComplete={(res) => {
+                  // Do something with the response
+                  router.refresh();
+                  console.log("Files: ", res);
+                  alert("Upload Completed");
+                }}
+                onUploadError={(error: Error) => {
+                  // Do something with the error.
+                  alert(`ERROR! ${error.message}`);
+                }}
+              />
+              <Button type="submit" disabled={true} className="w-full">
                 Create an account
               </Button>
             </div>
