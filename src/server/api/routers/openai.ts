@@ -8,12 +8,8 @@ const OPEN_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export const openAiRouter = createTRPCRouter({
   analyzePersonality: protectedProcedure
-    .input(z.object({ playlistId: z.string() }))
+    .input(z.object({ songs: z.string().array() }))
     .mutation(async ({ input }) => {
-      const { items: tracks } = await spotifyApi.playlists.getPlaylistItems(
-        input.playlistId,
-      );
-      const songs = tracks.map((track) => track.track.name);
       const data = {
         model: "gpt-3.5-turbo",
         messages: [
@@ -24,7 +20,7 @@ export const openAiRouter = createTRPCRouter({
           },
           {
             role: "user",
-            content: `songs: ${songs.join(", ")}`,
+            content: `songs: ${input.songs.join(", ")}`,
           },
         ],
         temperature: 0.7,

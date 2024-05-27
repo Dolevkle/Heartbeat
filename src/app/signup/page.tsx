@@ -53,7 +53,9 @@ export default function SignUp() {
     resolver: zodResolver(userSchema),
   });
   const session = useSession();
+  const playlistId = form.watch("playlist");
   const { mutate } = api.openAi.analyzePersonality.useMutation();
+
   const { data: playlists } = api.spotify.userPlaylists.useQuery(
     {
       id: session.data?.user.spotifyId ?? "",
@@ -63,12 +65,21 @@ export default function SignUp() {
     },
   );
 
+  const { data: tracks } = api.spotify.tracks.useQuery(
+    {
+      id: playlistId,
+    },
+    {
+      enabled: !!playlistId,
+    },
+  );
+
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    if (session.data?.user.id)
+    if (session.data?.user.id && tracks)
       mutate(
-        { playlistId: values.playlist },
+        { songs: tracks.map((track) => track.track.name) },
         {
           onSuccess: (data) => {
             const analysis = data.split(", ");
@@ -204,7 +215,7 @@ export default function SignUp() {
                   alert(`ERROR! ${error.message}`);
                 }}
               />
-              <Button type="submit" disabled={true} className="w-full">
+              <Button type="submit" className="w-full">
                 Create an account
               </Button>
             </div>
