@@ -1,6 +1,7 @@
 import { JWT } from "next-auth/jwt";
 import SpotifyProvider from "next-auth/providers/spotify";
 import { env } from "~/env";
+import axios from "axios";
 
 if (!env.SPOTIFY_CLIENT_ID) {
   throw new Error("Missing SPOTIFY_CLIENT_ID");
@@ -35,16 +36,14 @@ export default spotifyProfile;
 
 export async function refreshAccessToken(token: JWT) {
   try {
-    const response = await fetch(authURL, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+    const refreshedTokens = await axios.post(
+      "https://accounts.spotify.com/authorize",
+      {
+        scope: scopes.join(" "),
       },
-      method: "POST",
-    });
+    );
 
-    const refreshedTokens = await response.json();
-
-    if (!response.ok) {
+    if (!refreshedTokens) {
       throw refreshedTokens;
     }
 
