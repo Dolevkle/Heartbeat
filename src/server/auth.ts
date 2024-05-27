@@ -1,7 +1,8 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
-  getServerSession,
+  type Account,
   type DefaultSession,
+  getServerSession,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
@@ -9,6 +10,11 @@ import SpotifyProvider from "next-auth/providers/spotify";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { type JWT } from "next-auth/jwt";
+import { AUTH_URL } from "~/lib/spotify";
+import SpotifyProfile, {
+  refreshAccessToken,
+} from "~/app/api/auth/[...nextauth]/SpotifyProfile";
 // import {type JWT} from "next-auth/jwt";
 // import spotifyApi from "~/app/_lib/spotify";
 
@@ -22,6 +28,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      spotifyId: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -32,7 +39,6 @@ declare module "next-auth" {
   //   // role: UserRole;
   // }
 }
-
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -40,20 +46,29 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
+    async session({ session, token, user }) {
+      const account = (await db.account.findFirst({
+        where: { userId: user.id },
+      })) as Account;
+      session.user = {
         ...session.user,
+        access_token: account.access_token!,
+        token_type: account.token_type,
+        expires_at: account.expires_at,
+        refresh_token: account.refresh_token,
+        scope: account.scope,
         id: user.id,
-      },
-    }),
+        spotifyId: account.providerAccountId,
+      };
+      return session;
+    },
   },
+  // session: { strategy: "jwt" },
   adapter: PrismaAdapter(db) as Adapter,
+  secret: env.NEXTAUTH_SECRET,
+
   providers: [
-    SpotifyProvider({
-      clientId: env.SPOTIFY_CLIENT_ID,
-      clientSecret: env.SPOTIFY_CLIENT_SECRET,
-    }),
+    SpotifyProfile,
     /**
      * ...add more providers here.
      *

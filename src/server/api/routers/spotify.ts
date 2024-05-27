@@ -7,13 +7,14 @@ import {
 } from "~/server/api/trpc";
 import { env } from "~/env";
 import { spotifyApi } from "~/lib/spotify";
+import { getServerAuthSession } from "~/server/auth";
 
 export const spotifyRouter = createTRPCRouter({
   userPlaylists: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
-      console.log(input.id);
       const playlists = await spotifyApi.playlists.getUsersPlaylists(input.id);
+      console.log(playlists.items);
       return {
         playlists: playlists.items,
       };

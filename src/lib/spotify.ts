@@ -16,12 +16,18 @@ const scopes = [
   "user-follow-read",
 ];
 
-const authURL = new URL("https://accounts.spotify.com/authorize");
-authURL.searchParams.append("scope", scopes.join(" "));
+const params = {
+  scope: scopes.join(","),
+};
+
+const queryParamsString = new URLSearchParams(params);
+
+const AUTH_URL = `https://accounts.spotify.com/authorize?${queryParamsString.toString()}`;
 
 export const spotifyApi = SpotifyApi.withClientCredentials(
   env.SPOTIFY_CLIENT_ID,
   env.SPOTIFY_CLIENT_SECRET,
   scopes,
 );
-export { authURL };
+
+export { AUTH_URL };

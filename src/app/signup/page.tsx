@@ -45,12 +45,13 @@ export default function SignUp() {
   const { mutate } = api.user.update.useMutation();
   const { data: playlists } = api.spotify.userPlaylists.useQuery(
     {
-      id: session.data?.user.id,
+      id: session.data?.user.spotifyId ?? "",
     },
     {
-      enabled: session.data?.user.id !== undefined,
+      enabled: !!session.data,
     },
   );
+  console.log(playlists);
 
   const onSubmit = (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
