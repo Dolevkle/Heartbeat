@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "~/components/ui/button";
+import { Button } from "@components/button";
 import axios from "axios";
 
 import { useForm, useFieldArray } from "react-hook-form";
@@ -13,7 +13,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "@components/card";
 import {
   Form,
   FormControl,
@@ -21,9 +21,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+} from "@components/form";
+import { Input } from "@components/input";
+import { Label } from "@components/label";
 import { env } from "~/env";
 import { useState } from "react";
 
