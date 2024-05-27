@@ -50,8 +50,8 @@ export default function SignUp() {
     resolver: zodResolver(userSchema),
   });
   const session = useSession();
-  const { mutate } = api.user.update.useMutation();
-  const { data } = api.spotify.userPlaylists.useQuery(
+  const { mutate } = api.openAi.analyzePersonality.useMutation();
+  const { data: playlists } = api.spotify.userPlaylists.useQuery(
     {
       id: session.data?.user.spotifyId ?? "",
     },
@@ -60,21 +60,20 @@ export default function SignUp() {
     },
   );
 
-  const onSubmit = (values: z.infer<typeof userSchema>) => {
+  const onSubmit = async (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-    // TODO analyze user personality and update it
-    // if (session.data?.user.id)
-    //   mutate(
-    //     { id: session.data?.user.id, ...values },
-    //     {
-    //       onSuccess: (data) => {
-    //         console.log("Successfully updated user", data);
-    //         //TODO add navigation to app
-    //       },
-    //     },
-    //   );
+    if (session.data?.user.id)
+      mutate(
+        { playlistId: values.playlist },
+        {
+          onSuccess: (data) => {
+            const analysis = data.split(", ");
+            console.log("analysis:", analysis);
+            //TODO add navigation to app
+          },
+        },
+      );
   };
 
   return (
@@ -163,8 +162,8 @@ export default function SignUp() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {data?.playlists.map((playlist) => (
-                            <SelectItem key={playlist.id} value={playlist.name}>
+                          {playlists?.map((playlist) => (
+                            <SelectItem key={playlist.id} value={playlist.id}>
                               {playlist.name}
                             </SelectItem>
                           ))}

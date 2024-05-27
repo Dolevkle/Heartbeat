@@ -13,7 +13,7 @@ export const appRouter = createTRPCRouter({
   post: postRouter,
   user: userRouter,
   spotify: spotifyRouter,
-  openApi: openAiRouter,
+  openAi: openAiRouter,
 });
 
 // export type definition of API
