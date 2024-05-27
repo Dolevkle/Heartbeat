@@ -25,6 +25,7 @@ import SpotifyProfile, {
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
+  // TODO might need to change type
   interface Session extends DefaultSession {
     user: {
       id: string;
