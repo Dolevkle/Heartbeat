@@ -34,7 +34,6 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
-    NEXT_PUBLIC_OPEN_API_KEY: z.string(),
   },
 
   /**
@@ -48,7 +47,6 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
-    NEXT_PUBLIC_OPEN_API_KEY: process.env.NEXT_PUBLIC_OPEN_API_KEY,
     OPEN_API_KEY: process.env.NEXT_PUBLIC_OPEN_API_KEY,
   },
   /**
