@@ -1,5 +1,8 @@
 import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { userRouter } from "~/server/api/routers/user";
+import { spotifyRouter } from "~/server/api/routers/spotify";
+import { openAiRouter } from "~/server/api/routers/openai";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +11,9 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  user: userRouter,
+  spotify: spotifyRouter,
+  openApi: openAiRouter,
 });
 
 // export type definition of API

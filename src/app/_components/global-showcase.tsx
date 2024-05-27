@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { Button } from "~/components/ui/button";
+import { Button } from "@/*/ui/button";
 import { useRouter } from "next/navigation";
 
 const World = dynamic(() => import("./ui/globe").then((m) => m.World), {

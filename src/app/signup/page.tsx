@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "~/components/ui/button";
+import { Button } from "@components/button";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,41 +12,69 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "@components/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+  FormMessage,
+} from "@components/form";
+import { Input } from "@components/input";
+import { Label } from "@components/label";
+import { useSession } from "next-auth/react";
+import { api } from "~/trpc/react";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectItem,
+  SelectValue,
+} from "@components/select";
 
 const userSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }), // Validates the string as an email
-  firstName: z.string().min(1, { message: "First name cannot be empty" }), // Ensures the first name is not empty
-  lastName: z.string().min(1, { message: "Last name cannot be empty" }), // Ensures the last name is not empty
-  password: z
+  age: z.coerce
+    .number()
+    .min(1, { message: "Invalid age below" })
+    .max(120, "Invalid age, above limit"), // Validates the string as an email
+  sexualPreference: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long" }) // Sets a minimum length for the password
-    .regex(/[a-zA-Z]/, { message: "Password must contain letters" }) // Ensures the password contains letters
-    .regex(/[0-9]/, { message: "Password must contain numbers" }) // Ensures the password contains numbers
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, {
-      message: "Password must contain special characters",
-    }), // Ensures the password contains special characters
+    .min(1, { message: "sexual preference cannot be empty" }), // Ensures the first name is not empty
+  gender: z.string().min(1, { message: "gender cannot be empty" }), // Ensures the last name is not empty
+  playlist: z.string(),
 });
 
 export default function SignUp() {
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
+  const session = useSession();
+  const { mutate } = api.user.update.useMutation();
+  const { data } = api.spotify.userPlaylists.useQuery(
+    {
+      id: session.data?.user.spotifyId ?? "",
+    },
+    {
+      enabled: !!session.data,
+    },
+  );
 
   const onSubmit = (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    // TODO analyze user personality and update it
+    // if (session.data?.user.id)
+    //   mutate(
+    //     { id: session.data?.user.id, ...values },
+    //     {
+    //       onSuccess: (data) => {
+    //         console.log("Successfully updated user", data);
+    //         //TODO add navigation to app
+    //       },
+    //     },
+    //   );
   };
 
   return (
@@ -56,76 +84,92 @@ export default function SignUp() {
           <CardHeader>
             <CardTitle className="text-xl">Sign Up</CardTitle>
             <CardDescription>
-              Enter your information to create an account
+              Enter additional information to finish creating an account
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Label htmlFor="first-name">First name</Label>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Max" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Label htmlFor="last-name">Last name</Label>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Robinson" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
               <div className="grid gap-2">
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="age"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="age">age</Label>
                       </FormLabel>
                       <FormControl>
-                        <Input type='email' placeholder="m@example.com" {...field} />
+                        <Input type="number" placeholder="5" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="sexualPreference"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Label htmlFor="sexualPreference">
+                            sexual preference
+                          </Label>
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="bisexual" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Label htmlFor="gender">gender</Label>
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
               <div className="grid gap-2">
                 <FormField
                   control={form.control}
-                  name="password"
+                  name="playlist"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="playlist">playlist</Label>
                       </FormLabel>
-                      <FormControl>
-                        <Input type="password" {...field} />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select from your playlists" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {data?.playlists.map((playlist) => (
+                            <SelectItem key={playlist.id} value={playlist.name}>
+                              {playlist.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -133,9 +177,6 @@ export default function SignUp() {
               </div>
               <Button type="submit" className="w-full">
                 Create an account
-              </Button>
-              <Button variant="outline" className="w-full">
-                Sign up with GitHub
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

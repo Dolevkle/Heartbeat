@@ -1,7 +1,8 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
-  getServerSession,
+  type Account,
   type DefaultSession,
+  getServerSession,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
@@ -9,6 +10,11 @@ import SpotifyProvider from "next-auth/providers/spotify";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { type JWT } from "next-auth/jwt";
+import { AUTH_URL } from "~/lib/spotify";
+import SpotifyProfile, {
+  refreshAccessToken,
+} from "~/app/api/auth/[...nextauth]/SpotifyProfile";
 // import {type JWT} from "next-auth/jwt";
 // import spotifyApi from "~/app/_lib/spotify";
 
@@ -22,6 +28,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      spotifyId: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -32,48 +39,6 @@ declare module "next-auth" {
   //   // role: UserRole;
   // }
 }
-
-// const refreshAccessToken = async (token: JWT) => {
-//   spotifyApi.setAccessToken(token.accessToken as string);
-//   spotifyApi.setRefreshToken(token.refreshToken as string);
-//   const { body: refreshedToken } = await spotifyApi
-//       .refreshAccessToken()
-//       .catch((error: any) => {
-//         console.error(error);
-//         return {
-//           ...token,
-//           error: "RefreshAccessTokenError",
-//         };
-//       });
-//   console.log("refreshedToken is", refreshedToken);
-//   return {
-//     ...token,
-//     accessToken: refreshedToken.access_token,
-//     accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
-//     refreshToken: refreshedToken.refresh_token ?? token.refresh_token,
-//   };
-// };
-
-const scopes = [
-  "user-read-email",
-  "playlist-read-private",
-  "playlist-read-collaborative",
-  "streaming",
-  "user-read-private",
-  "user-library-read",
-  "user-top-read",
-  "user-read-playback-state",
-  "user-modify-playback-state",
-  "user-read-currently-playing",
-  "user-read-recently-played",
-  "user-follow-read",
-].join(",");
-
-const params = {
-  scope: scopes,
-};
-const LOGIN_URL  = "https://accounts.spotify.com/authorize?" + new URLSearchParams(params).toString()
-
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -81,21 +46,29 @@ const LOGIN_URL  = "https://accounts.spotify.com/authorize?" + new URLSearchPara
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
+    async session({ session, token, user }) {
+      const account = (await db.account.findFirst({
+        where: { userId: user.id },
+      })) as Account;
+      session.user = {
         ...session.user,
+        access_token: account.access_token!,
+        token_type: account.token_type,
+        expires_at: account.expires_at,
+        refresh_token: account.refresh_token,
+        scope: account.scope,
         id: user.id,
-      },
-    }),
+        spotifyId: account.providerAccountId,
+      };
+      return session;
+    },
   },
+  // session: { strategy: "jwt" },
   adapter: PrismaAdapter(db) as Adapter,
+  secret: env.NEXTAUTH_SECRET,
+
   providers: [
-    SpotifyProvider({
-      clientId: env.SPOTIFY_CLIENT_ID,
-      clientSecret: env.SPOTIFY_CLIENT_SECRET,
-      authorization: LOGIN_URL
-    }),
+    SpotifyProfile,
     /**
      * ...add more providers here.
      *

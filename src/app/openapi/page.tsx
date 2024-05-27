@@ -1,9 +1,7 @@
 "use client";
-import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "~/components/ui/button";
-import axios from "axios";
+import { Button } from "@components/button";
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +11,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "@components/card";
 import {
   Form,
   FormControl,
@@ -21,9 +19,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+} from "@components/form";
+import { Input } from "@components/input";
+import { Label } from "@components/label";
 import { env } from "~/env";
 import { useState } from "react";
 
@@ -53,28 +51,29 @@ export default function Poc() {
     songs: string[],
   ): Promise<string> => {
     // TODO keep in mind this costs money we will need to change the api key sometime
-    const data = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content:
-            "you need to analyze users. if user give you a music genre and 3 songs your return scores about him in the following format: Openness: low/medium/high, Conscientiousness:  low/ medium/high, extraversion:  low/ medium/high, agreeableness:  low/ medium/high,neuroticism:  low/ medium/high. return without additional info",
-        },
-        { role: "user", content: `genre: ${genre} songs: ${songs.join(", ")}` },
-      ],
-      temperature: 0.7,
-    };
-
-    const response = await axios.post(apiUrl, data, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${env.NEXT_PUBLIC_OPEN_API_KEY}`, // Replace with your OpenAI API key
-      },
-    });
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    return response.data.choices[0].message.content as string;
+    // this will not work now since I move this to backend and also envs
+    // const data = {
+    //   model: "gpt-3.5-turbo",
+    //   messages: [
+    //     {
+    //       role: "system",
+    //       content:
+    //         "you need to analyze users. if user give you a music genre and 3 songs your return scores about him in the following format: Openness: low/medium/high, Conscientiousness:  low/ medium/high, extraversion:  low/ medium/high, agreeableness:  low/ medium/high,neuroticism:  low/ medium/high. return without additional info",
+    //     },
+    //     { role: "user", content: `genre: ${genre} songs: ${songs.join(", ")}` },
+    //   ],
+    //   temperature: 0.7,
+    // };
+    //
+    // const response = await axios.post(apiUrl, data, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${env.NEXT_PUBLIC_OPEN_API_KEY}`, // Replace with your OpenAI API key
+    //   },
+    // });
+    //
+    // // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // return response.data.choices[0].message.content as string;
   };
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {

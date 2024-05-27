@@ -1,17 +1,17 @@
-import Link from "next/link"
-import { Button } from "~/components/ui/button"
+import Link from "next/link";
+import { Button } from "@components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
+} from "@components/card";
+import { Input } from "@components/input";
+import { Label } from "@components/label";
 export default function LoginForm() {
   return (
-    <Card className="mx-auto max-w-sm mt-16">
+    <Card className="mx-auto mt-16 max-w-sm">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
@@ -53,5 +53,5 @@ export default function LoginForm() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
