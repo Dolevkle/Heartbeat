@@ -54,7 +54,8 @@ export default function SignUp() {
   });
   const session = useSession();
   const playlistId = form.watch("playlist");
-  const { mutate } = api.openAi.analyzePersonality.useMutation();
+  const { mutate: analyzePersonality } =
+    api.openAi.analyzePersonality.useMutation();
 
   const { data: playlists } = api.spotify.userPlaylists.useQuery(
     {
@@ -78,12 +79,11 @@ export default function SignUp() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     if (session.data?.user.id && tracks)
-      mutate(
+      analyzePersonality(
         { songs: tracks.map((track) => track.track.name) },
         {
           onSuccess: (data) => {
-            const analysis = data.split(", ");
-            console.log("analysis:", analysis);
+            console.log("analysis:", data);
             //TODO add navigation to app
           },
         },

@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import axios from "axios";
 import { env } from "~/env";
 import { spotifyApi } from "~/lib/spotify";
+
 const OPEN_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export const openAiRouter = createTRPCRouter({
@@ -31,6 +32,11 @@ export const openAiRouter = createTRPCRouter({
           Authorization: `Bearer ${env.OPEN_API_KEY}`, // Replace with your OpenAI API key
         },
       });
-      return response.data.choices[0].message.content as string;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const content = response.data.choices[0].message.content as string;
+      return content.split(", ").reduce((acc, item) => {
+        const [key, value] = item.split(":");
+        return { ...acc, [key!]: value?.trim() };
+      }, {});
     }),
 });
