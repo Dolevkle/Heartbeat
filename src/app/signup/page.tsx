@@ -23,7 +23,6 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getServerAuthSession } from "~/server/auth";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 
@@ -44,6 +43,14 @@ export default function SignUp() {
   });
   const session = useSession();
   const { mutate } = api.user.update.useMutation();
+  const { data: playlists } = api.spotify.userPlaylists.useQuery(
+    {
+      id: session.data?.user.id,
+    },
+    {
+      enabled: session.data?.user.id !== undefined,
+    },
+  );
 
   const onSubmit = (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
@@ -89,42 +96,45 @@ export default function SignUp() {
                   )}
                 />
               </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="sexualPreference"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        <Label htmlFor="sexualPreference">
-                          sexual preference
-                        </Label>
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="bisexual" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="sexualPreference"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Label htmlFor="sexualPreference">
+                            sexual preference
+                          </Label>
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="bisexual" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Label htmlFor="gender">gender</Label>
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        <Label htmlFor="gender">gender</Label>
-                      </FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+
               <Button type="submit" className="w-full">
                 Create an account
               </Button>
