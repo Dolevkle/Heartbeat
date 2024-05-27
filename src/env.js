@@ -20,10 +20,11 @@ export const env = createEnv({
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string() : z.string().url()
+      process.env.VERCEL ? z.string() : z.string().url(),
     ),
     SPOTIFY_CLIENT_ID: z.string(),
     SPOTIFY_CLIENT_SECRET: z.string(),
+    OPEN_API_KEY: z.string(),
   },
 
   /**
@@ -33,7 +34,7 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
-    NEXT_PUBLIC_OPEN_API_KEY: z.string()
+    NEXT_PUBLIC_OPEN_API_KEY: z.string(),
   },
 
   /**
@@ -48,6 +49,7 @@ export const env = createEnv({
     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
     NEXT_PUBLIC_OPEN_API_KEY: process.env.NEXT_PUBLIC_OPEN_API_KEY,
+    OPEN_API_KEY: process.env.NEXT_PUBLIC_OPEN_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
