@@ -32,8 +32,6 @@ import {
   SelectItem,
   SelectValue,
 } from "@components/select";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
 
 const userSchema = z.object({
   age: z.coerce

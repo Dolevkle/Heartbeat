@@ -1,9 +1,7 @@
 "use client";
-import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/button";
-import axios from "axios";
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
