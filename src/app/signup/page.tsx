@@ -97,20 +97,20 @@ export default function SignUp() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="mx-auto mt-16 max-w-sm">
           <CardHeader>
-            <div className="flex items-center space-x-3">
-              {session.data?.user?.image && (
+            {session.data?.user && (
+              <div className="flex items-center space-x-3">
                 <img
-                  src={session.data?.user?.image}
+                  src={session.data?.user?.image ?? ""}
                   width={50}
                   height={50}
                   className="rounded-full object-cover "
                   alt="no profile image"
                 />
-              )}
-              <CardTitle className="text-xl">
-                {session.data?.user?.name}
-              </CardTitle>
-            </div>
+                <CardTitle className="text-xl">
+                  {session.data?.user?.name}
+                </CardTitle>
+              </div>
+            )}
 
             <CardDescription>
               Enter additional information to finish creating an account
