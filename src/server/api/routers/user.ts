@@ -22,12 +22,20 @@ export const userRouter = createTRPCRouter({
         age: z.number().min(1),
         sexualPreference: z.string().min(1),
         gender: z.string().min(1),
+        personality: z.object({
+          Openness: z.string(),
+          Neuroticism: z.string(),
+          Extraversion: z.string(),
+          Conscientiousness: z.string(),
+          Agreeableness: z.string(),
+        }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const { id, ...rest } = input;
       return ctx.db.user.update({
-        where: { id: input.id },
-        data: input,
+        where: { id },
+        data: rest,
       });
     }),
 });

@@ -36,6 +36,15 @@ import { Skeleton } from "@components/skeleton";
 import { UploadButton } from "~/utils/uploadthing";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Loader2 } from "lucide-react";
+
+type Personality = {
+  Openness: string;
+  Neuroticism: string;
+  Extraversion: string;
+  Conscientiousness: string;
+  Agreeableness: string;
+};
 
 const userSchema = z.object({
   age: z.coerce
@@ -50,44 +59,52 @@ const userSchema = z.object({
 });
 
 export default function SignUp() {
-  const router = useRouter();
+  const session = useSession();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
-  const session = useSession();
+
   const playlistId = form.watch("playlist");
-  const { mutate: analyzePersonality } =
+  const { mutate: analyzePersonality, isPending: isAnalyzingPersonality } =
     api.openAi.analyzePersonality.useMutation();
 
+  const { mutate: updateUser, isPending: isUpdatingUser } =
+    api.user.update.useMutation();
+
   const { data: playlists } = api.spotify.userPlaylists.useQuery(
-    {
-      id: session.data?.user.spotifyId ?? "",
-    },
-    {
-      enabled: !!session.data,
-    },
+    { id: session.data?.user.spotifyId ?? "" },
+    { enabled: !!session.data },
   );
 
   const { data: tracks } = api.spotify.tracks.useQuery(
-    {
-      id: playlistId,
-    },
-    {
-      enabled: !!playlistId,
-    },
+    { id: playlistId },
+    { enabled: !!playlistId },
   );
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    const { age, gender, sexualPreference } = values;
     if (session.data?.user.id && tracks)
       analyzePersonality(
         { songs: tracks.map((track) => track.track.name) },
         {
           onSuccess: (data) => {
-            console.log("analysis:", data);
-            //TODO add navigation to app
+            updateUser(
+              {
+                id: session.data?.user.id,
+                age,
+                gender,
+                sexualPreference,
+                personality: data as Personality,
+              },
+              {
+                onSuccess: (data) => {
+                  console.log(data);
+                  //TODO add navigation to app
+                },
+              },
+            );
           },
         },
       );
@@ -267,7 +284,14 @@ export default function SignUp() {
               {/*  }}*/}
               {/*/>*/}
               <Button type="submit" className="w-full">
-                Create an account
+                {isUpdatingUser || isAnalyzingPersonality ? (
+                  <div className="flex">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </div>
+                ) : (
+                  <span>Create an account</span>
+                )}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
