@@ -48,7 +48,7 @@ export default function Home() {
             <Button onClick={() => signOut()}>kaki</Button>
             <Button
               variant="secondary"
-              onClick={() => signIn("spotify", { callbackUrl: "/signup" })}
+              onClick={() => signIn("spotify", { callbackUrl: "/" })}
             >
               Sign Up
             </Button>
