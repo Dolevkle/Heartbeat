@@ -21,9 +21,14 @@ declare module "next-auth" {
   // TODO might need to change type
   interface Session extends DefaultSession {
     user: {
-      id: string;
       // ...other properties
       // role: UserRole;
+      id: string;
+      access_token?: string;
+      token_type?: string;
+      expires_at?: number;
+      refresh_token?: string;
+      scope?: string;
     } & User;
   }
 
@@ -31,7 +36,10 @@ declare module "next-auth" {
     // ...other properties
     // role: UserRole;
     spotifyId: string;
-    profileImage: string;
+    profileImage: string | null | undefined;
+    age?: number;
+    gender?: string;
+    sexualPreference?: string;
     personality?: {
       Openness: string;
       Neuroticism: string;
@@ -54,15 +62,18 @@ export const authOptions: NextAuthOptions = {
       })) as Account;
       session.user = {
         ...session.user,
-        access_token: account.access_token!,
+        access_token: account.access_token,
         token_type: account.token_type,
         expires_at: account.expires_at,
         refresh_token: account.refresh_token,
         scope: account.scope,
         id: user.id,
         spotifyId: account.providerAccountId,
-        profileImage: user.image,
-        personality: user?.personality ?? null,
+        profileImage: user?.image,
+        personality: user?.personality,
+        age: user?.age,
+        gender: user?.gender,
+        sexualPreference: user?.sexualPreference,
       };
       return session;
     },
