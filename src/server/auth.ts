@@ -22,17 +22,24 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      spotifyId: string;
-      profileImage: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    } & User;
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    // role: UserRole;
+    spotifyId: string;
+    profileImage: string;
+    personality?: {
+      Openness: string;
+      Neuroticism: string;
+      Extraversion: string;
+      Conscientiousness: string;
+      Agreeableness: string;
+    };
+  }
 }
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -41,7 +48,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, user }) {
       const account = (await db.account.findFirst({
         where: { userId: user.id },
       })) as Account;
@@ -55,6 +62,7 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
         spotifyId: account.providerAccountId,
         profileImage: user.image,
+        personality: user?.personality ?? null,
       };
       return session;
     },
