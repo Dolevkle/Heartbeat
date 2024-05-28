@@ -65,7 +65,7 @@ model User {
   accounts         Account[]
   sessions         Session[]
   posts            Post[]
-  image            String
+  image            String?
   images           Image[]
 }
 
