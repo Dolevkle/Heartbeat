@@ -1,10 +1,9 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { getServerAuthSession } from "~/server/auth";
+import { db } from "~/server/db";
 
 const f = createUploadthing();
-
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -26,6 +25,13 @@ export const ourFileRouter = {
       console.log("Upload complete for userId:", metadata.userId);
 
       console.log("file url", file.url);
+      await db.image.create({
+        data: {
+          name: file.name,
+          url: file.url,
+          userId: metadata.userId,
+        },
+      });
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };

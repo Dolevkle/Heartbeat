@@ -34,6 +34,7 @@ import {
 } from "@components/select";
 import { UploadButton } from "~/utils/uploadthing";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const userSchema = z.object({
   age: z.coerce
@@ -95,7 +96,19 @@ export default function SignUp() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="mx-auto mt-16 max-w-sm">
           <CardHeader>
-            <CardTitle className="text-xl">Sign Up</CardTitle>
+            <div className="flex items-center space-x-3">
+              {session.data?.user?.image && (
+                <img
+                  src={session.data?.user?.image}
+                  width={50}
+                  height={50}
+                  className="rounded-full object-cover "
+                  alt="no profile image"
+                />
+              )}
+              <CardTitle className="text-xl">Sign Up</CardTitle>
+            </div>
+
             <CardDescription>
               Enter additional information to finish creating an account
             </CardDescription>
@@ -112,7 +125,7 @@ export default function SignUp() {
                         <Label htmlFor="age">age</Label>
                       </FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="5" {...field} />
+                        <Input type="number" placeholder="18" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -188,33 +201,33 @@ export default function SignUp() {
                   )}
                 />
               </div>
-              <UploadButton
-                className="ut-button:bg-secondary ut-button:ut-readying:bg-secondary ut-button:w-full w-full"
-                endpoint="imageUploader"
-                content={{
-                  button({ ready }) {
-                    if (ready) return <div>Upload image</div>;
+              {/*<UploadButton*/}
+              {/*  className="w-full ut-button:w-full ut-button:bg-secondary ut-button:ut-readying:bg-secondary"*/}
+              {/*  endpoint="imageUploader"*/}
+              {/*  content={{*/}
+              {/*    button({ ready }) {*/}
+              {/*      if (ready) return <div>Upload image</div>;*/}
 
-                    return "loading...";
-                  },
-                  allowedContent({ ready, fileTypes, isUploading }) {
-                    // if (!ready) return "Checking what you allow";
-                    if (isUploading) return "uploading the profile picture";
-                    return "";
-                    // return `Stuff you can upload: ${fileTypes.join(", ")}`;
-                  },
-                }}
-                onClientUploadComplete={(res) => {
-                  // Do something with the response
-                  router.refresh();
-                  console.log("Files: ", res);
-                  alert("Upload Completed");
-                }}
-                onUploadError={(error: Error) => {
-                  // Do something with the error.
-                  alert(`ERROR! ${error.message}`);
-                }}
-              />
+              {/*      return "loading...";*/}
+              {/*    },*/}
+              {/*    allowedContent({ ready, fileTypes, isUploading }) {*/}
+              {/*      // if (!ready) return "Checking what you allow";*/}
+              {/*      if (isUploading) return "uploading the profile picture";*/}
+              {/*      return "";*/}
+              {/*      // return `Stuff you can upload: ${fileTypes.join(", ")}`;*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*  onClientUploadComplete={(res) => {*/}
+              {/*    // Do something with the response*/}
+              {/*    router.refresh();*/}
+              {/*    console.log("Files: ", res);*/}
+              {/*    alert("Upload Completed");*/}
+              {/*  }}*/}
+              {/*  onUploadError={(error: Error) => {*/}
+              {/*    // Do something with the error.*/}
+              {/*    alert(`ERROR! ${error.message}`);*/}
+              {/*  }}*/}
+              {/*/>*/}
               <Button type="submit" className="w-full">
                 Create an account
               </Button>

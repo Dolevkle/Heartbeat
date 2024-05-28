@@ -6,17 +6,10 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-import SpotifyProvider from "next-auth/providers/spotify";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { type JWT } from "next-auth/jwt";
-import { AUTH_URL } from "~/lib/spotify";
-import SpotifyProfile, {
-  refreshAccessToken,
-} from "~/app/api/auth/[...nextauth]/SpotifyProfile";
-// import {type JWT} from "next-auth/jwt";
-// import spotifyApi from "~/app/_lib/spotify";
+import SpotifyProfile from "~/app/api/auth/[...nextauth]/SpotifyProfile";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -30,6 +23,7 @@ declare module "next-auth" {
     user: {
       id: string;
       spotifyId: string;
+      profileImage: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -60,6 +54,7 @@ export const authOptions: NextAuthOptions = {
         scope: account.scope,
         id: user.id,
         spotifyId: account.providerAccountId,
+        profileImage: user.image,
       };
       return session;
     },
