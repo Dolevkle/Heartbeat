@@ -32,6 +32,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@components/select";
+import { Skeleton } from "@components/skeleton";
 import { UploadButton } from "~/utils/uploadthing";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -97,7 +98,7 @@ export default function SignUp() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="mx-auto mt-16 max-w-sm">
           <CardHeader>
-            {session.data?.user && (
+            {session.data?.user ? (
               <div className="flex items-center space-x-3">
                 <img
                   src={session.data?.user?.image ?? ""}
@@ -109,6 +110,14 @@ export default function SignUp() {
                 <CardTitle className="text-xl">
                   {session.data?.user?.name}
                 </CardTitle>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>
               </div>
             )}
 
