@@ -107,7 +107,9 @@ export default function SignUp() {
                   alt="no profile image"
                 />
               )}
-              <CardTitle className="text-xl">Sign Up</CardTitle>
+              <CardTitle className="text-xl">
+                {session.data?.user?.name}
+              </CardTitle>
             </div>
 
             <CardDescription>
