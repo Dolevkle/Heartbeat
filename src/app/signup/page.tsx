@@ -79,6 +79,7 @@ export default function SignUp() {
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    console.log(values);
     if (session.data?.user.id && tracks)
       analyzePersonality(
         { songs: tracks.map((track) => track.track.name) },
@@ -144,9 +145,21 @@ export default function SignUp() {
                             sexual preference
                           </Label>
                         </FormLabel>
-                        <FormControl>
-                          <Input placeholder="bisexual" {...field} />
-                        </FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select preference" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="male">male</SelectItem>
+                            <SelectItem value="female">female</SelectItem>
+                            <SelectItem value="both">both</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -161,9 +174,23 @@ export default function SignUp() {
                         <FormLabel>
                           <Label htmlFor="gender">gender</Label>
                         </FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select gender" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="male">male</SelectItem>
+                            <SelectItem value="female">female</SelectItem>
+                            <SelectItem value="non binary">
+                              non binary
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
