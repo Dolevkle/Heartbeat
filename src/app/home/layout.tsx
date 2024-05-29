@@ -19,14 +19,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const isActive = (href: string) => pathname === href;
 
+  const getLinkClassname = (href: string) =>
+    `flex h-9 w-9 items-center justify-center ${isActive(href) ? "group shrink-0 gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base" : "rounded-lg text-muted-foreground transition-colors hover:text-foreground"}`;
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link
-            href="/home"
-            className={`flex h-9 w-9 items-center justify-center ${isActive("/home") ? "group shrink-0 gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base" : "rounded-lg text-muted-foreground transition-colors hover:text-foreground"}`}
-          >
+          <Link href="/home" className={getLinkClassname("/home")}>
             <Home className="h-4 w-4" />
 
             <span className="sr-only">Acme Inc</span>
@@ -35,7 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <TooltipTrigger asChild>
               <Link
                 href="/home/matches"
-                className={`flex h-9 w-9 items-center justify-center ${isActive("/home/matches") ? "group shrink-0 gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base" : "rounded-lg text-muted-foreground transition-colors hover:text-foreground"}`}
+                className={getLinkClassname("/home/matches")}
               >
                 <HeartPulse className="h-5 w-5" />
                 <span className="sr-only">Matches</span>
@@ -47,7 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <TooltipTrigger asChild>
               <Link
                 href="/home/chats"
-                className={`flex h-9 w-9 items-center justify-center ${isActive("/home/chats") ? "group shrink-0 gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base" : "rounded-lg text-muted-foreground transition-colors hover:text-foreground"}`}
+                className={getLinkClassname("/home/chats")}
               >
                 <Users2 className="h-5 w-5" />
                 <span className="sr-only">Chats</span>
