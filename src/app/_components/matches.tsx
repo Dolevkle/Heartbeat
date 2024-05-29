@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
 
 export default function Component() {
   return (
-    <Card className="h-full w-fit rounded-l-none rounded-r rounded-bl-none">
+    <Card className="h-full w-fit rounded-l-none rounded-r rounded-bl-none border-card">
       <CardHeader>
         <CardTitle>Matches</CardTitle>
       </CardHeader>
