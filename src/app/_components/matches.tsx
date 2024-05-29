@@ -21,7 +21,7 @@ export default function Component() {
             </p>
           </div>
           <div className="ml-auto flex items-center space-x-3 font-medium">
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 stroke-primary" />
             <span>85%</span>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default function Component() {
             <p className="text-sm text-muted-foreground">will@email.com</p>
           </div>
           <div className="ml-auto flex space-x-3 font-medium">
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 stroke-primary" />
             <span> 99%</span>
           </div>
         </div>
