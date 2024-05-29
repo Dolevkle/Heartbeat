@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
+import { Sparkles } from "lucide-react";
 
 export default function Component() {
   return (
@@ -19,7 +20,10 @@ export default function Component() {
               olivia.martin@email.com
             </p>
           </div>
-          <div className="ml-auto font-medium">85%</div>
+          <div className="ml-auto flex items-center space-x-3 font-medium">
+            <Sparkles className="h-4 w-4" />
+            <span>85%</span>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <Avatar className="hidden h-9 w-9 sm:flex">
@@ -56,7 +60,10 @@ export default function Component() {
             <p className="text-sm font-medium leading-none">William Kim</p>
             <p className="text-sm text-muted-foreground">will@email.com</p>
           </div>
-          <div className="ml-auto font-medium">99%</div>
+          <div className="ml-auto flex space-x-3 font-medium">
+            <Sparkles className="h-4 w-4" />
+            <span> 99%</span>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <Avatar className="hidden h-9 w-9 sm:flex">
