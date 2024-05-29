@@ -38,10 +38,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className={`flex h-9 w-9 items-center justify-center ${isActive("/home/matches") ? "group shrink-0 gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base" : "rounded-lg text-muted-foreground transition-colors hover:text-foreground"}`}
               >
                 <HeartPulse className="h-5 w-5" />
-                <span className="sr-only">Chats</span>
+                <span className="sr-only">Matches</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Chats</TooltipContent>
+            <TooltipContent side="right">Matches</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
