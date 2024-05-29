@@ -1,9 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/*/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/*/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
 
 export default function Component() {
   return (
-    <Card>
+    <Card className="h-full w-fit rounded-l-none rounded-r rounded-bl-none">
       <CardHeader>
         <CardTitle>Matches</CardTitle>
       </CardHeader>
