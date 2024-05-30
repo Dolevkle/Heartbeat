@@ -33,11 +33,10 @@ import {
   SelectValue,
 } from "@components/select";
 import { Skeleton } from "@components/skeleton";
-import { UploadButton } from "~/utils/uploadthing";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { Loader2 } from "lucide-react";
-
+import { useToast } from "@components/use-toast";
+import { ToastAction } from "@components/toast";
 type Personality = {
   Openness: string;
   Neuroticism: string;
@@ -45,6 +44,11 @@ type Personality = {
   Conscientiousness: string;
   Agreeableness: string;
 };
+
+interface CreateUserPayload extends z.infer<typeof userSchema> {
+  id: string;
+  personality: Personality;
+}
 
 const userSchema = z.object({
   age: z.coerce
@@ -60,9 +64,11 @@ const userSchema = z.object({
 
 export default function SignUp() {
   const session = useSession();
+  const router = useRouter();
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
+  const { toast } = useToast();
 
   const playlistId = form.watch("playlist");
   const { mutate: analyzePersonality, isPending: isAnalyzingPersonality } =
@@ -81,31 +87,49 @@ export default function SignUp() {
     { enabled: !!playlistId },
   );
 
+  const formValues = form.watch();
+
+  const isAnyFieldEmpty = Object.values(formValues).some((value) => !value);
+
+  const handleCreateUser = (payload: CreateUserPayload) => {
+    updateUser(payload, {
+      onSuccess: () => {
+        router.push("/home");
+        toast({
+          title: "Success",
+          description: "User successfully created",
+        });
+      },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "User was not created!",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+      },
+    });
+  };
+
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { age, gender, sexualPreference } = values;
     if (session.data?.user.id && tracks)
       analyzePersonality(
         { songs: tracks.map((track) => track.track.name) },
         {
-          onSuccess: (data) => {
-            updateUser(
-              {
-                id: session.data?.user.id,
-                age,
-                gender,
-                sexualPreference,
-                personality: data as Personality,
-              },
-              {
-                onSuccess: (data) => {
-                  console.log(data);
-                  //TODO add navigation to app
-                },
-              },
-            );
-          },
+          onSuccess: (data) =>
+            handleCreateUser({
+              id: session.data?.user.id,
+              ...values,
+              personality: data as Personality,
+            }),
+          onError: () =>
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: "User's personality was not analayzed!",
+            }),
         },
       );
   };
@@ -283,7 +307,11 @@ export default function SignUp() {
               {/*    alert(`ERROR! ${error.message}`);*/}
               {/*  }}*/}
               {/*/>*/}
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isAnyFieldEmpty || !tracks}
+              >
                 {isUpdatingUser || isAnalyzingPersonality ? (
                   <div className="flex">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
