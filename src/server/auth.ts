@@ -81,7 +81,7 @@ export const authOptions: NextAuthOptions = {
   // session: { strategy: "jwt" },
   adapter: PrismaAdapter(db) as Adapter,
   secret: env.NEXTAUTH_SECRET,
-
+  debug: true,
   providers: [
     SpotifyProfile,
     /**
