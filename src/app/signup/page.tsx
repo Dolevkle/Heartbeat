@@ -134,6 +134,21 @@ export default function SignUp() {
       );
   };
 
+  const renderSubmitButtonContent = () => {
+    if (!isAnyFieldEmpty && !tracks)
+      return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
+    if (isUpdatingUser || isAnalyzingPersonality)
+      return (
+        <div className="flex">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Please wait
+        </div>
+      );
+    {
+      return <span>Create an account</span>;
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -312,19 +327,15 @@ export default function SignUp() {
                 className="w-full"
                 disabled={isAnyFieldEmpty || !tracks}
               >
-                {isUpdatingUser || isAnalyzingPersonality ? (
-                  <div className="flex">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait
-                  </div>
-                ) : (
-                  <span>Create an account</span>
-                )}
+                {renderSubmitButtonContent()}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href="/login" className="underline">
+              <Link
+                href={`${session.data?.user.personality ? "/home" : "/"}`}
+                className="underline"
+              >
                 Log in
               </Link>
             </div>
