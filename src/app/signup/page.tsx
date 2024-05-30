@@ -64,13 +64,20 @@ const userSchema = z.object({
 
 export default function SignUp() {
   const session = useSession();
+
   const router = useRouter();
+
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
   const { toast } = useToast();
 
   const playlistId = form.watch("playlist");
+
+  const formValues = form.watch();
+
+  const isAnyFieldEmpty = Object.values(formValues).some((value) => !value);
+
   const { mutate: analyzePersonality, isPending: isAnalyzingPersonality } =
     api.openAi.analyzePersonality.useMutation();
 
@@ -86,10 +93,6 @@ export default function SignUp() {
     { id: playlistId },
     { enabled: !!playlistId },
   );
-
-  const formValues = form.watch();
-
-  const isAnyFieldEmpty = Object.values(formValues).some((value) => !value);
 
   const handleCreateUser = (payload: CreateUserPayload) => {
     updateUser(payload, {
@@ -112,8 +115,6 @@ export default function SignUp() {
   };
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     if (session.data?.user.id && tracks)
       analyzePersonality(
         { songs: tracks.map((track) => track.track.name) },
@@ -128,7 +129,7 @@ export default function SignUp() {
             toast({
               variant: "destructive",
               title: "Uh oh! Something went wrong.",
-              description: "User's personality was not analayzed!",
+              description: "User's personality was not analyzed!",
             }),
         },
       );
@@ -144,10 +145,12 @@ export default function SignUp() {
           Please wait
         </div>
       );
-    {
-      return <span>Create an account</span>;
-    }
+    return <span>Create an account</span>;
   };
+
+  const genders = ["male", "female", "non binary"];
+
+  const sexualPreferences = ["male", "female", "both"];
 
   return (
     <Form {...form}>
@@ -222,9 +225,16 @@ export default function SignUp() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="male">male</SelectItem>
-                            <SelectItem value="female">female</SelectItem>
-                            <SelectItem value="both">both</SelectItem>
+                            {sexualPreferences.map(
+                              (sexualPreference, index) => (
+                                <SelectItem
+                                  key={index}
+                                  value={sexualPreference}
+                                >
+                                  {sexualPreference}
+                                </SelectItem>
+                              ),
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -251,11 +261,11 @@ export default function SignUp() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="male">male</SelectItem>
-                            <SelectItem value="female">female</SelectItem>
-                            <SelectItem value="non binary">
-                              non binary
-                            </SelectItem>
+                            {genders.map((gender, index) => (
+                              <SelectItem key={index} value={gender}>
+                                {gender}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -295,33 +305,6 @@ export default function SignUp() {
                   )}
                 />
               </div>
-              {/*<UploadButton*/}
-              {/*  className="w-full ut-button:w-full ut-button:bg-secondary ut-button:ut-readying:bg-secondary"*/}
-              {/*  endpoint="imageUploader"*/}
-              {/*  content={{*/}
-              {/*    button({ ready }) {*/}
-              {/*      if (ready) return <div>Upload image</div>;*/}
-
-              {/*      return "loading...";*/}
-              {/*    },*/}
-              {/*    allowedContent({ ready, fileTypes, isUploading }) {*/}
-              {/*      // if (!ready) return "Checking what you allow";*/}
-              {/*      if (isUploading) return "uploading the profile picture";*/}
-              {/*      return "";*/}
-              {/*      // return `Stuff you can upload: ${fileTypes.join(", ")}`;*/}
-              {/*    },*/}
-              {/*  }}*/}
-              {/*  onClientUploadComplete={(res) => {*/}
-              {/*    // Do something with the response*/}
-              {/*    router.refresh();*/}
-              {/*    console.log("Files: ", res);*/}
-              {/*    alert("Upload Completed");*/}
-              {/*  }}*/}
-              {/*  onUploadError={(error: Error) => {*/}
-              {/*    // Do something with the error.*/}
-              {/*    alert(`ERROR! ${error.message}`);*/}
-              {/*  }}*/}
-              {/*/>*/}
               <Button
                 type="submit"
                 className="w-full"
