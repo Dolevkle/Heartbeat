@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
 import { Sparkles } from "lucide-react";
-import { api, RouterOutputs } from "~/trpc/react";
+import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 interface Props {
   matches: RouterOutputs["user"]["getMatches"];
@@ -32,7 +32,7 @@ export default function Component({ matches }: Props) {
               <p className="text-sm font-medium leading-none">
                 {users[i]?.name}
               </p>
-              <p className="text-sm text-muted-foreground">{users[i]?.email}</p>
+              <p className="text-sm text-muted-foreground">{users[i]?.age}</p>
             </div>
             <div className="ml-auto flex items-center space-x-3 font-medium">
               {parseFloat(match.similarity) >= HIGH_MATCH && (
