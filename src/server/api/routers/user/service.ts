@@ -69,7 +69,7 @@ const calculateAndSaveMatches = async (user: User) => {
     const similarity = cosineSimilarity(userVector, matchVector);
     await db.match.create({
       data: {
-        similarity: similarity,
+        similarity: similarity * PERCENTAGE_MULTIPLIER,
         users: [user.id, matchUser.id],
       },
     });
