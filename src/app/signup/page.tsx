@@ -36,11 +36,7 @@ import { Skeleton } from "@components/skeleton";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@components/use-toast";
-import {
-  type CreateUserPayload,
-  type Personality,
-  userSchema,
-} from "~/app/signup/types";
+import { type Personality, userSchema } from "~/app/signup/types";
 
 export default function SignUp() {
   const session = useSession();
@@ -60,20 +56,7 @@ export default function SignUp() {
     api.openAi.analyzePersonality.useMutation();
 
   const { mutate: updateUser, isPending: isUpdatingUser } =
-    api.user.update.useMutation();
-
-  const { data: playlists } = api.spotify.userPlaylists.useQuery(
-    { id: session.data?.user.spotifyId ?? "" },
-    { enabled: !!session.data },
-  );
-
-  const { data: tracks } = api.spotify.tracks.useQuery(
-    { id: formValues.playlist },
-    { enabled: !!formValues.playlist },
-  );
-
-  const handleCreateUser = (payload: CreateUserPayload) => {
-    updateUser(payload, {
+    api.user.update.useMutation({
       onSuccess: () => {
         router.push("/home");
         toast({
@@ -89,7 +72,16 @@ export default function SignUp() {
         });
       },
     });
-  };
+
+  const { data: playlists } = api.spotify.userPlaylists.useQuery(
+    { id: session.data?.user.spotifyId ?? "" },
+    { enabled: !!session.data },
+  );
+
+  const { data: tracks } = api.spotify.tracks.useQuery(
+    { id: formValues.playlist },
+    { enabled: !!formValues.playlist },
+  );
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
     if (session.data?.user.id && tracks)
@@ -97,7 +89,7 @@ export default function SignUp() {
         { songs: tracks.map((track) => track.track.name) },
         {
           onSuccess: (data) =>
-            handleCreateUser({
+            updateUser({
               id: session.data?.user.id,
               ...values,
               personality: data as Personality,
@@ -117,7 +109,7 @@ export default function SignUp() {
       return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
     if (isUpdatingUser || isAnalyzingPersonality)
       return (
-        <div className="flex">
+        <div className="flex items-center">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Please wait
         </div>
