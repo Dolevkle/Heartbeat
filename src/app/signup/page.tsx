@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/button";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import {
   Card,
   CardContent,
@@ -37,30 +37,11 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@components/use-toast";
 import { ToastAction } from "@components/toast";
-type Personality = {
-  Openness: string;
-  Neuroticism: string;
-  Extraversion: string;
-  Conscientiousness: string;
-  Agreeableness: string;
-};
-
-interface CreateUserPayload extends z.infer<typeof userSchema> {
-  id: string;
-  personality: Personality;
-}
-
-const userSchema = z.object({
-  age: z.coerce
-    .number()
-    .min(1, { message: "Invalid age below" })
-    .max(120, "Invalid age, above limit"), // Validates the string as an email
-  sexualPreference: z
-    .string()
-    .min(1, { message: "sexual preference cannot be empty" }), // Ensures the first name is not empty
-  gender: z.string().min(1, { message: "gender cannot be empty" }), // Ensures the last name is not empty
-  playlist: z.string(),
-});
+import {
+  type CreateUserPayload,
+  type Personality,
+  userSchema,
+} from "~/app/signup/types";
 
 export default function SignUp() {
   const session = useSession();
@@ -71,8 +52,6 @@ export default function SignUp() {
     resolver: zodResolver(userSchema),
   });
   const { toast } = useToast();
-
-  const playlistId = form.watch("playlist");
 
   const formValues = form.watch();
 
@@ -90,8 +69,8 @@ export default function SignUp() {
   );
 
   const { data: tracks } = api.spotify.tracks.useQuery(
-    { id: playlistId },
-    { enabled: !!playlistId },
+    { id: formValues.playlist },
+    { enabled: !!formValues.playlist },
   );
 
   const handleCreateUser = (payload: CreateUserPayload) => {
