@@ -141,7 +141,7 @@ export default function SignUp() {
                   className="rounded-full object-cover "
                   alt="no profile image"
                 />
-                <CardTitle className="text-xl">
+                <CardTitle className="text-xl" data-testid="user name">
                   {session.data?.user?.name}
                 </CardTitle>
               </div>
@@ -191,6 +191,7 @@ export default function SignUp() {
                           </Label>
                         </FormLabel>
                         <Select
+                          data-testid="sexual preference select"
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
