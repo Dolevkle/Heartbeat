@@ -62,11 +62,10 @@ export const calculateAndSaveMatches = async (user: User, db: PrismaClient) => {
   const matches = potentialMatches.map(({ id, personality }) => {
     const matchVector = convertPersonalityToVector(personality as Personality);
     const cosineSim = cosineSimilarity(userVector, matchVector);
-    const similarity = ((cosineSim + 1) / 2) * 100; // Map to 0-100% range
     return {
       user1_id: user.id,
       user2_id: id,
-      similarity: similarity,
+      similarity: cosineSim * 100,
     };
   });
 
