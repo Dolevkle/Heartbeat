@@ -56,7 +56,7 @@ export const getPotentialMatches = async (user: User) => {
   });
 };
 
-const calculateAndSaveMatches = async (user: User) => {
+export const calculateAndSaveMatches = async (user: User) => {
   const userVector = convertPersonalityToVector(
     user.personality as Personality,
   );
@@ -67,11 +67,18 @@ const calculateAndSaveMatches = async (user: User) => {
       matchUser.personality as Personality,
     );
     const similarity = cosineSimilarity(userVector, matchVector);
-    await db.match.create({
-      data: {
-        similarity: similarity * PERCENTAGE_MULTIPLIER,
-        users: [user.id, matchUser.id],
+    const matchExist = await db.match.findFirst({
+      where: {
+        users: { has: matchUser.id },
       },
     });
+    if (!matchExist) {
+      await db.match.create({
+        data: {
+          similarity: `${Math.round(similarity * PERCENTAGE_MULTIPLIER)}%`,
+          users: [user.id, matchUser.id],
+        },
+      });
+    }
   }
 };

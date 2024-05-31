@@ -6,6 +6,8 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { db } from "~/server/db";
+import { calculateAndSaveMatches } from "~/server/api/routers/user/service";
+import { type User } from "@prisma/client";
 
 export const userRouter = createTRPCRouter({
   hello: publicProcedure
@@ -40,17 +42,31 @@ export const userRouter = createTRPCRouter({
         data: rest,
       });
     }),
-
-  getMatches: protectedProcedure.input(z.string()).query(async ({ input }) => {
-    return db.match.findMany({
-      where: {
-        users: {
-          has: input,
+  getMatches: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({ where: { id: input } });
+      if (user) {
+        await calculateAndSaveMatches(user);
+        return db.match.findMany({
+          where: {
+            users: {
+              has: input,
+            },
+          },
+          orderBy: {
+            similarity: "desc",
+          },
+        });
+      }
+    }),
+  getMatchUsers: protectedProcedure
+    .input(z.string().array())
+    .query(async ({ ctx, input }) => {
+      return ctx.db.user.findMany({
+        where: {
+          id: { in: input },
         },
-      },
-      orderBy: {
-        similarity: "desc",
-      },
-    });
-  }),
+      });
+    }),
 });
