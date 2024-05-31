@@ -54,6 +54,17 @@ model User {
   sessions         Session[]
   image            String?
   images           Image[]
+  matchesAsUser1   Match[]   @relation("User1Matches")
+  matchesAsUser2   Match[]   @relation("User2Matches")
+}
+
+model Match {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  user1_id   String
+  user2_id   String
+  similarity Float
+  user1      User   @relation("User1Matches", fields: [user1_id], references: [id])
+  user2      User   @relation("User2Matches", fields: [user2_id], references: [id])
 }
 
 model Image {

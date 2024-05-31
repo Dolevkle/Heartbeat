@@ -33,6 +33,7 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...rest } = input;
+      // TODO maybe I need to populate matches here
       return ctx.db.user.update({
         where: { id },
         data: rest,
