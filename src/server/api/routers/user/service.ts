@@ -11,6 +11,7 @@ export type Personality = {
 const LOW_VALUE = 1;
 const MEDIUM_VALUE = 5;
 const HIGH_VALUE = 9;
+const PERCENTAGE_MULTIPLIER = 100;
 
 const traitMapping = {
   low: LOW_VALUE,
@@ -65,7 +66,7 @@ export const calculateAndSaveMatches = async (user: User, db: PrismaClient) => {
     return {
       user1_id: user.id,
       user2_id: id,
-      similarity: cosineSim * 100,
+      similarity: cosineSim * PERCENTAGE_MULTIPLIER,
     };
   });
 
