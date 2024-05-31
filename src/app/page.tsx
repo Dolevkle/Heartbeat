@@ -1,5 +1,4 @@
 "use client";
-import GlobeShowcase from "./_components/global-showcase";
 import { motion } from "framer-motion";
 import { Button } from "@components/button";
 import { useRouter } from "next/navigation";
@@ -7,7 +6,7 @@ import { signIn, useSession } from "next-auth/react";
 import { Vortex } from "~/app/_components/ui/Vortex";
 import { CanvasShowcase } from "~/app/_components/canvas-showcase";
 
-export default function Home() {
+export default function Page() {
   const router = useRouter();
   const session = useSession();
   const sign = () => signIn("spotify", { callbackUrl: "/signup" });

@@ -1,18 +1,10 @@
 "use client";
 import Link from "next/link";
-import {
-  HeartPulse,
-  Home,
-  LineChart,
-  Package,
-  Package2,
-  Settings,
-  ShoppingCart,
-  Users2,
-} from "lucide-react";
+import { HeartPulse, Home, Settings, Users2 } from "lucide-react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
