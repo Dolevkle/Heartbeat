@@ -67,7 +67,6 @@ const calculateAndSaveMatches = async (user: User) => {
       matchUser.personality as Personality,
     );
     const similarity = cosineSimilarity(userVector, matchVector);
-    //TODO figure why there is error here
     await db.match.create({
       data: {
         similarity: similarity,
