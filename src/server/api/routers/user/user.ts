@@ -44,7 +44,7 @@ export const userRouter = createTRPCRouter({
   getMatches: protectedProcedure.input(z.string()).query(async ({ input }) => {
     return db.match.findMany({
       where: {
-        userIds: {
+        users: {
           has: input,
         },
       },

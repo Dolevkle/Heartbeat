@@ -71,7 +71,7 @@ const calculateAndSaveMatches = async (user: User) => {
     await db.match.create({
       data: {
         similarity: similarity,
-        userIds: [user.id, matchUser.id],
+        users: [user.id, matchUser.id],
       },
     });
   }

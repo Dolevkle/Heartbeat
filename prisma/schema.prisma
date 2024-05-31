@@ -58,10 +58,8 @@ model User {
 
 model Match {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  user1_id   String
-  user2_id   String
   similarity Int
-  users    String[]
+  users      String[]
 }
 
 model Image {
