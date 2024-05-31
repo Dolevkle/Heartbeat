@@ -19,12 +19,20 @@ const traitMapping = {
 };
 
 export const convertPersonalityToVector = (personality: Personality) => {
+  const {
+    Openness,
+    Neuroticism,
+    Extraversion,
+    Conscientiousness,
+    Agreeableness,
+  } = personality;
+
   return [
-    traitMapping[personality.Openness],
-    traitMapping[personality.Neuroticism],
-    traitMapping[personality.Extraversion],
-    traitMapping[personality.Conscientiousness],
-    traitMapping[personality.Agreeableness],
+    traitMapping[Openness],
+    traitMapping[Neuroticism],
+    traitMapping[Extraversion],
+    traitMapping[Conscientiousness],
+    traitMapping[Agreeableness],
   ];
 };
 
