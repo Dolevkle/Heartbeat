@@ -1,4 +1,5 @@
-import type { PrismaClient, User } from "@prisma/client";
+import type { User } from "@prisma/client";
+import { db } from "~/server/db";
 
 export type Personality = {
   Openness: "high" | "low" | "medium";
@@ -46,7 +47,7 @@ export const cosineSimilarity = (vec1: number[], vec2: number[]) => {
   return dotProduct / (magnitude1 * magnitude2);
 };
 
-export const getPotentialMatches = async (user: User, db: PrismaClient) => {
+export const getPotentialMatches = async (user: User) => {
   return db.user.findMany({
     where: {
       gender: user.sexualPreference,
@@ -55,10 +56,10 @@ export const getPotentialMatches = async (user: User, db: PrismaClient) => {
   });
 };
 
-export const calculateAndSaveMatches = async (user: User, db: PrismaClient) => {
+export const calculateAndSaveMatches = async (user: User) => {
   const { personality } = user;
   const userVector = convertPersonalityToVector(personality as Personality);
-  const potentialMatches = await getPotentialMatches(user, db);
+  const potentialMatches = await getPotentialMatches(user);
 
   const matches = potentialMatches.map(({ id, personality }) => {
     const matchVector = convertPersonalityToVector(personality as Personality);
@@ -74,3 +75,40 @@ export const calculateAndSaveMatches = async (user: User, db: PrismaClient) => {
     data: matches,
   });
 };
+
+// const calculateAndSaveMatches2 = async (user: User, db: PrismaClient) => {
+//   const userVector = convertPersonalityToVector(
+//     user.personality as Personality,
+//   );
+//   const potentialMatches = await getPotentialMatches(user);
+//
+//   for (const matchUser of potentialMatches) {
+//     const matchVector = convertPersonalityToVector(
+//       matchUser.personality as Personality,
+//     );
+//     const similarity = cosineSimilarity(userVector, matchVector);
+//
+//     const match = await db.match.create({
+//       data: {
+//         similarity: similarity,
+//         users: {
+//           connect: [{ id: user.id }, { id: matchUser.id }],
+//         },
+//       },
+//     });
+//
+//     await db.matchUser.create({
+//       data: {
+//         userId: user.id,
+//         matchId: match.id,
+//       },
+//     });
+//
+//     await db.matchUser.create({
+//       data: {
+//         userId: matchUser.id,
+//         matchId: match.id,
+//       },
+//     });
+//   }
+// };
