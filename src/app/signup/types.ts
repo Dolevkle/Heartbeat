@@ -8,11 +8,6 @@ export type Personality = {
   Agreeableness: string;
 };
 
-export interface CreateUserPayload extends z.infer<typeof userSchema> {
-  id: string;
-  personality: Personality;
-}
-
 export const userSchema = z.object({
   age: z.coerce
     .number()
