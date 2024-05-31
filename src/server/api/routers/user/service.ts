@@ -56,59 +56,23 @@ export const getPotentialMatches = async (user: User) => {
   });
 };
 
-export const calculateAndSaveMatches = async (user: User) => {
-  const { personality } = user;
-  const userVector = convertPersonalityToVector(personality as Personality);
+const calculateAndSaveMatches = async (user: User) => {
+  const userVector = convertPersonalityToVector(
+    user.personality as Personality,
+  );
   const potentialMatches = await getPotentialMatches(user);
 
-  const matches = potentialMatches.map(({ id, personality }) => {
-    const matchVector = convertPersonalityToVector(personality as Personality);
-    const cosineSim = cosineSimilarity(userVector, matchVector);
-    return {
-      user1_id: user.id,
-      user2_id: id,
-      similarity: cosineSim * PERCENTAGE_MULTIPLIER,
-    };
-  });
-
-  await db.match.createMany({
-    data: matches,
-  });
+  for (const matchUser of potentialMatches) {
+    const matchVector = convertPersonalityToVector(
+      matchUser.personality as Personality,
+    );
+    const similarity = cosineSimilarity(userVector, matchVector);
+    //TODO figure why there is error here
+    await db.match.create({
+      data: {
+        similarity: similarity,
+        userIds: [user.id, matchUser.id],
+      },
+    });
+  }
 };
-
-// const calculateAndSaveMatches2 = async (user: User, db: PrismaClient) => {
-//   const userVector = convertPersonalityToVector(
-//     user.personality as Personality,
-//   );
-//   const potentialMatches = await getPotentialMatches(user);
-//
-//   for (const matchUser of potentialMatches) {
-//     const matchVector = convertPersonalityToVector(
-//       matchUser.personality as Personality,
-//     );
-//     const similarity = cosineSimilarity(userVector, matchVector);
-//
-//     const match = await db.match.create({
-//       data: {
-//         similarity: similarity,
-//         users: {
-//           connect: [{ id: user.id }, { id: matchUser.id }],
-//         },
-//       },
-//     });
-//
-//     await db.matchUser.create({
-//       data: {
-//         userId: user.id,
-//         matchId: match.id,
-//       },
-//     });
-//
-//     await db.matchUser.create({
-//       data: {
-//         userId: matchUser.id,
-//         matchId: match.id,
-//       },
-//     });
-//   }
-// };

@@ -54,17 +54,14 @@ model User {
   sessions         Session[]
   image            String?
   images           Image[]
-  matchesAsUser1   Match[]   @relation("User1Matches")
-  matchesAsUser2   Match[]   @relation("User2Matches")
 }
 
 model Match {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   user1_id   String
   user2_id   String
-  similarity Float
-  user1      User   @relation("User1Matches", fields: [user1_id], references: [id])
-  user2      User   @relation("User2Matches", fields: [user2_id], references: [id])
+  similarity Int
+  users    String[]
 }
 
 model Image {
@@ -85,29 +82,3 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-
-//
-//
-// model User {
-//   id                 String   @id @default(uuid())
-//   gender             String
-//   sexual_preference  String
-//   personality        Json
-//   matches            Match[]
-// }
-//
-// model Match {
-//   id         String   @id @default(uuid())
-//   similarity Float
-//   users      User[]   @relation(references: [id])
-// }
-//
-// model MatchUser {
-//   id         String   @id @default(uuid())
-//   userId     String
-//   matchId    String
-//   user       User     @relation(fields: [userId], references: [id])
-//   match      Match    @relation(fields: [matchId], references: [id])
-//
-//   @@unique([userId, matchId])
-// }

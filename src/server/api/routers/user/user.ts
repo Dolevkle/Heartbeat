@@ -5,6 +5,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { db } from "~/server/db";
 
 export const userRouter = createTRPCRouter({
   hello: publicProcedure
@@ -39,4 +40,17 @@ export const userRouter = createTRPCRouter({
         data: rest,
       });
     }),
+
+  getMatches: protectedProcedure.input(z.string()).query(async ({ input }) => {
+    return db.match.findMany({
+      where: {
+        userIds: {
+          has: input,
+        },
+      },
+      orderBy: {
+        similarity: "desc",
+      },
+    });
+  }),
 });
