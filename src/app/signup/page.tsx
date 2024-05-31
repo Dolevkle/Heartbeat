@@ -36,7 +36,6 @@ import { Skeleton } from "@components/skeleton";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@components/use-toast";
-import { ToastAction } from "@components/toast";
 import {
   type CreateUserPayload,
   type Personality,
@@ -87,7 +86,6 @@ export default function SignUp() {
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: "User was not created!",
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
       },
     });
@@ -140,8 +138,6 @@ export default function SignUp() {
               <div className="flex items-center space-x-3">
                 <img
                   src={session.data?.user?.image ?? ""}
-                  width={50}
-                  height={50}
                   className="rounded-full object-cover "
                   alt="no profile image"
                 />
@@ -293,7 +289,7 @@ export default function SignUp() {
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
+              Already have an account?
               <Link
                 href={`${session.data?.user.personality ? "/home" : "/"}`}
                 className="underline"
