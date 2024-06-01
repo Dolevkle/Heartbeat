@@ -9,7 +9,7 @@ interface Props {
   matches: RouterOutputs["user"]["getMatches"];
 }
 export default function Component({ matches }: Props) {
-  const HIGH_MATCH = 60;
+  const HIGH_MATCH = 75;
   const session = useSession();
   const ids = matches?.map(({ users }) =>
     users[0] === session.data?.user.id ? users[1] : users[0],
@@ -17,6 +17,12 @@ export default function Component({ matches }: Props) {
   const { data: users, isLoading } = api.user.getMatchUsers.useQuery(ids, {
     enabled: ids !== undefined,
   });
+
+  /**
+   * This function maps the user IDs to their corresponding user objects from the fetched users data.
+   * It ensures that the order of the users matches the order of the IDs.
+   */
+  const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
 
   return (
     <Card className="h-full w-64 rounded-l-none rounded-r rounded-bl-none border-card">
@@ -36,14 +42,14 @@ export default function Component({ matches }: Props) {
           ) : (
             <div key={match.id} className="flex items-center gap-4">
               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src={users[i]?.image ?? ""} alt="Avatar" />
+                <AvatarImage src={orderedUsers[i]?.image ?? ""} alt="Avatar" />
                 <AvatarFallback>
-                  {users[i]?.name?.charAt(0) ?? ""}
+                  {orderedUsers[i]?.name?.charAt(0) ?? ""}
                 </AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
                 <p className="text-sm font-medium leading-none">
-                  {users[i]?.name}
+                  {orderedUsers[i]?.name}
                 </p>
                 <p className="text-sm text-muted-foreground">{users[i]?.age}</p>
               </div>
