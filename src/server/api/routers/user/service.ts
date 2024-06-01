@@ -38,6 +38,24 @@ export const convertPersonalityToVector = (personality: Personality) => {
   ];
 };
 
+/**
+ * Calculates the cosine similarity between two numerical vectors.
+ *
+ * @param vec1 - The first numerical vector.
+ * @param vec2 - The second numerical vector.
+ * @returns The cosine similarity between the two vectors.
+ *
+ * @remarks
+ * The cosine similarity is a measure of similarity between two non-zero vectors
+ * of an inner product space that measures the cosine of the angle between them.
+ * It is defined as the dot product of the two vectors divided by the product of their magnitudes.
+ *
+ * @example
+ * const vec1 = [1, 2, 3];
+ * const vec2 = [4, 5, 6];
+ * const similarity = cosineSimilarity(vec1, vec2);
+ * console.log(similarity); // Output: 0.974609375
+ */
 export const cosineSimilarity = (vec1: number[], vec2: number[]) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -56,26 +74,41 @@ export const getPotentialMatches = async (user: User) => {
   });
 };
 
-export const calculateAndSaveMatches = async (user: User) => {
+/**
+ * Calculates and saves matches for a given user based on personality traits.
+ *
+ * @param user - The user for whom matches are to be calculated.
+ * @returns {Promise<void>} - A promise that resolves when the matches are calculated and saved.
+ */
+export const calculateAndSaveMatches = async (user: User): Promise<void> => {
+  // Convert the user's personality traits into a numerical vector representation.
   const userVector = convertPersonalityToVector(
     user.personality as Personality,
   );
+
+  // Retrieve potential matches based on the user's gender and sexual preference.
   const potentialMatches = await getPotentialMatches(user);
 
-  // this is transaction if one fails all fails we can remove this if we want
+  // Begin a database transaction to ensure atomicity and consistency.
   await db.$transaction(async (transaction) => {
+    // Iterate through each potential match.
     for (const matchUser of potentialMatches) {
+      // Convert the potential match's personality traits into a numerical vector representation.
       const matchVector = convertPersonalityToVector(
         matchUser.personality as Personality,
       );
+
+      // Calculate the cosine similarity between the user's and potential match's personality vectors.
       const similarity = cosineSimilarity(userVector, matchVector);
 
+      // Check if a match already exists between the user and potential match.
       const matchExist = await transaction.match.findFirst({
         where: {
           users: { has: matchUser.id },
         },
       });
 
+      // If no match exists, create a new match record in the database.
       if (!matchExist) {
         await transaction.match.create({
           data: {
