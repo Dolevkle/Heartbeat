@@ -1,4 +1,4 @@
-import { UploadButton } from "~/utils/uploadthing";
+import { UploadButton } from "~/lib/uploadthing";
 export default function UploadS3Example() {
   return (
     <UploadButton
