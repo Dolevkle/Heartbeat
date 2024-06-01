@@ -73,27 +73,33 @@ export default function SignUp() {
       },
     });
 
+  // Fetches the user's playlists from the Spotify API.
   const { data: playlists } = api.spotify.userPlaylists.useQuery(
     { id: session.data?.user.spotifyId ?? "" },
     { enabled: !!session.data },
   );
 
+  // Fetches the tracks from the selected playlist from the Spotify API.
   const { data: tracks } = api.spotify.tracks.useQuery(
     { id: formValues.playlist },
     { enabled: !!formValues.playlist },
   );
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
+    // Check if user data and tracks are available
     if (session.data?.user.id && tracks)
+      // Analyze personality using OpenAI API
       analyzePersonality(
         { songs: tracks.map((track) => track.track.name) },
         {
+          // On successful analysis, update the user with the personality data
           onSuccess: (data) =>
             updateUser({
               id: session.data?.user.id,
               ...values,
               personality: data as Personality,
             }),
+          // On error during analysis, show a toast message
           onError: () =>
             toast({
               variant: "destructive",
