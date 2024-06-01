@@ -56,6 +56,15 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    /**
+     * Callback function for the `session` option in NextAuth.js.
+     * This function is called whenever a session is created or updated.
+     * It retrieves the user's account information from the database and adds it to the session object.
+     *
+     * @param session - The current session object.
+     * @param user - The user object associated with the session.
+     * @returns The updated session object with the user's account information.
+     */
     async session({ session, user }) {
       const account = (await db.account.findFirst({
         where: { userId: user.id },
