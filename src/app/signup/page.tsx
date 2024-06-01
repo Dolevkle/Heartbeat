@@ -48,6 +48,7 @@ export default function SignUp() {
   });
   const { toast } = useToast();
 
+  //Retrieves the current values of the form fields being watched.
   const formValues = form.watch();
 
   const isAnyFieldEmpty = Object.values(formValues).some((value) => !value);
@@ -57,6 +58,10 @@ export default function SignUp() {
 
   const { mutate: updateUser, isPending: isUpdatingUser } =
     api.user.update.useMutation({
+      /**
+       * Callback function to handle successful user creation.
+       * It navigates to the home page and shows a success toast message.
+       */
       onSuccess: () => {
         router.push("/home");
         toast({
@@ -64,6 +69,10 @@ export default function SignUp() {
           description: "User successfully created",
         });
       },
+      /**
+       * Callback function to handle errors during user creation.
+       * It shows a toast message indicating that the user was not created.
+       */
       onError: () => {
         toast({
           variant: "destructive",
@@ -111,8 +120,11 @@ export default function SignUp() {
   };
 
   const renderSubmitButtonContent = () => {
+    // If there are no empty fields and tracks are available, show a loading spinner
     if (!isAnyFieldEmpty && !tracks)
       return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
+
+    // If user data is being updated or personality is being analyzed, show a loading spinner with text
     if (isUpdatingUser || isAnalyzingPersonality)
       return (
         <div className="flex items-center">
@@ -120,6 +132,7 @@ export default function SignUp() {
           Please wait
         </div>
       );
+    // If none of the above conditions are met, show the default text for the submit button
     return <span>Create an account</span>;
   };
 
