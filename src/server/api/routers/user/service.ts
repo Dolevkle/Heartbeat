@@ -20,21 +20,19 @@ const traitMapping = {
   high: HIGH_VALUE,
 };
 
+/**
+ * Converts a user's personality traits into a numerical vector representation.
+ *
+ * @param personality - The user's personality traits.
+ * @returns A numerical vector representation of the user's personality traits.
+ */
 export const convertPersonalityToVector = (personality: Personality) => {
-  const {
-    Openness,
-    Neuroticism,
-    Extraversion,
-    Conscientiousness,
-    Agreeableness,
-  } = personality;
-
   return [
-    traitMapping[Openness],
-    traitMapping[Neuroticism],
-    traitMapping[Extraversion],
-    traitMapping[Conscientiousness],
-    traitMapping[Agreeableness],
+    traitMapping[personality.Openness],
+    traitMapping[personality.Neuroticism],
+    traitMapping[personality.Extraversion],
+    traitMapping[personality.Conscientiousness],
+    traitMapping[personality.Agreeableness],
   ];
 };
 
@@ -65,7 +63,13 @@ export const cosineSimilarity = (vec1: number[], vec2: number[]) => {
   return dotProduct / (magnitude1 * magnitude2);
 };
 
-export const getPotentialMatches = async (user: User) => {
+/**
+ * Retrieves potential matches for a given user based on their gender and sexual preference.
+ *
+ * @param user - The user for whom potential matches are to be retrieved.
+ * @returns {Promise<User[]>} - A promise that resolves to an array of potential matches.
+ */
+export const getPotentialMatches = async (user: User): Promise<User[]> => {
   return db.user.findMany({
     where: {
       gender: user.sexualPreference,
