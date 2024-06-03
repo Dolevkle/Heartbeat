@@ -93,34 +93,38 @@ export const calculateAndSaveMatches = async (user: User): Promise<void> => {
   // Retrieve potential matches based on the user's gender and sexual preference.
   const potentialMatches = await getPotentialMatches(user);
 
-  // Begin a database transaction to ensure atomicity and consistency.
-  await db.$transaction(async (transaction) => {
-    // Iterate through each potential match.
-    for (const matchUser of potentialMatches) {
-      // Convert the potential match's personality traits into a numerical vector representation.
-      const matchVector = convertPersonalityToVector(
-        matchUser.personality as Personality,
-      );
-
-      // Calculate the cosine similarity between the user's and potential match's personality vectors.
-      const similarity = cosineSimilarity(userVector, matchVector);
-
-      // Check if a match already exists between the user and potential match.
-      const matchExist = await transaction.match.findFirst({
-        where: {
-          users: { has: matchUser.id },
-        },
-      });
-
-      // If no match exists, create a new match record in the database.
-      if (!matchExist) {
-        await transaction.match.create({
-          data: {
-            similarity: `${Math.round(similarity * PERCENTAGE_MULTIPLIER)}%`,
-            users: [user.id, matchUser.id],
-          },
-        });
-      }
-    }
+  // Retrieve existing matches to avoid duplicate entries.
+  const existingMatches = await db.match.findMany({
+    where: {
+      users: { has: user.id },
+    },
   });
+
+  const existingMatchUserIds = new Set(
+    existingMatches
+      .flatMap((match) => match.users)
+      .filter((id) => id !== user.id),
+  );
+
+  // Filter out potential matches that already exist.
+  const newMatches = potentialMatches.filter(
+    (matchUser) => !existingMatchUserIds.has(matchUser.id),
+  );
+
+  // Prepare data for batch insertion.
+  const matchesToCreate = newMatches.map((matchUser) => {
+    const matchVector = convertPersonalityToVector(
+      matchUser.personality as Personality,
+    );
+    const similarity = cosineSimilarity(userVector, matchVector);
+    return {
+      similarity: `${Math.round(similarity * PERCENTAGE_MULTIPLIER)}%`,
+      users: [user.id, matchUser.id],
+    };
+  });
+  if (matchesToCreate.length !== 0) {
+    await db.match.createMany({
+      data: matchesToCreate,
+    });
+  }
 };
