@@ -54,13 +54,25 @@ export const convertPersonalityToVector = (personality: Personality) => {
  * const similarity = cosineSimilarity(vec1, vec2);
  * console.log(similarity); // Output: 0.974609375
  */
-export const cosineSimilarity = (vec1: number[], vec2: number[]) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const dotProduct = vec1.reduce((acc, val, i) => acc + val * vec2[i], 0);
-  const magnitude1 = Math.sqrt(vec1.reduce((acc, val) => acc + val * val, 0));
-  const magnitude2 = Math.sqrt(vec2.reduce((acc, val) => acc + val * val, 0));
-  return dotProduct / (magnitude1 * magnitude2);
+const cosineSimilarity = (vec1: number[], vec2: number[]) => {
+  const [dotProduct, magnitude1, magnitude2] = vec1.reduce(
+    ([accDotProduct, accMagnitude1, accMagnitude2], val, i) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const product = val * vec2[i];
+
+      return [
+        accDotProduct + product,
+        accMagnitude1 + val * val,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        accMagnitude2 + vec2[i] * vec2[i],
+      ];
+    },
+    [0, 0, 0],
+  );
+
+  return dotProduct / (Math.sqrt(magnitude1) * Math.sqrt(magnitude2));
 };
 
 /**
@@ -90,16 +102,17 @@ export const calculateAndSaveMatches = async (user: User): Promise<void> => {
     user.personality as Personality,
   );
 
-  // Retrieve potential matches based on the user's gender and sexual preference.
-  const potentialMatches = await getPotentialMatches(user);
+  // Retrieve potential matches and existing matches concurrently.
+  const [potentialMatches, existingMatches] = await Promise.all([
+    getPotentialMatches(user),
+    db.match.findMany({
+      where: {
+        users: { has: user.id },
+      },
+    }),
+  ]);
 
-  // Retrieve existing matches to avoid duplicate entries.
-  const existingMatches = await db.match.findMany({
-    where: {
-      users: { has: user.id },
-    },
-  });
-
+  // Store existing match user IDs in a Set for efficient lookup.
   const existingMatchUserIds = new Set(
     existingMatches
       .flatMap((match) => match.users)
