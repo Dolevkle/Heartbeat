@@ -1,4 +1,11 @@
 import { UploadButton } from "~/lib/uploadthing";
+
+/**
+ * This is an example component that demonstrates the usage of the UploadButton component.
+ * It uses the imageUploader endpoint and provides custom content for the button and allowed content.
+ * It also includes event handlers for client upload completion and upload errors.
+ * it uploads an image to S3.
+ */
 export default function UploadS3Example() {
   return (
     <UploadButton

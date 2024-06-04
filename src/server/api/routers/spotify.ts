@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { spotifyApi } from "~/lib/spotify";
+import { spotifyApi } from "~/app/api/auth/[...nextauth]/SpotifyProfile";
 
 export const spotifyRouter = createTRPCRouter({
   /**

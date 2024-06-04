@@ -1,5 +1,6 @@
 import SpotifyProvider from "next-auth/providers/spotify";
 import { env } from "~/env";
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 if (!env.SPOTIFY_CLIENT_ID) throw new Error("Missing SPOTIFY_CLIENT_ID");
 
@@ -14,20 +15,29 @@ const spotifyProfile = SpotifyProvider({
 const authURL = new URL("https://accounts.spotify.com/authorize");
 
 const scopes = [
-  "user-top-read",
+  "user-read-private",
   "user-read-email",
   "user-read-recently-played",
-  "user-read-private",
-  "user-read-playback-state",
   "user-library-read",
-  "user-modify-playback-state",
-  "playlist-read-private",
   "playlist-read-collaborative",
+  "user-read-currently-playing",
+  "playlist-read-private",
+  "user-follow-read",
+  "user-top-read",
+  "user-modify-playback-state",
+  "user-read-playback-state",
+  "streaming",
 ];
 
 authURL.searchParams.append("scope", scopes.join(" "));
 
 spotifyProfile.authorization = authURL.toString();
+
+export const spotifyApi = SpotifyApi.withClientCredentials(
+  env.SPOTIFY_CLIENT_ID,
+  env.SPOTIFY_CLIENT_SECRET,
+  scopes,
+);
 
 export default spotifyProfile;
 

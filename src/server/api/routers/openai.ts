@@ -3,7 +3,6 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import axios from "axios";
 import { env } from "~/env";
-import { spotifyApi } from "~/lib/spotify";
 
 const OPEN_API_URL = "https://api.openai.com/v1/chat/completions";
 
