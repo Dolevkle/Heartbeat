@@ -97,6 +97,7 @@ export const getPotentialMatches = async (user: User): Promise<User[]> => {
  * @returns {Promise<void>} - A promise that resolves when the matches are calculated and saved.
  */
 export const calculateAndSaveMatches = async (user: User): Promise<void> => {
+  // TODO maybe because we do 3 queries in db we need to do this in a transaction. might be smarter
   // Convert the user's personality traits into a numerical vector representation.
   const userVector = convertPersonalityToVector(
     user.personality as Personality,
