@@ -1,17 +1,10 @@
-"use client";
 import Matches from "../../_components/matches";
-import { api } from "~/trpc/react";
-import { useSession } from "next-auth/react";
+import { api } from "~/trpc/server";
+import { getServerAuthSession } from "~/server/auth";
 
-export default function Page() {
-  // TODO this needs to be server component if it will be everytime we enter the page it'll execute request
-  const session = useSession();
-  const { data: matches } = api.user.getMatches.useQuery(
-    session?.data?.user.id ?? "",
-    {
-      enabled: session?.data?.user.id !== undefined,
-    },
-  );
+export default async function Page() {
+  const session = await getServerAuthSession();
+  const matches = await api.user.getMatches(session?.user.id ?? "");
   return (
     <div className="h-full w-fit">
       <Matches matches={matches} />

@@ -14,6 +14,8 @@ export default function Component({ matches }: Props) {
   const ids = matches?.map(({ users }) =>
     users[0] === session.data?.user.id ? users[1] : users[0],
   );
+
+  // TODO if you want you can save in match the whole users instead of just the ids and then this request is redundant.
   const { data: users, isLoading } = api.user.getMatchUsers.useQuery(ids, {
     enabled: ids !== undefined,
   });
