@@ -6,7 +6,6 @@ export default function Page() {
   console.log(session?.data?.user.personality);
   return (
     <div className="h-full w-fit">
-      <div className="text-primary">kaki</div>
       <div className="h-96 w-[725px]">
         {session?.data?.user.personality && (
           <PersonalityChart personality={session?.data?.user.personality} />
