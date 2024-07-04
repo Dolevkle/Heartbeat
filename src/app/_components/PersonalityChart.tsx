@@ -4,7 +4,6 @@ import {
   Rectangle,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -36,7 +35,6 @@ const PersonalityChart = ({ personality }: Props) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart width={500} height={300} data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
