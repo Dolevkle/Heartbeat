@@ -6,18 +6,20 @@ import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@components/skeleton";
 import SideCard from "~/app/_components/SideCard";
+import UserCard from "~/app/_components/UserCard";
+import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
+import { useState } from "react";
 interface Props {
   matches: RouterOutputs["user"]["getMatches"];
 }
 export default function Component({ matches }: Props) {
-  const HIGH_MATCH = 75;
   const session = useSession();
   const ids = matches?.map(({ users }) =>
     users[0] === session.data?.user.id ? users[1] : users[0],
   );
 
   // TODO if you want you can save in match the whole users instead of just the ids and then this request is redundant.
-  const { data: users, isLoading } = api.user.getMatchUsers.useQuery(ids, {
+  const { data: users, isLoading } = api.user.findUsersByIds.useQuery(ids, {
     enabled: ids !== undefined,
   });
 
@@ -27,38 +29,25 @@ export default function Component({ matches }: Props) {
    */
   const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
 
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+
+  const handleUserCardClick = (id: string | undefined) => setSelectedId(id);
+
   return (
     <SideCard title="Matches">
       {matches?.map((match, i) =>
         isLoading ? (
-          <div key={match.id} className="flex items-center space-x-4">
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[150px]" />
-              <Skeleton className="h-4 w-[75px]" />
-            </div>
-          </div>
+          <UserCardSkeleton key={match.id} />
         ) : (
-          <div key={match.id} className="flex items-center gap-4">
-            <Avatar className="hidden h-9 w-9 sm:flex">
-              <AvatarImage src={orderedUsers[i]?.image ?? ""} alt="Avatar" />
-              <AvatarFallback>
-                {orderedUsers[i]?.name?.charAt(0) ?? ""}
-              </AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <p className="text-sm font-medium leading-none">
-                {orderedUsers[i]?.name}
-              </p>
-              <p className="text-sm text-muted-foreground">{users[i]?.age}</p>
-            </div>
-            <div className="ml-auto flex items-center space-x-3 font-medium">
-              {parseFloat(match.similarity) >= HIGH_MATCH && (
-                <Sparkles className="h-4 w-4 stroke-primary" />
-              )}
-              <span>{match.similarity}</span>
-            </div>
-          </div>
+          <UserCard
+            key={match.id}
+            user={orderedUsers?.[i]}
+            isSelected={
+              selectedId ===
+              (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
+            }
+            onClick={handleUserCardClick}
+          />
         ),
       )}
     </SideCard>

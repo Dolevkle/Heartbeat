@@ -11,7 +11,7 @@ const SideCard = ({ children, title }: Props) => {
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-8">{children}</CardContent>
+      <CardContent className="grid gap-8 px-0">{children}</CardContent>
     </Card>
   );
 };

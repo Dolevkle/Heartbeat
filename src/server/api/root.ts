@@ -2,6 +2,8 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "~/server/api/routers/user/user";
 import { spotifyRouter } from "~/server/api/routers/spotify/spotify";
 import { openAiRouter } from "~/server/api/routers/openai/openai";
+import { messageRouter } from "~/server/api/routers/message/message";
+import { chatRouter } from "~/server/api/routers/chat/chat";
 
 /**
  * This is the primary router for your server.
@@ -9,9 +11,11 @@ import { openAiRouter } from "~/server/api/routers/openai/openai";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  user: userRouter,
-  spotify: spotifyRouter,
+  chat: chatRouter,
+  message: messageRouter,
   openAi: openAiRouter,
+  spotify: spotifyRouter,
+  user: userRouter,
 });
 
 // export type definition of API
