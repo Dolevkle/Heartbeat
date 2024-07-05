@@ -8,6 +8,7 @@ import { Skeleton } from "@components/skeleton";
 import SideCard from "~/app/_components/SideCard";
 import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
+import { useState } from "react";
 interface Props {
   matches: RouterOutputs["user"]["getMatches"];
 }
@@ -28,13 +29,25 @@ export default function Component({ matches }: Props) {
    */
   const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
 
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+
+  const handleUserCardClick = (id: string | undefined) => setSelectedId(id);
+
   return (
     <SideCard title="Matches">
       {matches?.map((match, i) =>
         isLoading ? (
           <UserCardSkeleton key={match.id} />
         ) : (
-          <UserCard key={match.id} user={orderedUsers?.[i]} />
+          <UserCard
+            key={match.id}
+            user={orderedUsers?.[i]}
+            isSelected={
+              selectedId ===
+              (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
+            }
+            onClick={handleUserCardClick}
+          />
         ),
       )}
     </SideCard>

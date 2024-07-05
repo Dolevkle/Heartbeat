@@ -9,6 +9,7 @@ import { Button } from "@components/button";
 import { toast } from "@components/use-toast";
 import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
+import { useState } from "react";
 interface Props {
   chats: RouterOutputs["chat"]["getChats"];
 }
@@ -39,19 +40,32 @@ export default function Chats({ chats }: Props) {
       });
     },
   });
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+
+  const handleUserCardClick = (id: string | undefined) => {
+    setSelectedId(id);
+  };
   return (
     <SideCard title="Chats">
       {chats?.map((chat, i) =>
         isLoading ? (
           <UserCardSkeleton key={chat.id} />
         ) : (
-          <UserCard key={chat.id} user={orderedUsers?.[i]} />
+          <UserCard
+            key={chat.id}
+            user={orderedUsers?.[i]}
+            isSelected={
+              selectedId ===
+              (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
+            }
+            onClick={handleUserCardClick}
+          />
         ),
       )}
       <Button
         onClick={() =>
           createChat({
-            users: ["665654d7880d08ee8cf00c00", "6686cf8d0cd54da497acec0e"],
+            users: ["665654d7880d08ee8cf00c00", "665afaf45971992be6918dce"],
           })
         }
       >
