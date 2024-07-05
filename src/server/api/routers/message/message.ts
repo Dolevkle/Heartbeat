@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { pusher } from "~/lib/pusher";
+import { getPusherInstance } from "~/lib/pusher";
+
+const pusherServer = getPusherInstance();
 
 export const messageRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -40,11 +42,7 @@ export const messageRouter = createTRPCRouter({
         },
       });
 
-      await pusher.trigger(
-        message.chatId,
-        `new-message-chat-${message.chatId}`,
-        message,
-      );
+      await pusherServer.trigger(message.chatId, `new-message}`, message);
 
       return message;
     }),
