@@ -104,7 +104,7 @@ export const userRouter = createTRPCRouter({
    * console.log(users);
    * ```
    */
-  getMatchUsers: protectedProcedure
+  findUsersByIds: protectedProcedure
     .input(z.string().array())
     .query(async ({ ctx, input }) => {
       return ctx.db.user.findMany({
