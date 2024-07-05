@@ -4,12 +4,9 @@ import Chats from "~/app/_components/Chats";
 import { Button } from "@components/button";
 
 export default async function Page() {
-  const session = await getServerAuthSession();
-  const chats = await api.chat.getChats({ userId: session?.user.id ?? "" });
-
   return (
-    <div className="h-full w-fit">
-      <Chats chats={chats} />
+    <div className="flex h-full w-full items-center justify-center">
+      <h1 className="text-white">Select a chat from the sidebar</h1>
     </div>
   );
 }

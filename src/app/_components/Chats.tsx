@@ -10,11 +10,14 @@ import { toast } from "@components/use-toast";
 import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 interface Props {
   chats: RouterOutputs["chat"]["getChats"];
 }
 export default function Chats({ chats }: Props) {
   const session = useSession();
+  const router = useRouter();
+
   const chatUserIds = chats?.map(({ users }) =>
     users[0] === session.data?.user.id ? users[1] : users[0],
   );
@@ -44,33 +47,37 @@ export default function Chats({ chats }: Props) {
 
   const handleUserCardClick = (id: string | undefined) => {
     setSelectedId(id);
+    router.push(`/home/chats/${id}`);
   };
+
   return (
-    <SideCard title="Chats">
-      {chats?.map((chat, i) =>
-        isLoading ? (
-          <UserCardSkeleton key={chat.id} />
-        ) : (
-          <UserCard
-            key={chat.id}
-            user={orderedUsers?.[i]}
-            isSelected={
-              selectedId ===
-              (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
-            }
-            onClick={handleUserCardClick}
-          />
-        ),
-      )}
-      <Button
-        onClick={() =>
-          createChat({
-            users: ["665654d7880d08ee8cf00c00", "665afaf45971992be6918dce"],
-          })
-        }
-      >
-        Create Test Chat
-      </Button>
-    </SideCard>
+    <div className="w-fit">
+      <SideCard title="Chats">
+        {chats?.map((chat, i) =>
+          isLoading ? (
+            <UserCardSkeleton key={chat.id} />
+          ) : (
+            <UserCard
+              key={chat.id}
+              user={orderedUsers?.[i]}
+              isSelected={
+                selectedId ===
+                (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
+              }
+              onClick={handleUserCardClick}
+            />
+          ),
+        )}
+        <Button
+          onClick={() =>
+            createChat({
+              users: ["665654d7880d08ee8cf00c00", "665afaf45971992be6918dce"],
+            })
+          }
+        >
+          Create Test Chat
+        </Button>
+      </SideCard>
+    </div>
   );
 }
