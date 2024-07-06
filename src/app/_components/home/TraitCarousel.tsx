@@ -67,14 +67,6 @@ export default function TraitCarousel() {
           </TraitCard>
         </CarouselItem>
         <CarouselItem>
-          <TraitCard title="Conscientiousness">
-            personality trait that reflects how organized, responsible, and
-            dependable a person is. People high in conscientiousness are
-            careful, disciplined, and goal-oriented, often excelling in tasks
-            that require attention to detail and persistence.
-          </TraitCard>
-        </CarouselItem>
-        <CarouselItem>
           <TraitCard title="Agreeableness">
             personality trait that reflects how kind, compassionate, and
             cooperative a person is. People high in agreeableness are friendly,
