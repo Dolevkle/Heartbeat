@@ -1,3 +1,4 @@
+"use client";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Button } from "@components/button";
 import { CornerDownLeft, Mic, Paperclip } from "lucide-react";
@@ -14,17 +15,47 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "~/trpc/react";
+import { useSession } from "next-auth/react";
 
 export const messageFormSchema = z.object({
   message: z.string().min(1, { message: "gender cannot be empty" }), // Ensures the last name is not empty
 });
-export default function ChatInput() {
+
+interface Props {
+  chatId: string;
+}
+export default function ChatInput({ chatId }: Props) {
+  const utils = api.useUtils();
+
   const form = useForm<z.infer<typeof messageFormSchema>>({
     resolver: zodResolver(messageFormSchema),
   });
 
+  const session = useSession();
+
+  const { mutate: createMessage, isPending } =
+    api.message.createMessage.useMutation();
+
   const onSubmit = async (values: z.infer<typeof messageFormSchema>) => {
-    console.log(values);
+    if (session.data?.user.id) {
+      createMessage(
+        {
+          message: values.message,
+          chatId: chatId,
+          userId: session.data?.user.id,
+        },
+        {
+          onSuccess: () => {
+            void utils.message.getMessages.invalidate();
+          },
+          onError: (data) => {
+            console.log("Failed to create message");
+          },
+        },
+      );
+    }
+
     form.reset({ message: "" });
   };
 

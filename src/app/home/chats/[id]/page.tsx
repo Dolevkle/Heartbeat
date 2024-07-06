@@ -11,14 +11,15 @@ export default function Page({ params }: { params: { id: string } }) {
   const parsedUser = JSON.parse(
     decodeURIComponent(searchParams.get("user") ?? ""),
   ) as User;
-  const messages = api.message.getMessages.useQuery({ chatId: params.id });
-  console.log(messages);
+  const { data: messages } = api.message.getMessages.useQuery({
+    chatId: params.id,
+  });
 
   return (
     <div className="flex h-full w-full flex-col justify-between">
       <ChatHeader user={parsedUser} />
-      <ChatMessages />
-      <ChatInput />
+      <ChatMessages messages={messages} />
+      <ChatInput chatId={params.id} />
     </div>
   );
 }

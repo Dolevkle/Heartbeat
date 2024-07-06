@@ -3,7 +3,6 @@ import PersonalityChart from "~/app/_components/PersonalityChart";
 import { useSession } from "next-auth/react";
 export default function Page() {
   const session = useSession();
-  console.log(session?.data?.user.personality);
   return (
     <div className="h-full w-fit">
       <div className="h-96 w-[725px]">

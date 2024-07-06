@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { getPusherInstance } from "~/lib/pusher";
+// import { getPusherInstance } from "~/lib/pusher";
 
 export const messageRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -25,7 +25,6 @@ export const messageRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // const pusherServer = getPusherInstance();
-
       const message = await ctx.db.message.create({
         data: {
           content: input.message,
