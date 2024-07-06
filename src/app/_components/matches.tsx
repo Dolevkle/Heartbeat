@@ -32,7 +32,10 @@ export default function Component({ matches }: Props) {
   const [selectedId, setSelectedId] = useState<string | undefined>();
 
   const handleUserCardClick = (id: string | undefined) => setSelectedId(id);
-
+  // TODO matches and chats components are separate now,
+  //  but in the end the logic may be the same and then it can be one component
+  //  also I deleted the high matching sparkles for now, we can add it later
+  //  the correct way to build the matches including routes can be seen in how chats was built
   return (
     <SideCard title="Matches">
       {matches?.map((match, i) =>
