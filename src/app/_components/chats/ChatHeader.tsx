@@ -1,19 +1,12 @@
 "use client";
-import { Card, CardDescription, CardHeader, CardTitle } from "@components/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
-import { api } from "~/trpc/react";
+import { Card, CardHeader } from "@components/card";
 import UserCard from "~/app/_components/UserCard";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { User } from "@prisma/client";
+import { type User } from "@prisma/client";
 
 interface Props {
-  chatId: string;
   user: User;
 }
-export default function ChatHeader({ chatId, user }: Props) {
-  const messages = api.message.getMessages.useQuery({ chatId: chatId });
-  console.log(messages);
+export default function ChatHeader({ user }: Props) {
   return (
     <Card className=" w-full rounded-none border-0 border-b border-secondary">
       <CardHeader className={" p-0"}>
