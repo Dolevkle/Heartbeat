@@ -35,7 +35,7 @@ export default function ChatInput() {
           <TooltipContent side="top">Use Microphone</TooltipContent>
         </Tooltip>
         <Button type="submit" size="sm" className="ml-auto gap-1.5">
-          Send Message
+          Send
           <CornerDownLeft className="size-3.5" />
         </Button>
       </div>
