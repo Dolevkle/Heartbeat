@@ -1,7 +1,18 @@
+"use client";
+import ChatInput from "~/app/_components/chats/ChatInput";
+import ChatHeader from "~/app/_components/chats/ChatHeader";
+import { useSearchParams } from "next/navigation";
+
 export default function Page({ params }: { params: { id: string } }) {
+  const searchParams = useSearchParams();
+  const parsedUser = JSON.parse(
+    decodeURIComponent(searchParams.get("user") ?? ""),
+  );
+
   return (
-    <div className="flex h-full w-full items-center justify-center">
-      <h1 className="text-white">My chat is {params.id}</h1>
+    <div className="flex h-full w-full flex-col items-center justify-between">
+      <ChatHeader chatId={params.id} user={parsedUser} />
+      <ChatInput />
     </div>
   );
 }
