@@ -4,8 +4,8 @@ import { useRef } from "react";
 
 interface Props {
   user: User | undefined;
-  onClick: (id: string | undefined) => void;
-  isSelected: boolean;
+  onClick?: (user: User) => void;
+  isSelected?: boolean;
 }
 export default function UserCard({ user, onClick, isSelected }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
@@ -14,7 +14,7 @@ export default function UserCard({ user, onClick, isSelected }: Props) {
     <div
       className={`flex cursor-pointer items-center gap-4 rounded-lg border-2 ${isSelected ? "border-white" : "border-transparent"} p-4`}
       ref={divRef}
-      onClick={() => onClick(user?.id)}
+      onClick={() => (onClick && user ? onClick(user) : null)}
     >
       <Avatar className="hidden h-9 w-9 sm:flex">
         <AvatarImage src={user?.image ?? ""} alt="Avatar" />

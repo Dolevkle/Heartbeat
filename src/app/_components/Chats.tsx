@@ -1,9 +1,6 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
-import { Sparkles } from "lucide-react";
 import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
-import { Skeleton } from "@components/skeleton";
 import SideCard from "~/app/_components/SideCard";
 import { Button } from "@components/button";
 import { toast } from "@components/use-toast";
@@ -11,6 +8,7 @@ import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { User } from "@prisma/client";
 interface Props {
   chats: RouterOutputs["chat"]["getChats"];
 }
@@ -45,9 +43,10 @@ export default function Chats({ chats }: Props) {
   });
   const [selectedId, setSelectedId] = useState<string | undefined>();
 
-  const handleUserCardClick = (id: string | undefined) => {
-    setSelectedId(id);
-    router.push(`/home/chats/${id}`);
+  const handleUserCardClick = (user: User, chatId: string) => {
+    setSelectedId(user.id);
+    const queryString = `user=${encodeURIComponent(JSON.stringify(user))}`;
+    router.push(`/home/chats/${chatId}?${queryString}`);
   };
 
   return (
@@ -64,7 +63,7 @@ export default function Chats({ chats }: Props) {
                 selectedId ===
                 (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
               }
-              onClick={handleUserCardClick}
+              onClick={() => handleUserCardClick(orderedUsers[i], chat.id)}
             />
           ),
         )}

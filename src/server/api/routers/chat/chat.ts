@@ -27,4 +27,13 @@ export const chatRouter = createTRPCRouter({
         },
       });
     }),
+  findChatById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.chat.findUnique({ where: { id: input.id } });
+    }),
 });
