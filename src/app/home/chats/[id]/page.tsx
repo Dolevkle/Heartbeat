@@ -18,7 +18,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className="flex h-full w-full flex-col justify-between">
       <ChatHeader user={parsedUser} />
-      <ChatMessages messages={messages} />
+      <ChatMessages messages={messages} chatId={params.id} />
       <ChatInput chatId={params.id} />
     </div>
   );
