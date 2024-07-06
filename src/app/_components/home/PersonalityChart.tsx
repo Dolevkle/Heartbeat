@@ -1,14 +1,6 @@
-import {
-  BarChart,
-  Bar,
-  Rectangle,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { BarChart, Bar, CartesianGrid, XAxis } from "recharts";
 import { type Personality } from "~/app/signup/types";
+import { type ChartConfig, ChartContainer } from "@components/chart";
 
 interface Props {
   personality: Personality;
@@ -23,6 +15,13 @@ const traitMapping = {
   medium: MEDIUM_VALUE,
   high: HIGH_VALUE,
 };
+
+const chartConfig = {
+  name: {
+    label: "name",
+    color: "#e11d48",
+  },
+} satisfies ChartConfig;
 // TODO this is personality chart widget.
 //  We can do multiple widgets in user page.
 //  Another idea I had for widget is trait carousel,
@@ -33,19 +32,13 @@ const PersonalityChart = ({ personality }: Props) => {
     measure: traitMapping[value as "low" | "high" | "medium"],
   }));
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart width={500} height={300} data={data}>
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar
-          dataKey="measure"
-          fill="#e11d48"
-          activeBar={<Rectangle fill="white" stroke="#e11d48" />}
-        />
+    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+      <BarChart accessibilityLayer data={data}>
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey="name" tickLine={false} axisLine={false} />
+        <Bar dataKey="measure" fill="var(--color-name)" radius={4} />
       </BarChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
 };
 
