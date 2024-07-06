@@ -1,12 +1,12 @@
-import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
-import Chats from "~/app/_components/Chats";
-import { Button } from "@components/button";
-
 export default async function Page() {
+  // TODO we can change the image later if we don't like
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <h1 className="text-white">Select a chat from the sidebar</h1>
+      <img
+        src="/assets/chats.jpg"
+        alt="no chats image"
+        className="h-96 w-[750px]"
+      />
     </div>
   );
 }
