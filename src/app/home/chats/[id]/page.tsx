@@ -4,6 +4,7 @@ import ChatHeader from "~/app/_components/chats/ChatHeader";
 import { useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { type User } from "@prisma/client";
+import ChatMessages from "~/app/_components/chats/ChatMessages";
 
 export default function Page({ params }: { params: { id: string } }) {
   const searchParams = useSearchParams();
@@ -14,8 +15,9 @@ export default function Page({ params }: { params: { id: string } }) {
   console.log(messages);
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-between">
+    <div className="flex h-full w-full flex-col justify-between">
       <ChatHeader user={parsedUser} />
+      <ChatMessages />
       <ChatInput />
     </div>
   );
