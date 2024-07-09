@@ -47,6 +47,7 @@ export default function ChatInput({ chatId }: Props) {
         },
         {
           onSuccess: () => {
+            // TODO we might not need invalidation because of websockets, maybe just manage front end state
             void utils.message.getMessages.invalidate();
           },
           onError: (data) => {
