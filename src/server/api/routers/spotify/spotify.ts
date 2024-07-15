@@ -53,4 +53,29 @@ export const spotifyRouter = createTRPCRouter({
       const tracks = await spotifyApi.playlists.getPlaylistItems(input.id);
       return tracks.items;
     }),
+  /**
+   * Retrieves detailed information about a specific playlist.
+   *
+   * @remarks
+   * This procedure is protected and requires a valid access token.
+   *
+   * @param input - An object containing the playlist's ID.
+   * @param input.id - The Spotify playlist ID.
+   *
+   * @returns A promise that resolves to detailed information about the playlist.
+   *
+   * @throws Will throw an error if the request fails or if the access token is invalid.
+   *
+   * @example
+   * ```typescript
+   * const playlistInfo = await trpc.spotifyRouter.playlistInfo.query({ id: 'playlist_id' });
+   * console.log(playlistInfo);
+   * ```
+   */
+  playlistInfo: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const playlistInfo = await spotifyApi.playlists.getPlaylist(input.id);
+      return playlistInfo;
+    }),
 });

@@ -55,6 +55,7 @@ model User {
   image            String?
   images           Image[]
   Message          Message[]
+  playlist         String?
 }
 
 model Match {
