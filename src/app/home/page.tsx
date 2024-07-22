@@ -2,7 +2,7 @@
 import PersonalityChart from "~/app/_components/home/PersonalityChart";
 import { useSession } from "next-auth/react";
 import TraitCarousel from "~/app/_components/home/TraitCarousel";
-import ChosenPlaylistDisplay from "../_components/home/ChosenPlaylistDisplay/ChosenPlaylistDisplay";
+import ChosenPlaylistDisplay from "../_components/home/ChosenPlaylist/ChosenPlaylistDisplay";
 
 export default function Page() {
   const session = useSession();

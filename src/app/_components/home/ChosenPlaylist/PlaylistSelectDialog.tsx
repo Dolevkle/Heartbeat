@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { PenSquareIcon } from "lucide-react";
 import { Button } from "@components/button";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
@@ -29,8 +29,6 @@ import {
   SelectValue,
 } from "../../shadcn/select";
 import { useToast } from "../../shadcn/use-toast";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Personality, userSchema } from "~/app/signup/types";
@@ -39,9 +37,7 @@ import { Loader2 } from "lucide-react";
 
 const PlaylistSelectDialog: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
   const session = useSession();
-  const queryClient = useQueryClient();
   const { update: updateSession } = useSession();
 
   const playlistSchema = userSchema.pick({
@@ -149,7 +145,7 @@ const PlaylistSelectDialog: React.FC = () => {
           className="relative left-1/2 flex h-12 w-12 -translate-x-1/2 transform rounded-full border-none text-white"
           onClick={() => setIsOpen(true)}
         >
-          <BsPencilSquare className="text-2xl" />
+          <PenSquareIcon className="text-2xl" />
         </Button>
       </DialogTrigger>
       <DialogContent className="text-white sm:max-w-[425px]">
