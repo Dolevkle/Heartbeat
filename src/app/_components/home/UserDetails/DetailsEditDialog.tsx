@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { PenSquareIcon } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { PenSquareIcon, Loader2 } from "lucide-react";
 import { Button } from "@components/button";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
@@ -33,20 +33,40 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Personality, userSchema } from "~/app/signup/types";
 import { type z } from "zod";
-import { Loader2 } from "lucide-react";
+import { genders, sexualPreferences } from "~/app/consts";
+import { Input } from "../../shadcn/input";
 
 const DetailsEditDialog: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
   const { update: updateSession } = useSession();
 
-  const playlistSchema = userSchema.pick({
-    playlist: true,
+  const userDetailsSchema = userSchema.pick({
+    age: true,
+    gender: true,
+    sexualPreference: true,
   });
 
-  const form = useForm<z.infer<typeof playlistSchema>>({
-    resolver: zodResolver(playlistSchema),
+  const form = useForm<z.infer<typeof userDetailsSchema>>({
+    resolver: zodResolver(userDetailsSchema),
+    defaultValues: {
+      age: session.data?.user.age ?? 18,
+      gender: session.data?.user.gender ?? "",
+      sexualPreference: session.data?.user.sexualPreference ?? "",
+    },
   });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (session) {
+      reset({
+        age: session.data?.user.age ?? 18,
+        gender: session.data?.user.gender ?? "",
+        sexualPreference: session.data?.user.sexualPreference ?? "",
+      });
+    }
+  }, [session, reset]);
 
   const { toast } = useToast();
 
@@ -54,15 +74,12 @@ const DetailsEditDialog: React.FC = () => {
 
   const isAnyFieldEmpty = Object.values(formValues).some((value) => !value);
 
-  const { mutate: analyzePersonality, isPending: isAnalyzingPersonality } =
-    api.openAi.analyzePersonality.useMutation();
-
   const { mutate: updateUser, isPending: isUpdatingUser } =
     api.user.update.useMutation({
       onSuccess: async () => {
         toast({
           title: "Success",
-          description: "Playlist successfully updated",
+          description: "Details successfully updated",
         });
         setIsOpen(false);
         await updateSession();
@@ -71,7 +88,7 @@ const DetailsEditDialog: React.FC = () => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: "Playlist was not updated!",
+          description: "Details were not updated!",
         });
       },
     });
@@ -87,47 +104,22 @@ const DetailsEditDialog: React.FC = () => {
       },
     });
 
-  const { data: playlists } = api.spotify.userPlaylists.useQuery(
-    { id: session.data?.user.spotifyId ?? "" },
-    { enabled: !!session.data },
-  );
-
-  const { data: tracks } = api.spotify.tracks.useQuery(
-    { id: formValues.playlist },
-    { enabled: !!formValues.playlist },
-  );
-
-  const onSubmit = async (values: z.infer<typeof playlistSchema>) => {
-    if (session.data?.user.id && tracks)
-      analyzePersonality(
-        { songs: tracks.map((track) => track.track.name) },
-        {
-          onSuccess: (data) => {
-            deleteExistingMatches(session.data?.user.id);
-            updateUser({
-              id: session.data?.user.id,
-              age: session.data?.user.age ?? 0,
-              gender: session.data?.user.gender ?? "",
-              sexualPreference: session.data?.user.sexualPreference ?? "",
-              ...values,
-              personality: data as Personality,
-            });
-          },
-          onError: () =>
-            toast({
-              variant: "destructive",
-              title: "Uh oh! Something went wrong.",
-              description: "User's personality was not analyzed!",
-            }),
+  const onSubmit = async (values: z.infer<typeof userDetailsSchema>) => {
+    if (session.data?.user.id && session.data?.user.personality)
+      deleteExistingMatches(session.data?.user.id, {
+        onSuccess: () => {
+          updateUser({
+            id: session.data?.user.id,
+            ...values,
+            playlist: session.data?.user.playlist,
+            personality: session.data?.user.personality as Personality,
+          });
         },
-      );
+      });
   };
 
   const renderSubmitButtonContent = () => {
-    if (!isAnyFieldEmpty && !tracks)
-      return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
-
-    if (isUpdatingUser || isAnalyzingPersonality || isDeletingMatches)
+    if (isUpdatingUser || isDeletingMatches)
       return (
         <div className="flex items-center">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -153,48 +145,99 @@ const DetailsEditDialog: React.FC = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Select Playlist</DialogTitle>
+              <DialogTitle>Edit Details</DialogTitle>
               <DialogDescription>
-                The playlist you select will shape your user personality and
-                affect your matches.
+                Changing your details will affect your current matches.
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="mt-4 grid gap-2">
               <FormField
                 control={form.control}
-                name="playlist"
+                name="age"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      <Label htmlFor="playlist">playlist</Label>
+                      <Label htmlFor="age">Age</Label>
                     </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select from your playlists" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {playlists?.map((playlist) => (
-                          <SelectItem key={playlist.id} value={playlist.id}>
-                            {playlist.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <Input type="number" placeholder="18" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+            <div className="mb-4 grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="gender"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        <Label htmlFor="gender">Gender</Label>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {genders.map((gender, index) => (
+                            <SelectItem key={index} value={gender}>
+                              {gender}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="sexualPreference"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        <Label htmlFor="sexualPreference">
+                          Sexual Preference
+                        </Label>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select preference" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {sexualPreferences.map((sexualPreference, index) => (
+                            <SelectItem key={index} value={sexualPreference}>
+                              {sexualPreference}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <DialogFooter>
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isAnyFieldEmpty || !tracks}
+                disabled={isAnyFieldEmpty}
               >
                 {renderSubmitButtonContent()}
               </Button>

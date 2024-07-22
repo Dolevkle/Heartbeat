@@ -37,6 +37,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@components/use-toast";
 import { type Personality, userSchema } from "~/app/signup/types";
+import { genders, sexualPreferences } from "../consts";
 
 export default function SignUp() {
   const session = useSession();
@@ -135,10 +136,6 @@ export default function SignUp() {
     // If none of the above conditions are met, show the default text for the submit button
     return <span>Create an account</span>;
   };
-
-  const genders = ["male", "female", "non binary"];
-
-  const sexualPreferences = ["male", "female", "both"];
 
   return (
     <Form {...form}>
