@@ -47,6 +47,7 @@ declare module "next-auth" {
       Conscientiousness: string;
       Agreeableness: string;
     };
+    playlist: string;
   }
 }
 /**
@@ -83,6 +84,7 @@ export const authOptions: NextAuthOptions = {
         age: user?.age,
         gender: user?.gender,
         sexualPreference: user?.sexualPreference,
+        playlist: user?.playlist,
       };
       return session;
     },

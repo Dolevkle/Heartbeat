@@ -18,6 +18,9 @@ const config = {
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
+    images: {
+        domains: ['mosaic.scdn.co'],
+    },
 };
 
 export default config;

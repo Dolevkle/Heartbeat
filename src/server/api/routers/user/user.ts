@@ -38,6 +38,7 @@ export const userRouter = createTRPCRouter({
           Conscientiousness: z.string(),
           Agreeableness: z.string(),
         }),
+        playlist: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
