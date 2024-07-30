@@ -11,20 +11,20 @@ export default function Page() {
   const session = useSession();
   return (
     <ScrollArea className="rounded-md">
-      <div className="flex h-full w-full flex-wrap items-center overflow-auto p-6">
-        <div className="flex h-fit w-full justify-start ">
+      <div className="grid grid-cols-4 p-6">
+        <div className="flex h-fit justify-start ">
           <UserDetailsDisplay />
         </div>
-        <div className="mt-5 flex h-fit w-[30%] justify-start">
+        <div className="mt-5 flex h-fit row-start-2  justify-start">
           <ChosenPlaylistDisplay />
         </div>
-        <div className="flex h-96 w-[35%] justify-start items-center" >
+        <div className=" w-full  row-span-2 col-span-2 col-start-3 " >
           {session?.data?.user.personality && (
            <PersonalityRadarChart personality={session.data.user.personality} />
           )}
           
         </div>
-        <div className="flex h-96 w-[35%] align-middle ">
+        <div className="flex col-start-3 w-full col-span-2  justify-center ">
         <TraitCarousel />
         </div>
       </div>

@@ -26,9 +26,9 @@ const traitMapping = {
 };
 
 const chartConfig = {
-  personality: {
-    label: "Personality",
-    color: "var(--secondery)",
+  value: {
+    label: "value",
+    color: "var(--primary)",
   },
 } satisfies ChartConfig;
 
@@ -37,12 +37,12 @@ const PersonalityRadarChart = ({ personality }: Props) => {
     trait: key,
     value: traitMapping[value as "low" | "high" | "medium"],
   }));
+  console.log(data)
   return (
-    <ChartContainer config={chartConfig} className="max-h-80">
+    <ChartContainer config={chartConfig} className="h-full w-full h-full">
       <RadarChart data={data}>
         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-        <PolarAngleAxis dataKey="trait" radius={100}/>
-        <PolarRadiusAxis angle={30} domain={[0, MAX_VALUE]} axisLine={false} tick={false}/>
+        <PolarAngleAxis dataKey="trait" />
         <PolarGrid />
         <Radar
           dataKey="value"
