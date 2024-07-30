@@ -114,4 +114,32 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+  /**
+   * Retrieves a user based on the ID.
+   *
+   * @remarks
+   * This function is used to fetch a user from the database based on the ID.
+   * It is a protected procedure, meaning it requires authentication to be called.
+   *
+   * @param input - user ID.
+   * @returns A promise that resolves to the {@link User}.
+   *
+   * @throws Will throw an error if the user is not authenticated.
+   *
+   * @example
+   * ```typescript
+   * const userIds = "userID";
+   * const user = await trpc.procedure.userRouter.getUser.query(userId);
+   * console.log(user);
+   * ```
+   */
+  findUserById: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return ctx.db.user.findUnique({
+        where: {
+          id: input,
+        },
+      });
+    }),
 });
