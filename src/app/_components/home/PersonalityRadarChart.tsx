@@ -1,6 +1,6 @@
 "use client";
 
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 import { type Personality } from "~/app/signup/types";
 
 import {
@@ -9,21 +9,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@components/chart";
+import { traitMapping } from "~/app/consts";
 
 interface Props {
   personality: Personality;
 }
-
-const LOW_VALUE = 1;
-const MEDIUM_VALUE = 3;
-const HIGH_VALUE = 5;
-const MAX_VALUE = 6
-
-const traitMapping = {
-  low: LOW_VALUE,
-  medium: MEDIUM_VALUE,
-  high: HIGH_VALUE,
-};
 
 const chartConfig = {
   value: {
@@ -37,9 +27,9 @@ const PersonalityRadarChart = ({ personality }: Props) => {
     trait: key,
     value: traitMapping[value as "low" | "high" | "medium"],
   }));
-  console.log(data)
+
   return (
-    <ChartContainer config={chartConfig} className="h-full w-full h-full">
+    <ChartContainer config={chartConfig} className="h-full w-full">
       <RadarChart data={data}>
         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
         <PolarAngleAxis dataKey="trait" />
