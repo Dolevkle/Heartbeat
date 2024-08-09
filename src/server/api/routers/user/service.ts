@@ -1,4 +1,5 @@
 import type { User } from "@prisma/client";
+import { sexualPreferences } from "~/app/consts";
 import { db } from "~/server/db";
 
 export type Personality = {
@@ -19,6 +20,12 @@ const traitMapping = {
   medium: MEDIUM_VALUE,
   high: HIGH_VALUE,
 };
+
+export enum SexualPreference {
+  MALE = "male",
+  FEMALE = "female",
+  BOTH = "both",
+}
 
 /**
  * Converts a user's personality traits into a numerical vector representation.
@@ -82,12 +89,26 @@ const cosineSimilarity = (vec1: number[], vec2: number[]) => {
  * @returns {Promise<User[]>} - A promise that resolves to an array of potential matches.
  */
 export const getPotentialMatches = async (user: User): Promise<User[]> => {
+  // might be problem here, if other users gender is non binary i might not find him 
+  // people with same gender as sexual preferences will find themselvs 
+  if( user.sexualPreference == SexualPreference.BOTH)
+  {
   return db.user.findMany({
     where: {
-      gender: user.sexualPreference,
+      id: {not : user.id },
+      OR: [{gender: SexualPreference.MALE},{gender:SexualPreference.FEMALE}],
       sexualPreference: user.gender,
     },
   });
+} else{
+  return db.user.findMany({
+    where: {
+      id: {not : user.id },
+      gender: user.sexualPreference,
+      sexualPreference: user.gender,
+    },
+  })
+}
 };
 
 /**
@@ -97,6 +118,7 @@ export const getPotentialMatches = async (user: User): Promise<User[]> => {
  * @returns {Promise<void>} - A promise that resolves when the matches are calculated and saved.
  */
 export const calculateAndSaveMatches = async (user: User): Promise<void> => {
+  // return 
   // TODO maybe because we do 3 queries in db we need to do this in a transaction. might be smarter
   // Convert the user's personality traits into a numerical vector representation.
   const userVector = convertPersonalityToVector(
@@ -121,6 +143,7 @@ export const calculateAndSaveMatches = async (user: User): Promise<void> => {
   );
 
   // Filter out potential matches that already exist.
+  // might add itself
   const newMatches = potentialMatches.filter(
     (matchUser) => !existingMatchUserIds.has(matchUser.id),
   );
