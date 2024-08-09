@@ -89,8 +89,6 @@ const cosineSimilarity = (vec1: number[], vec2: number[]) => {
  * @returns {Promise<User[]>} - A promise that resolves to an array of potential matches.
  */
 export const getPotentialMatches = async (user: User): Promise<User[]> => {
-  // might be problem here, if other users gender is non binary i might not find him 
-  // people with same gender as sexual preferences will find themselvs 
   if( user.sexualPreference == SexualPreference.BOTH)
   {
   return db.user.findMany({
@@ -143,7 +141,6 @@ export const calculateAndSaveMatches = async (user: User): Promise<void> => {
   );
 
   // Filter out potential matches that already exist.
-  // might add itself
   const newMatches = potentialMatches.filter(
     (matchUser) => !existingMatchUserIds.has(matchUser.id),
   );
