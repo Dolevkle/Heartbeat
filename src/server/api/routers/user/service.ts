@@ -105,7 +105,7 @@ export const getPotentialMatches = async (user: User): Promise<User[]> => {
     where: {
       id: {not : user.id },
       gender: user.sexualPreference,
-      sexualPreference: user.gender,
+      OR: [{sexualPreference: SexualPreference.BOTH},{gender: user.gender}],
     },
   })
 }
