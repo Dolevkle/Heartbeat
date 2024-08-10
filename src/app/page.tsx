@@ -9,7 +9,7 @@ import { CanvasShowcase } from "~/app/_components/canvas-showcase";
 export default function Page() {
   const router = useRouter();
   const session = useSession();
-  const sign = () => signIn("spotify", { callbackUrl: "/signup" });
+  const sign = () => signIn("spotify", { callbackUrl: "/home" });
   const handleLogin = () => {
     if (session.data?.user.personality) router.push("/home");
     else void sign();
