@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { Vortex } from "~/app/_components/ui/Vortex";
 import { CanvasShowcase } from "~/app/_components/canvas-showcase";
-import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
