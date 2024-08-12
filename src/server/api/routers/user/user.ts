@@ -39,6 +39,7 @@ export const userRouter = createTRPCRouter({
           Agreeableness: z.string(),
         }),
         playlist: z.string(),
+        city: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
