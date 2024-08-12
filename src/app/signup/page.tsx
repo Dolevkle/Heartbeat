@@ -169,22 +169,41 @@ export default function SignUp() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="age"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        <Label htmlFor="age">age</Label>
-                      </FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="18" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="age"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Label htmlFor="age">age</Label>
+                        </FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="18" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Label htmlFor="city">City</Label>
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter city" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">

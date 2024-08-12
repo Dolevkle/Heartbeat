@@ -58,8 +58,6 @@ export default function Page() {
                 </div>
               </motion.div>
             </Vortex>
-
-            {/*<GlobeShowcase />*/}
           </div>
           <CanvasShowcase />
         </div>
