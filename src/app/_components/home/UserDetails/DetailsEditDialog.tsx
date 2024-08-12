@@ -45,6 +45,7 @@ const DetailsEditDialog: React.FC = () => {
     age: true,
     gender: true,
     sexualPreference: true,
+    city: true,
   });
 
   const form = useForm<z.infer<typeof userDetailsSchema>>({
