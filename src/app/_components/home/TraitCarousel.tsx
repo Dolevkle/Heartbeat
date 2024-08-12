@@ -29,10 +29,10 @@ export default function TraitCarousel() {
   return (
     <Carousel
       opts={{
-        align: "start",
+        align: "center",
         loop: true,
       }}
-      className="w-full max-w-sm"
+      className="w-full max-w-sm flex items-center"
     >
       <CarouselContent>
         <CarouselItem>
