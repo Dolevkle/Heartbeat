@@ -1,5 +1,5 @@
 import type { User } from "@prisma/client";
-import { sexualPreferences } from "~/app/consts";
+import { sexualPreferences, SexualPreference } from "~/app/consts";
 import { db } from "~/server/db";
 
 export type Personality = {
@@ -20,12 +20,6 @@ const traitMapping = {
   medium: MEDIUM_VALUE,
   high: HIGH_VALUE,
 };
-
-export enum SexualPreference {
-  MALE = "male",
-  FEMALE = "female",
-  BOTH = "both",
-}
 
 /**
  * Converts a user's personality traits into a numerical vector representation.
