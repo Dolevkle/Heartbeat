@@ -39,7 +39,7 @@ const MatchWindow: React.FC = () => {
           <ResizablePanel
             className="h-full w-6/12"
             defaultSize={52}
-            minSize={30}
+            minSize={40}
           >
             <Carousel
               opts={{
@@ -69,7 +69,7 @@ const MatchWindow: React.FC = () => {
           <ResizablePanel
             className="w-6/12 bg-primary pl-4"
             defaultSize={50}
-            minSize={30}
+            minSize={40}
           >
             <AspectRatio>
               <div className="flex h-full w-full flex-col justify-center gap-1 object-cover font-bold">
