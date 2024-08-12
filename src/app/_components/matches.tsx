@@ -9,6 +9,8 @@ import SideCard from "~/app/_components/SideCard";
 import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
 import { useState } from "react";
+import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
+
 interface Props {
   matches: RouterOutputs["user"]["getMatches"];
 }
@@ -18,41 +20,41 @@ export default function Component({ matches }: Props) {
     users[0] === session.data?.user.id ? users[1] : users[0],
   );
 
-  // TODO if you want you can save in match the whole users instead of just the ids and then this request is redundant.
   const { data: users, isLoading } = api.user.findUsersByIds.useQuery(ids, {
     enabled: ids !== undefined,
   });
 
-  /**
-   * This function maps the user IDs to their corresponding user objects from the fetched users data.
-   * It ensures that the order of the users matches the order of the IDs.
-   */
   const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
 
   const [selectedId, setSelectedId] = useState<string | undefined>();
 
   const handleUserCardClick = (id: string | undefined) => setSelectedId(id);
-  // TODO matches and chats components are separate now,
-  //  but in the end the logic may be the same and then it can be one component
-  //  also I deleted the high matching sparkles for now, we can add it later
-  //  the correct way to build the matches including routes can be seen in how chats was built
+
   return (
     <SideCard title="Matches">
-      {matches?.map((match, i) =>
-        isLoading ? (
-          <UserCardSkeleton key={match.id} />
-        ) : (
-          <UserCard
-            key={match.id}
-            user={orderedUsers?.[i]}
-            isSelected={
-              selectedId ===
-              (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
-            }
-            onClick={handleUserCardClick}
-          />
-        ),
-      )}
+      <div className="flex flex-row">
+        <ScrollArea>
+          <div className="mb-4 ml-4 flex flex-row">
+            {matches?.map((match, i) =>
+              isLoading ? (
+                <UserCardSkeleton key={match.id} />
+              ) : (
+                <UserCard
+                  key={match.id}
+                  user={orderedUsers?.[i]}
+                  isSelected={
+                    selectedId ===
+                    (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
+                  }
+                  onClick={handleUserCardClick}
+                />
+              ),
+            )}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+        <Sparkles />
+      </div>
     </SideCard>
   );
 }

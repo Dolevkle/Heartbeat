@@ -25,13 +25,18 @@ export default function UserCard({ user, onClick, isSelected, chatId }: Props) {
         <AvatarImage src={user?.image ?? ""} alt="Avatar" />
         <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
       </Avatar>
-      <div className="grid gap-1 grid-cols-2 grid-rows-2">
-        <p className="text-sm font-medium leading-none w-min">{user?.name}</p>
-        <p className="text-sm text-muted-foreground leading-none">{user?.age}</p>
-        <p className="text-sm text-muted-foreground col-span-2">
-          {messages && messages[0]?.content}
-        </p>
-      </div>
+      <Avatar className="hidden h-9 w-9 sm:flex">
+        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
+      <Avatar className="hidden h-9 w-9 sm:flex">
+        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
+      <Avatar className="hidden h-9 w-9 sm:flex">
+        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
     </div>
   );
 }
