@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import exampleImage from "public/assets/profilePic.png";
 import { Separator } from "../shadcn/separator";
@@ -14,6 +14,7 @@ import {
 } from "../shadcn/carousel";
 import { Button } from "../shadcn/button";
 import { XIcon } from "lucide-react";
+import { Progress } from "../shadcn/progress";
 
 const currentMatch = {
   artist: "Ornella Binni",
@@ -23,6 +24,13 @@ const currentMatch = {
 };
 
 const MatchWindow: React.FC = () => {
+  const [progress, setProgress] = useState<number>(13);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(66), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="h-8/12 relative m-24 mr-2 flex w-8/12">
       <div className="flex h-full w-full rounded-md border-4 border-primary">
@@ -64,6 +72,11 @@ const MatchWindow: React.FC = () => {
           </AspectRatio>
         </div>
       </div>
+      <Progress
+        value={progress}
+        orientation="vertical"
+        className="absolute w-[60%]"
+      />
       <div className="absolute -bottom-8 left-1/2 flex -translate-x-1/2 transform gap-8">
         <Button
           className="h-16 w-16 rounded-full border border-primary bg-white text-red-700 hover:bg-red-400"
