@@ -20,6 +20,7 @@ const UserDetailsDisplay: React.FC = () => {
   );
 
   const facts = [
+    `I live in ${userDetails?.city}`,
     `I am a ${userDetails?.gender}.`,
     `I am looking for a ${userDetails?.sexualPreference}!`,
   ];

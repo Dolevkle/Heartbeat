@@ -45,6 +45,7 @@ const DetailsEditDialog: React.FC = () => {
     age: true,
     gender: true,
     sexualPreference: true,
+    city: true,
   });
 
   const form = useForm<z.infer<typeof userDetailsSchema>>({
@@ -53,6 +54,7 @@ const DetailsEditDialog: React.FC = () => {
       age: session.data?.user.age ?? 18,
       gender: session.data?.user.gender ?? "",
       sexualPreference: session.data?.user.sexualPreference ?? "",
+      city: session.data?.user.city ?? "",
     },
   });
 
@@ -64,6 +66,7 @@ const DetailsEditDialog: React.FC = () => {
         age: session.data?.user.age ?? 18,
         gender: session.data?.user.gender ?? "",
         sexualPreference: session.data?.user.sexualPreference ?? "",
+        city: session.data?.user.city ?? "",
       });
     }
   }, [session, reset]);
@@ -150,22 +153,41 @@ const DetailsEditDialog: React.FC = () => {
                 Changing your details will affect your current matches.
               </DialogDescription>
             </DialogHeader>
-            <div className="mt-4 grid gap-2">
-              <FormField
-                control={form.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Label htmlFor="age">Age</Label>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="18" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="mb-4 mt-4 grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        <Label htmlFor="age">Age</Label>
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="18" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        <Label htmlFor="city">City</Label>
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter city" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <div className="mb-4 grid grid-cols-2 gap-4">
               <div className="grid gap-2">
