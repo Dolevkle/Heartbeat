@@ -116,6 +116,17 @@ const Carousel = React.forwardRef<
       [scrollPrev, scrollNext],
     );
 
+    const handleWheel = React.useCallback(
+      (event: React.WheelEvent<HTMLDivElement>) => {
+        if (event.deltaY < 0) {
+          scrollPrev();
+        } else if (event.deltaY > 0) {
+          scrollNext();
+        }
+      },
+      [scrollPrev, scrollNext],
+    );
+
     React.useEffect(() => {
       if (!api || !setApi) {
         return;
@@ -155,6 +166,7 @@ const Carousel = React.forwardRef<
         <div
           ref={ref}
           onKeyDownCapture={handleKeyDown}
+          onWheel={handleWheel}
           className={cn("relative", className)}
           role="region"
           aria-roledescription="carousel"
