@@ -12,7 +12,7 @@ export default function UserCard({ user, onClick, isSelected }: Props) {
 
   return (
     <div
-      className={`flex cursor-pointer items-center gap-4 rounded-lg border-2 ${isSelected ? "border-white" : "border-transparent"} p-4`}
+      className={`flex rounded-lg border-2 ${isSelected ? "border-white" : "border-transparent"} p-1`}
       ref={divRef}
       onClick={() => (onClick && user ? onClick(user) : null)}
     >
@@ -20,10 +20,18 @@ export default function UserCard({ user, onClick, isSelected }: Props) {
         <AvatarImage src={user?.image ?? ""} alt="Avatar" />
         <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
       </Avatar>
-      <div className="grid gap-1">
-        <p className="text-sm font-medium leading-none">{user?.name}</p>
-        <p className="text-sm text-muted-foreground">{user?.age}</p>
-      </div>
+      <Avatar className="hidden h-9 w-9 sm:flex">
+        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
+      <Avatar className="hidden h-9 w-9 sm:flex">
+        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
+      <Avatar className="hidden h-9 w-9 sm:flex">
+        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
     </div>
   );
 }
