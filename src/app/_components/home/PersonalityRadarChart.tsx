@@ -34,20 +34,20 @@ const PersonalityRadarChart = ({ personality, carouselRef }: Props) => {
     value: traitMapping[value as "low" | "high" | "medium"],
   }));
 
-  let setItem = (e: graphEvent) => {
+  const setTraitCarouselItem = (e: graphEvent) => {
     e?.activeLabel && carouselRef.current?.setItem(e["activeLabel"]);
     e?.value && carouselRef.current?.setItem(e["value"]);
   };
 
   return (
     <ChartContainer config={chartConfig} className="h-full w-full">
-      <RadarChart data={data} onClick={setItem}>
+      <RadarChart data={data} onClick={setTraitCarouselItem}>
         <ChartTooltip
           labelClassName="text-white"
           cursor={false}
           content={<ChartTooltipContent />}
         />
-        <PolarAngleAxis dataKey="trait" onClick={setItem} />
+        <PolarAngleAxis dataKey="trait" onClick={setTraitCarouselItem} />
         <PolarGrid />
         <Radar
           dataKey="value"
