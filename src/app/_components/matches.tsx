@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
-import { Sparkles } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@components/skeleton";
@@ -32,9 +32,9 @@ export default function Component({ matches }: Props) {
 
   return (
     <SideCard title="Matches">
-      <div className="flex flex-row">
-        <ScrollArea>
-          <div className="mb-4 ml-4 flex flex-row">
+      <div className="flex max-w-64 flex-row items-center gap-4">
+        <ScrollArea className="w-full">
+          <div className="mb-2 ml-4 flex w-10/12 flex-row">
             {matches?.map((match, i) =>
               isLoading ? (
                 <UserCardSkeleton key={match.id} />
@@ -53,7 +53,7 @@ export default function Component({ matches }: Props) {
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
-        <Sparkles />
+        <ChevronRight className="mb-1 mr-1 h-8 w-8" />
       </div>
     </SideCard>
   );
