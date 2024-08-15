@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { HeartPulse, Settings, Users2, LogOut, UserRound, MessageCircleHeart    } from "lucide-react";
+import { HeartPulse, Settings, LogOut, UserRound, MessageCircleHeart    } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { usePathname } from "next/navigation";
 import React from "react";
