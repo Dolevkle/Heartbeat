@@ -1,10 +1,10 @@
 "use client";
-import PersonalityChart from "~/app/_components/home/PersonalityChart";
-import PersonalityRadarChart from "~/app/_components/home/PersonalityRadarChart"
+import PersonalityChart from "~/app/_components/profile/PersonalityChart";
+import PersonalityRadarChart from "~/app/_components/profile/PersonalityRadarChart"
 import { useSession } from "next-auth/react";
-import TraitCarousel from "~/app/_components/home/TraitCarousel";
-import ChosenPlaylistDisplay from "../_components/home/ChosenPlaylist/ChosenPlaylistDisplay";
-import UserDetailsDisplay from "../_components/home/UserDetails/UserDetailsDisplay";
+import TraitCarousel from "~/app/_components/profile/TraitCarousel";
+import ChosenPlaylistDisplay from "../_components/profile/ChosenPlaylist/ChosenPlaylistDisplay";
+import UserDetailsDisplay from "../_components/profile/UserDetails/UserDetailsDisplay";
 import { ScrollArea } from "../_components/shadcn/scroll-area";
 
 export default function Page() {

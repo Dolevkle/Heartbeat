@@ -46,7 +46,7 @@ export default function Chats({ chats }: Props) {
   const handleUserCardClick = (user: User, chatId: string) => {
     setSelectedId(user.id);
     const queryString = `user=${encodeURIComponent(JSON.stringify(user))}`;
-    router.push(`/home/chats/${chatId}?${queryString}`);
+    router.push(`/profile/chats/${chatId}?${queryString}`);
   };
 
   return (
