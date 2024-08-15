@@ -13,7 +13,7 @@ export default function Page() {
   const sign = () =>
     signIn("spotify", { callbackUrl: "/home" }, "show_dialog=true");
   const handleLogin = () => {
-    if (session.data?.user.personality) router.push("/home");
+    if (session.data?.user.personality) router.push("/profile");
     else void sign();
   };
 

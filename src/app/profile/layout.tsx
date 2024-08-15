@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { HeartPulse, Home, Settings, Users2, LogOut } from "lucide-react";
+import { HeartPulse, Settings, LogOut, UserRound, MessageCircleHeart    } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -31,16 +31,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col bg-background sm:flex">
+
+
+
+        
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link href="/home" className={getLinkClassname("/home")}>
-            <Home className="h-4 w-4" />
-            <span className="sr-only">Acme Inc</span>
-          </Link>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/home/matches"
-                className={getLinkClassname("/home/matches")}
+                href="/profile/matches"
+                className={getLinkClassname("/profile/matches")}
               >
                 <HeartPulse className="h-5 w-5" />
                 <span className="sr-only">Matches</span>
@@ -51,16 +52,35 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/home/chats"
-                className={getLinkClassname("/home/chats")}
+                href="/profile/chats"
+                className={getLinkClassname("/profile/chats")}
               >
-                <Users2 className="h-5 w-5" />
+                <MessageCircleHeart  className="h-7 w-7" />
                 <span className="sr-only">Chats</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Chats</TooltipContent>
           </Tooltip>
+
+          <Tooltip>
+          <TooltipTrigger asChild>
+          <Link href="/profile" className={getLinkClassname("/profile")}>
+            <UserRound className="h-6 w-6" />
+            <span className="sr-only">Acme Inc</span>
+          </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right">Profile</TooltipContent>
+          </Tooltip>
         </nav>
+
+
+
+
+
+
+
+
+
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
           <Tooltip>
             <TooltipTrigger asChild>

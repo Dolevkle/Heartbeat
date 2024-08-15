@@ -61,10 +61,10 @@ export default function SignUp() {
     api.user.update.useMutation({
       /**
        * Callback function to handle successful user creation.
-       * It navigates to the home page and shows a success toast message.
+       * It navigates to the profile page and shows a success toast message.
        */
       onSuccess: () => {
-        router.push("/home");
+        router.push("/profile");
         toast({
           title: "Success",
           description: "User successfully created",
@@ -319,7 +319,7 @@ export default function SignUp() {
             <div className="mt-4 text-center text-sm">
               Already have an account?
               <Link
-                href={`${session.data?.user.personality ? "/home" : "/"}`}
+                href={`${session.data?.user.personality ? "/profile" : "/"}`}
                 className="underline"
               >
                 Log in
