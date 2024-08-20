@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import TraitCarousel, {CarouselHandle} from "~/app/_components/home/TraitCarousel";
 import ChosenPlaylistDisplay from "../_components/home/ChosenPlaylist/ChosenPlaylistDisplay";
 import UserDetailsDisplay from "../_components/home/UserDetails/UserDetailsDisplay";
+import ProfilePictureDisplay from "../_components/home/ProfilePicture/ProfilePictureDisplay";
 import { ScrollArea } from "../_components/shadcn/scroll-area";
 import { useRef } from "react";
 
@@ -16,6 +17,9 @@ export default function Page() {
       <div className="grid grid-cols-4 p-6">
         <div className="flex h-fit justify-start ">
           <UserDetailsDisplay />
+        </div>
+        <div className="flex h-fit justify-start ">
+          <ProfilePictureDisplay />
         </div>
         <div className="row-start-2 mt-5 flex h-fit  justify-start">
           <ChosenPlaylistDisplay />
