@@ -19,7 +19,7 @@ const config = {
         ignoreDuringBuilds: true,
     },
     images: {
-        domains: ['mosaic.scdn.co', 'utfs.io'],
+        domains: ['mosaic.scdn.co', 'i.scdn.co'],
     },
 };
 
