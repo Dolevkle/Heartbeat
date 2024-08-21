@@ -1,39 +1,42 @@
 import Matches from "../../_components/matches";
-import { api } from "~/trpc/server";
+import { api as serverApi } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
-import MatchWindow from "~/app/_components/matches/MatchWindow";
 import type { User, Match } from "@prisma/client";
+import type { ParticipantDict } from "~/server/api/routers/match/match";
+import MatchWindowClient from "~/app/_components/matches/MatchWindowClient";
 
 export default async function Page() {
   const session = await getServerAuthSession();
-  const potentialMatches: Match = await api.match.getMatches(
+  const potentialMatches: Match[] = await serverApi.match.getMatches(
     session?.user.id ?? "",
   );
 
   const ids = potentialMatches?.flatMap(({ userStatuses }) => {
-    // Get all the participant IDs
-    const participantIds = Object.keys(userStatuses);
+    if (userStatuses) {
+      const participantIds = Object.keys(userStatuses as ParticipantDict);
+      return participantIds.filter((id) => id !== session?.user?.id);
+    }
 
-    // Filter out the session ID
-    const filteredIds = participantIds.filter((id) => id !== session?.user?.id);
-
-    // If there's exactly one remaining ID, return it; otherwise, handle as needed
-    return filteredIds.length > 0 ? filteredIds : [];
+    return [];
   });
 
-  const users = ids ? await api.user.findUsersByIds(ids) : [];
+  const users = ids.length > 0 ? await serverApi.user.findUsersByIds(ids) : [];
 
   const orderedUsers: User[] = ids?.map(
-    (id) => users?.find((user) => user.id === id) as User,
+    (id) => users.find((user) => user.id === id) as User,
   );
 
   return (
     <div className="flex h-full w-full flex-row">
       <Matches potentialMatches={orderedUsers} isLoadingUsers={false} />
       {orderedUsers.length > 0 ? (
-        <MatchWindow currentPotentialMatch={orderedUsers[0]} />
+        <MatchWindowClient
+          potentialMatch={orderedUsers[0]}
+          matchId={potentialMatches[0]?.id ?? ""}
+          sessionUserId={session?.user.id ?? ""}
+        />
       ) : (
-        "no matches"
+        "No matches"
       )}
     </div>
   );
