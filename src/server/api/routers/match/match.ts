@@ -3,7 +3,9 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { calculateAndSaveMatches } from "~/server/api/routers/user/service";
 
-export type ConsentStatus = "Yes" | "No" | "Pending";
+const ConsentStatusSchema = z.enum(["Yes", "No", "Pending"]);
+
+export type ConsentStatus = z.infer<typeof ConsentStatusSchema>;
 
 export type ParticipantDict = Record<string, ConsentStatus>;
 
@@ -92,5 +94,64 @@ export const matchRouter = createTRPCRouter({
       }
 
       return { success: true };
+    }),
+
+  /**
+   * Updates the status of a specific user in a match.
+   *
+   * @remarks
+   * This function updates the status of a user in a specific match's userStatuses dictionary.
+   * It is a protected procedure, meaning it requires authentication to be called.
+   *
+   * @param input - An object containing the match ID, user ID, and new status.
+   * @returns A promise that resolves to the updated match object if the update is successful.
+   *
+   * @throws Will throw an error if the match or user is not found, or if the new status is invalid.
+   *
+   * @example
+   * ```typescript
+   * const matchId = "match1";
+   * const userId = "user1";
+   * const newStatus = "Yes";
+   * const updatedMatch = await trpc.matchRouter.updateUserStatus.mutate({ matchId, userId, newStatus });
+   * console.log(updatedMatch);
+   * ```
+   */
+  updateUserStatus: protectedProcedure
+    .input(
+      z.object({
+        matchId: z.string(),
+        userId: z.string(),
+        newStatus: ConsentStatusSchema,
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { matchId, userId, newStatus } = input;
+
+      // Fetch the match to ensure it exists
+      const match = await ctx.db.match.findUnique({
+        where: { id: matchId },
+      });
+
+      if (!match) {
+        throw new Error("Match not found");
+      }
+
+      // Type casting to ensure userStatuses is of type ParticipantDict
+      const userStatuses: ParticipantDict =
+        match.userStatuses as ParticipantDict;
+
+      // Update the userStatuses field
+      const updatedMatch = await ctx.db.match.update({
+        where: { id: matchId },
+        data: {
+          userStatuses: {
+            ...userStatuses,
+            [userId]: newStatus,
+          },
+        },
+      });
+
+      return updatedMatch;
     }),
 });

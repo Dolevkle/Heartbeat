@@ -13,12 +13,17 @@ import {
   ResizableHandle,
 } from "../shadcn/resizable";
 import type { User } from "@prisma/client";
+import type { ConsentStatus } from "~/server/api/routers/match/match";
 
 interface MatchWindowProps {
   currentPotentialMatch: User;
+  handleMatchStatusChange: (newStatus: ConsentStatus) => void;
 }
 
-const MatchWindow = ({ currentPotentialMatch }: MatchWindowProps) => {
+const MatchWindow = ({
+  currentPotentialMatch,
+  handleMatchStatusChange,
+}: MatchWindowProps) => {
   const [progress, setProgress] = useState<number>(1);
 
   const handleNext = () => {
@@ -98,7 +103,7 @@ const MatchWindow = ({ currentPotentialMatch }: MatchWindowProps) => {
         <Button
           className="h-16 w-16 rounded-full border border-primary bg-white text-red-700 hover:bg-red-100"
           onClick={() => {
-            console.log("pass");
+            handleMatchStatusChange("No");
           }}
         >
           <XIcon />
@@ -106,7 +111,7 @@ const MatchWindow = ({ currentPotentialMatch }: MatchWindowProps) => {
         <Button
           className="h-16 w-16 rounded-full border border-primary bg-white text-green-700 hover:bg-green-100"
           onClick={() => {
-            console.log("match");
+            handleMatchStatusChange("Yes");
           }}
         >
           <CheckIcon />
