@@ -19,12 +19,7 @@ const config = {
         ignoreDuringBuilds: true,
     },
     images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: '**',
-            },
-        ],
+        domains: ['mosaic.scdn.co', 'utfs.io'],
     },
 };
 
