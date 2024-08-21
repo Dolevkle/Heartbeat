@@ -15,6 +15,19 @@ export const messageRouter = createTRPCRouter({
         where: { chatId: input.chatId },
       });
     }),
+  getLatestMessage: protectedProcedure
+    .input(
+      z.object({
+        chatId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.message.findMany({
+        take: 1,
+        where: { chatId: input.chatId },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
   createMessage: protectedProcedure
     .input(
       z.object({

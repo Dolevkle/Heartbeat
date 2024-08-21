@@ -17,6 +17,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
+import { useRef } from "react";
 
 export const messageFormSchema = z.object({
   message: z.string().min(1, { message: "gender cannot be empty" }), // Ensures the last name is not empty
@@ -27,7 +28,7 @@ interface Props {
 }
 export default function ChatInput({ chatId }: Props) {
   const utils = api.useUtils();
-
+  const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<z.infer<typeof messageFormSchema>>({
     resolver: zodResolver(messageFormSchema),
   });
@@ -60,9 +61,17 @@ export default function ChatInput({ chatId }: Props) {
     form.reset({ message: "" });
   };
 
+  const onEnter = (e: React.KeyboardEvent) => {
+    console.log(e.code);
+    if (e.code == "Enter" && e.shiftKey == false) {
+      e.preventDefault();
+      formRef.current?.requestSubmit();
+    }
+  };
   return (
     <Form {...form}>
       <form
+        ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative w-full overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
       >
@@ -81,6 +90,7 @@ export default function ChatInput({ chatId }: Props) {
                   id="message"
                   placeholder="Type your message here..."
                   className="min-h-12 resize-none border-0 p-3 text-white shadow-none focus-visible:ring-0"
+                  onKeyDown={onEnter}
                   {...field}
                 />
               </FormControl>
