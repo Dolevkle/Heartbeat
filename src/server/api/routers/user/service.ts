@@ -1,4 +1,5 @@
 import type { User } from "@prisma/client";
+import { sexualPreferences, SexualPreference } from "~/app/consts";
 import { db } from "~/server/db";
 
 export type Personality = {
@@ -82,12 +83,24 @@ const cosineSimilarity = (vec1: number[], vec2: number[]) => {
  * @returns {Promise<User[]>} - A promise that resolves to an array of potential matches.
  */
 export const getPotentialMatches = async (user: User): Promise<User[]> => {
+  if( user.sexualPreference == SexualPreference.BOTH)
+  {
   return db.user.findMany({
     where: {
-      gender: user.sexualPreference,
+      id: {not : user.id },
+      OR: [{gender: SexualPreference.MALE},{gender:SexualPreference.FEMALE}],
       sexualPreference: user.gender,
     },
   });
+} else{
+  return db.user.findMany({
+    where: {
+      id: {not : user.id },
+      gender: user.sexualPreference,
+      OR: [{sexualPreference: SexualPreference.BOTH},{sexualPreference: user.gender}],
+    },
+  })
+}
 };
 
 /**

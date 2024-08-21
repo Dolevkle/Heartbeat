@@ -7,6 +7,12 @@ export const MEDIUM_VALUE = 3;
 export const HIGH_VALUE = 5;
 export const MAX_VALUE = 6
 
+export enum SexualPreference {
+  MALE = "male",
+  FEMALE = "female",
+  BOTH = "both",
+}
+
 export const traitMapping = {
   low: LOW_VALUE,
   medium: MEDIUM_VALUE,
