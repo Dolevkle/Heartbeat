@@ -91,7 +91,7 @@ import ImageUpload from "../../image-uploader";
         </Button>
       </DialogTrigger>
     <DialogContent>
-    <Form {...form}>
+    {/* <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
@@ -144,9 +144,9 @@ import ImageUpload from "../../image-uploader";
                   </p>
                 )}
               </FormMessage>
-            </FormItem>
-          )}
-        />
+            </FormItem> */}
+          {/* )} */}
+        {/* /> */}
         {/* <Button
           type="submit"
           disabled={form.formState.isSubmitting}
@@ -155,8 +155,8 @@ import ImageUpload from "../../image-uploader";
           Submit
         </Button> */}
         <ImageUpload/>
-      </form>
-    </Form>
+      {/* </form>
+    </Form> */}
         </DialogContent>
     </Dialog>
     // <Form {...form}>

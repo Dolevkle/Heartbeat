@@ -26,7 +26,7 @@ const ProfilePictureDisplay: React.FC = () => {
 return(
 <div className="relative max-w-sm overflow-hidden rounded p-4 text-white shadow-lg">
 <Image
-  src={""}
+  src={"https://utfs.io/f/90f6ada9-71a5-4ffc-89e3-61e2e96e99e9-iaxihd.png"}
   width={300}
   height={300}
   alt={"could not fetch the picture..."}

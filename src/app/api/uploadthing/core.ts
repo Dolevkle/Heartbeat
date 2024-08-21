@@ -33,6 +33,18 @@ export const ourFileRouter = {
         },
       });
 
+      await db.user.update({
+        where: {
+          id : metadata.userId,
+        },
+        data: {
+          image : file.url,
+        },
+      });
+
+
+
+
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
     }),
