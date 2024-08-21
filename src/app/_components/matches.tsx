@@ -1,19 +1,22 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
 import { ChevronRight } from "lucide-react";
 import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
-import { Skeleton } from "@components/skeleton";
 import SideCard from "~/app/_components/SideCard";
-import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
-import { useState } from "react";
 import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
+import { type User } from "@prisma/client";
+
+interface PotentialMatchDisplayProps {
+  user: User | undefined;
+  isInFocus?: boolean;
+}
 
 interface Props {
   matches: RouterOutputs["user"]["getMatches"];
 }
+
 export default function Component({ matches }: Props) {
   const session = useSession();
   const ids = matches?.map(({ users }) =>
@@ -26,27 +29,31 @@ export default function Component({ matches }: Props) {
 
   const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
 
-  const [selectedId, setSelectedId] = useState<string | undefined>();
-
-  const handleUserCardClick = (id: string | undefined) => setSelectedId(id);
+  const PotentialMatchDisplay = ({
+    user,
+    isInFocus,
+  }: PotentialMatchDisplayProps) => (
+    <Avatar
+      className={`h-12 w-12 border-2 ${isInFocus ? "border-primary" : "border-transparent"} m-1`}
+    >
+      <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+      <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+    </Avatar>
+  );
 
   return (
     <SideCard title="Matches">
       <div className="flex max-w-64 flex-row items-center gap-4">
         <ScrollArea className="w-full">
           <div className="mb-2 ml-4 flex w-10/12 flex-row">
-            {matches?.map((match, i) =>
+            {matches?.map((match, currentMatch) =>
               isLoading ? (
                 <UserCardSkeleton key={match.id} />
               ) : (
-                <UserCard
+                <PotentialMatchDisplay
                   key={match.id}
-                  user={orderedUsers?.[i]}
-                  isSelected={
-                    selectedId ===
-                    (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
-                  }
-                  onClick={handleUserCardClick}
+                  user={orderedUsers?.[currentMatch]}
+                  isInFocus={currentMatch == 0}
                 />
               ),
             )}
