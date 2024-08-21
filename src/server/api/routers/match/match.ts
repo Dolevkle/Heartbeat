@@ -44,13 +44,18 @@ export const matchRouter = createTRPCRouter({
           },
         });
 
-        // Filter matches where the participants field contains the user ID
-        const existingMatches = allMatches.filter(
-          (match) =>
-            match.userStatuses &&
-            Object.prototype.hasOwnProperty.call(match.userStatuses, input),
-        );
+        // Filter matches where userStatuses contains the user ID and the status is "Pending"
+        const existingMatches = allMatches.filter((match) => {
+          // Type assertion to ensure userStatuses is a dictionary
+          const userStatuses = match.userStatuses as Record<string, string>;
 
+          // Check if userStatuses contains the user ID and the status is "Pending"
+          return (
+            userStatuses &&
+            Object.prototype.hasOwnProperty.call(userStatuses, input) &&
+            userStatuses[input] === "Pending"
+          );
+        });
         return existingMatches;
       }
 
