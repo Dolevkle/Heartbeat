@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import exampleImage from "public/assets/profilePic.png";
 import { AspectRatio } from "../shadcn/aspect-ratio";
 import { CheckIcon, MapPin } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem } from "../shadcn/carousel";
@@ -13,15 +12,13 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "../shadcn/resizable";
+import type { User } from "@prisma/client";
 
-const currentMatch = {
-  artist: "Ornella Binni",
-  age: 23,
-  city: "Holon",
-  pictures: [exampleImage, exampleImage, exampleImage],
-};
+interface MatchWindowProps {
+  currentPotentialMatch: User;
+}
 
-const MatchWindow: React.FC = () => {
+const MatchWindow = ({ currentPotentialMatch }: MatchWindowProps) => {
   const [progress, setProgress] = useState<number>(1);
 
   const handleNext = () => {
@@ -50,12 +47,15 @@ const MatchWindow: React.FC = () => {
               handleNext={handleNext}
             >
               <CarouselContent className="h-[73vh]">
-                {currentMatch.pictures.map((picture, index) => (
+                {[
+                  currentPotentialMatch?.image,
+                  currentPotentialMatch?.image,
+                ].map((picture, index) => (
                   <CarouselItem key={index}>
                     <AspectRatio>
                       <Image
-                        src={picture}
-                        alt={`Photo by ${currentMatch.artist}`}
+                        src={picture ?? ""}
+                        alt={`Photo of ${currentPotentialMatch?.name}`}
                         objectFit="cover"
                         fill
                       />
@@ -73,10 +73,10 @@ const MatchWindow: React.FC = () => {
           >
             <AspectRatio>
               <div className="flex h-full w-full flex-col justify-center gap-1 object-cover font-bold">
-                <div className="text-4xl">{`${currentMatch.artist}, ${currentMatch.age}`}</div>
+                <div className="text-4xl">{`${currentPotentialMatch?.name}, ${currentPotentialMatch?.age}`}</div>
                 <div className="flex items-end text-2xl">
                   <MapPin className="h-8 w-8" />
-                  {currentMatch.city}
+                  {currentPotentialMatch?.city}
                 </div>
               </div>
             </AspectRatio>
@@ -84,14 +84,19 @@ const MatchWindow: React.FC = () => {
         </ResizablePanelGroup>
       </div>
       <Progress
-        value={(progress / currentMatch.pictures.length) * 100}
+        value={
+          (progress /
+            [currentPotentialMatch?.image, currentPotentialMatch?.image]
+              .length) *
+          100
+        }
         max={100}
         orientation="vertical"
         className="absolute -left-8 h-[25%] w-2"
       />
       <div className="absolute -bottom-8 left-1/2 flex -translate-x-1/2 transform gap-8">
         <Button
-          className="h-16 w-16 rounded-full border border-primary bg-white text-red-700 hover:bg-red-400"
+          className="h-16 w-16 rounded-full border border-primary bg-white text-red-700 hover:bg-red-100"
           onClick={() => {
             console.log("pass");
           }}
@@ -99,7 +104,7 @@ const MatchWindow: React.FC = () => {
           <XIcon />
         </Button>
         <Button
-          className="h-16 w-16 rounded-full border border-primary bg-white text-green-700 hover:bg-green-400"
+          className="h-16 w-16 rounded-full border border-primary bg-white text-green-700 hover:bg-green-100"
           onClick={() => {
             console.log("match");
           }}

@@ -1,8 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { ChevronRight } from "lucide-react";
-import { api, type RouterOutputs } from "~/trpc/react";
-import { useSession } from "next-auth/react";
 import SideCard from "~/app/_components/SideCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
 import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
@@ -14,21 +12,11 @@ interface PotentialMatchDisplayProps {
 }
 
 interface Props {
-  matches: RouterOutputs["user"]["getMatches"];
+  potentialMatches: User[];
+  isLoadingUsers: boolean;
 }
 
-export default function Component({ matches }: Props) {
-  const session = useSession();
-  const ids = matches?.map(({ users }) =>
-    users[0] === session.data?.user.id ? users[1] : users[0],
-  );
-
-  const { data: users, isLoading } = api.user.findUsersByIds.useQuery(ids, {
-    enabled: ids !== undefined,
-  });
-
-  const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
-
+export default function Component({ potentialMatches, isLoadingUsers }: Props) {
   const PotentialMatchDisplay = ({
     user,
     isInFocus,
@@ -46,14 +34,14 @@ export default function Component({ matches }: Props) {
       <div className="flex max-w-64 flex-row items-center gap-4">
         <ScrollArea className="w-full">
           <div className="mb-2 ml-4 flex w-10/12 flex-row">
-            {matches?.map((match, currentMatch) =>
-              isLoading ? (
-                <UserCardSkeleton key={match.id} />
+            {potentialMatches?.map((potentialMatch, currentPotentialMatch) =>
+              isLoadingUsers ? (
+                <UserCardSkeleton key={potentialMatch.id} />
               ) : (
                 <PotentialMatchDisplay
-                  key={match.id}
-                  user={orderedUsers?.[currentMatch]}
-                  isInFocus={currentMatch == 0}
+                  key={potentialMatch.id}
+                  user={potentialMatches?.[currentPotentialMatch]}
+                  isInFocus={currentPotentialMatch == 0}
                 />
               ),
             )}
