@@ -60,9 +60,9 @@ model User {
 }
 
 model Match {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  similarity String
-  users      String[]
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  similarity   String
+  userStatuses Json
 }
 
 model Image {

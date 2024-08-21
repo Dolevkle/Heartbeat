@@ -1,20 +1,27 @@
 import Matches from "../../_components/matches";
-import { api as serverApi } from "~/trpc/server";
+import { api } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
 import MatchWindow from "~/app/_components/matches/MatchWindow";
-import type { User } from "@prisma/client";
+import type { User, Match } from "@prisma/client";
 
 export default async function Page() {
   const session = await getServerAuthSession();
-  const potentialMatches = await serverApi.user.getMatches(
+  const potentialMatches: Match = await api.match.getMatches(
     session?.user.id ?? "",
   );
 
-  const ids = potentialMatches?.map(({ users }) =>
-    users[0] === session?.user?.id ? users[1] : users[0],
-  );
+  const ids = potentialMatches?.flatMap(({ userStatuses }) => {
+    // Get all the participant IDs
+    const participantIds = Object.keys(userStatuses);
 
-  const users = ids ? await serverApi.user.findUsersByIds(ids) : [];
+    // Filter out the session ID
+    const filteredIds = participantIds.filter((id) => id !== session?.user?.id);
+
+    // If there's exactly one remaining ID, return it; otherwise, handle as needed
+    return filteredIds.length > 0 ? filteredIds : [];
+  });
+
+  const users = ids ? await api.user.findUsersByIds(ids) : [];
 
   const orderedUsers: User[] = ids?.map(
     (id) => users?.find((user) => user.id === id) as User,
