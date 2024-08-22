@@ -36,11 +36,10 @@ export default function MatchWindowClient({
     });
 
   const { mutate: createChat } = reactApi.chat.createChat.useMutation({
-    onError: (error) => {
+    onError: () => {
       toast({
         variant: "destructive",
         title: "Chat Creation Failed",
-        description: `There was an error creating the chat: ${error.message}`,
       });
     },
   });
@@ -63,16 +62,12 @@ export default function MatchWindowClient({
         if (checkIfAMatch) {
           createChat({ users: participantsIds });
         }
-        toast({
-          title: "Success",
-          description: "User status successfully updated",
-        });
       },
       onError: () => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: "User status was not updated!",
+          description: "Match status was not updated!",
         });
       },
     });
