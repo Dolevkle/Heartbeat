@@ -35,10 +35,34 @@ export default function MatchWindowClient({
       initialData: initialUsers,
     });
 
+  const { mutate: createChat } = reactApi.chat.createChat.useMutation({
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Chat Creation Failed",
+        description: `There was an error creating the chat: ${error.message}`,
+      });
+    },
+  });
+
+  const statuses: ConsentStatus[] = Object.values(
+    potentialMatches[0]?.userStatuses ?? [],
+  );
+
+  const participantsIds: string[] = Object.keys(
+    potentialMatches[0]?.userStatuses ?? [],
+  );
+
+  const checkIfAMatch: boolean =
+    statuses.length > 0 && statuses.every((status) => status === "Yes");
+
   const { mutate: updateUserStatus, isPending: isUpdatingUserStatus } =
     reactApi.match.updateUserStatus.useMutation({
       onSuccess: async () => {
         await refetchPotentialMatches();
+        if (checkIfAMatch) {
+          createChat({ users: participantsIds });
+        }
         toast({
           title: "Success",
           description: "User status successfully updated",
