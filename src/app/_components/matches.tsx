@@ -2,9 +2,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { ChevronRight } from "lucide-react";
 import SideCard from "~/app/_components/SideCard";
-import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
 import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
 import { type User } from "@prisma/client";
+import { Skeleton } from "@components/skeleton";
 
 interface PotentialMatchDisplayProps {
   user: User | undefined;
@@ -17,6 +17,14 @@ interface Props {
 }
 
 export default function Component({ potentialMatches, isLoadingUsers }: Props) {
+  const PotentialMatchSkeleton = () => (
+    <div className="flex items-center space-x-4">
+      {potentialMatches.map((_, index) => (
+        <Skeleton key={index} className="m-1 h-12 w-12 rounded-full" />
+      ))}
+    </div>
+  );
+
   const PotentialMatchDisplay = ({
     user,
     isInFocus,
@@ -36,7 +44,7 @@ export default function Component({ potentialMatches, isLoadingUsers }: Props) {
           <div className="mb-2 ml-4 flex w-10/12 flex-row">
             {potentialMatches?.map((potentialMatch, currentPotentialMatch) =>
               isLoadingUsers ? (
-                <UserCardSkeleton key={potentialMatch.id} />
+                <PotentialMatchSkeleton key={potentialMatch.id} />
               ) : (
                 <PotentialMatchDisplay
                   key={potentialMatch.id}
