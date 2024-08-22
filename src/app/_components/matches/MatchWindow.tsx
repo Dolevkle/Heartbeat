@@ -18,19 +18,21 @@ import type { ConsentStatus } from "~/server/api/routers/match/match";
 interface MatchWindowProps {
   currentPotentialMatch: User;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
+  isLoading: boolean;
 }
 
 const MatchWindow = ({
   currentPotentialMatch,
   handleMatchStatusChange,
+  isLoading,
 }: MatchWindowProps) => {
   const [progress, setProgress] = useState<number>(1);
 
-  const handleNext = () => {
+  const handleNext = (): void => {
     setProgress((prev) => prev + 1);
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = (): void => {
     setProgress((prev) => prev - 1);
   };
 
@@ -101,6 +103,7 @@ const MatchWindow = ({
       />
       <div className="absolute -bottom-8 left-1/2 flex -translate-x-1/2 transform gap-8">
         <Button
+          disabled={isLoading}
           className="h-16 w-16 rounded-full border border-primary bg-white text-red-700 hover:bg-red-100"
           onClick={() => {
             handleMatchStatusChange("No");
@@ -109,6 +112,7 @@ const MatchWindow = ({
           <XIcon />
         </Button>
         <Button
+          disabled={isLoading}
           className="h-16 w-16 rounded-full border border-primary bg-white text-green-700 hover:bg-green-100"
           onClick={() => {
             handleMatchStatusChange("Yes");

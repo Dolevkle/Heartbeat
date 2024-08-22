@@ -1,12 +1,12 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import MatchWindow from "~/app/_components/matches/MatchWindow";
 import type { Match, User } from "@prisma/client";
 import { api as reactApi } from "~/trpc/react";
 import { toast } from "~/app/_components/shadcn/use-toast";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
 import Matches from "../matches";
+import { getPotentialMatchesIds } from "./utils";
 
 interface MatchWindowClientProps {
   userId: string;
@@ -20,36 +20,25 @@ export default function MatchWindowClient({
   initialUsers,
 }: MatchWindowClientProps) {
   const {
-    data: potentialMatches = initialPotentialMatches,
+    data: potentialMatches,
+    isLoading: isLoadingPotentialMatches,
     refetch: refetchPotentialMatches,
-  } = useQuery({
-    queryKey: ["potentialMatches", userId],
-    queryFn: async () => {
-      // Optionally implement refetch logic here
-    },
-    enabled: !!userId, // Disable automatic refetching
+  } = reactApi.match.getMatches.useQuery(userId, {
+    enabled: !!userId,
+    initialData: initialPotentialMatches,
   });
 
-  const ids = potentialMatches?.flatMap(({ userStatuses }) => {
-    if (userStatuses) {
-      const participantIds = Object.keys(userStatuses);
-      return participantIds.filter((id) => id !== userId);
-    }
-    return [];
-  });
+  const ids: string[] = getPotentialMatchesIds(potentialMatches, userId);
 
-  const { data: users = initialUsers } = useQuery({
-    queryKey: ["users", ids],
-    queryFn: async () => {
-      // Optionally implement refetch logic here
-    },
-    enabled: ids.length > 0, // Disable automatic refetching
-  });
+  const { data: users, isLoading: isLoadingUsers } =
+    reactApi.user.findUsersByIds.useQuery(ids, {
+      initialData: initialUsers,
+    });
 
   const { mutate: updateUserStatus, isPending: isUpdatingUserStatus } =
     reactApi.match.updateUserStatus.useMutation({
       onSuccess: async () => {
-        await refetchPotentialMatches(); // Refetch matches after a successful status update
+        await refetchPotentialMatches();
         toast({
           title: "Success",
           description: "User status successfully updated",
@@ -64,7 +53,7 @@ export default function MatchWindowClient({
       },
     });
 
-  const handleMatchStatusChange = (newStatus: ConsentStatus) => {
+  const handleMatchStatusChange = (newStatus: ConsentStatus): void => {
     updateUserStatus({
       matchId: potentialMatches[0]?.id ?? "",
       userId,
@@ -72,12 +61,20 @@ export default function MatchWindowClient({
     });
   };
 
+  const isAnyMatchesLeft: boolean = ids.length > 0;
+  const isPageLoading: boolean =
+    isUpdatingUserStatus || isLoadingPotentialMatches || isLoadingUsers;
+
   return (
     <div className="flex h-full w-full flex-row">
-      <Matches potentialMatches={users} isLoadingUsers={false} />
-      {users.length > 0 ? (
+      <Matches
+        potentialMatches={isAnyMatchesLeft ? users : []}
+        isLoadingUsers={isPageLoading}
+      />
+      {isAnyMatchesLeft ? (
         <MatchWindow
           currentPotentialMatch={users[0]}
+          isLoading={isPageLoading}
           handleMatchStatusChange={handleMatchStatusChange}
         />
       ) : (
