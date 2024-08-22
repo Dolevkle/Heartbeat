@@ -1,6 +1,7 @@
 import type { User } from "@prisma/client";
-import { sexualPreferences, SexualPreference } from "~/app/consts";
+import { SexualPreference } from "~/app/consts";
 import { db } from "~/server/db";
+import type { ParticipantDict } from "../match/match";
 
 export type Personality = {
   Openness: "high" | "low" | "medium";
@@ -83,24 +84,29 @@ const cosineSimilarity = (vec1: number[], vec2: number[]) => {
  * @returns {Promise<User[]>} - A promise that resolves to an array of potential matches.
  */
 export const getPotentialMatches = async (user: User): Promise<User[]> => {
-  if( user.sexualPreference == SexualPreference.BOTH)
-  {
-  return db.user.findMany({
-    where: {
-      id: {not : user.id },
-      OR: [{gender: SexualPreference.MALE},{gender:SexualPreference.FEMALE}],
-      sexualPreference: user.gender,
-    },
-  });
-} else{
-  return db.user.findMany({
-    where: {
-      id: {not : user.id },
-      gender: user.sexualPreference,
-      OR: [{sexualPreference: SexualPreference.BOTH},{sexualPreference: user.gender}],
-    },
-  })
-}
+  if (user.sexualPreference == SexualPreference.BOTH) {
+    return db.user.findMany({
+      where: {
+        id: { not: user.id },
+        OR: [
+          { gender: SexualPreference.MALE },
+          { gender: SexualPreference.FEMALE },
+        ],
+        sexualPreference: user.gender,
+      },
+    });
+  } else {
+    return db.user.findMany({
+      where: {
+        id: { not: user.id },
+        gender: user.sexualPreference,
+        OR: [
+          { sexualPreference: SexualPreference.BOTH },
+          { sexualPreference: user.gender },
+        ],
+      },
+    });
+  }
 };
 
 /**
@@ -117,19 +123,19 @@ export const calculateAndSaveMatches = async (user: User): Promise<void> => {
   );
 
   // Retrieve potential matches and existing matches concurrently.
-  const [potentialMatches, existingMatches] = await Promise.all([
+  const [potentialMatches, allMatches] = await Promise.all([
     getPotentialMatches(user),
-    db.match.findMany({
-      where: {
-        users: { has: user.id },
-      },
-    }),
+    db.match.findMany(),
   ]);
+
+  const existingMatches = allMatches.filter((match) =>
+    Object.prototype.hasOwnProperty.call(match.userStatuses, user.id),
+  );
 
   // Store existing match user IDs in a Set for efficient lookup.
   const existingMatchUserIds = new Set(
     existingMatches
-      .flatMap((match) => match.users)
+      .flatMap((match) => Object.keys(match.userStatuses as ParticipantDict))
       .filter((id) => id !== user.id),
   );
 
@@ -146,7 +152,10 @@ export const calculateAndSaveMatches = async (user: User): Promise<void> => {
     const similarity = cosineSimilarity(userVector, matchVector);
     return {
       similarity: `${Math.round(similarity * PERCENTAGE_MULTIPLIER)}%`,
-      users: [user.id, matchUser.id],
+      userStatuses: {
+        [user.id]: "Pending",
+        [matchUser.id]: "Pending",
+      },
     };
   });
   if (matchesToCreate.length !== 0) {

@@ -1,13 +1,23 @@
-import Matches from "../../_components/matches";
-import { api } from "~/trpc/server";
+import MatchWindowClient from "~/app/_components/matches/MatchWindowClient";
+import { getPotentialMatchesIds } from "~/app/_components/matches/utils";
 import { getServerAuthSession } from "~/server/auth";
+import { api as serverApi } from "~/trpc/server";
 
 export default async function Page() {
   const session = await getServerAuthSession();
-  const matches = await api.user.getMatches(session?.user.id ?? "");
+  const userId = session?.user.id ?? "";
+
+  const potentialMatches = await serverApi.match.getMatches(userId);
+
+  const ids: string[] = getPotentialMatchesIds(potentialMatches, userId);
+
+  const users = ids.length > 0 ? await serverApi.user.findUsersByIds(ids) : [];
+
   return (
-    <div className="h-full w-fit">
-      <Matches matches={matches} />
-    </div>
+    <MatchWindowClient
+      userId={userId}
+      initialPotentialMatches={potentialMatches}
+      initialUsers={users}
+    />
   );
 }
