@@ -2,7 +2,7 @@
 
 import MatchWindow from "~/app/_components/matches/MatchWindow";
 import type { Match, User } from "@prisma/client";
-import { api as reactApi } from "~/trpc/react";
+import { api as clientApi } from "~/trpc/react";
 import { toast } from "~/app/_components/shadcn/use-toast";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
 import Matches from "../matches";
@@ -23,7 +23,7 @@ export default function MatchWindowClient({
     data: potentialMatches,
     isLoading: isLoadingPotentialMatches,
     refetch: refetchPotentialMatches,
-  } = reactApi.match.getMatches.useQuery(userId, {
+  } = clientApi.match.getMatches.useQuery(userId, {
     enabled: !!userId,
     initialData: initialPotentialMatches,
   });
@@ -31,11 +31,11 @@ export default function MatchWindowClient({
   const ids: string[] = getPotentialMatchesIds(potentialMatches, userId);
 
   const { data: users, isLoading: isLoadingUsers } =
-    reactApi.user.findUsersByIds.useQuery(ids, {
+    clientApi.user.findUsersByIds.useQuery(ids, {
       initialData: initialUsers,
     });
 
-  const { mutate: createChat } = reactApi.chat.createChat.useMutation({
+  const { mutate: createChat } = clientApi.chat.createChat.useMutation({
     onError: () => {
       toast({
         variant: "destructive",
@@ -52,11 +52,11 @@ export default function MatchWindowClient({
     potentialMatches[0]?.userStatuses ?? [],
   );
 
-  const checkIfAMatch: boolean =
+  const checkIfAMatch =
     statuses.length > 0 && statuses.every((status) => status === "Yes");
 
   const { mutate: updateUserStatus, isPending: isUpdatingUserStatus } =
-    reactApi.match.updateUserStatus.useMutation({
+    clientApi.match.updateUserStatus.useMutation({
       onSuccess: async () => {
         await refetchPotentialMatches();
         if (checkIfAMatch) {
@@ -80,8 +80,8 @@ export default function MatchWindowClient({
     });
   };
 
-  const isAnyMatchesLeft: boolean = ids.length > 0;
-  const isPageLoading: boolean =
+  const isAnyMatchesLeft = ids.length > 0;
+  const isPageLoading =
     isUpdatingUserStatus || isLoadingPotentialMatches || isLoadingUsers;
 
   return (

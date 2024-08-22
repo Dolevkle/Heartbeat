@@ -15,6 +15,8 @@ import {
 import type { User } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
 
+const PROGRESS_PERCENTAGE = 100;
+
 interface MatchWindowProps {
   currentPotentialMatch: User;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
@@ -95,9 +97,9 @@ const MatchWindow = ({
           (progress /
             [currentPotentialMatch?.image, currentPotentialMatch?.image]
               .length) *
-          100
+          PROGRESS_PERCENTAGE
         }
-        max={100}
+        max={PROGRESS_PERCENTAGE}
         orientation="vertical"
         className="absolute -left-8 h-[25%] w-2"
       />
