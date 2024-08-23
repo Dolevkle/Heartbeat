@@ -23,7 +23,7 @@ import {
   DialogTrigger,
 } from "../../shadcn/dialog";
 import {CircleX  } from "lucide-react";
-// import { LoadingButton } from '../../loading-button';
+import { LoadingButton } from '../../loading-button';
 import { Button } from "@components/button";
 import { imageRemove } from "~/app/actions/imageRemove";
 import { api } from "~/trpc/react";
@@ -43,10 +43,12 @@ type DeleteUserPictureProps = {
 
  const DeleteUserPicture: React.FC<DeleteUserPictureProps>= ({imageUrl}) => {
 
+  const [loading, setLoading] = useState(false);
+
   const session = useSession();
   const { update: updateSession } = useSession();
   const { toast } = useToast();
-  
+
 
   const {mutate: deleteImage, isPending: isImageRemoved} =
     api.image.deleteOne.useMutation({
@@ -73,18 +75,11 @@ type DeleteUserPictureProps = {
       },
     })
 
-    // const LoadingButtonUsage = () => {
-    //   const [loading, setLoading] = React.useState(false);
-    //   const onClick = () => {
-    //     setLoading(true);
-    //     setTimeout(() => {
-    //       setLoading(false);
-    //     }, 1000);
-    //   };
-    // }
+
     
   const handleRemove =async ()=>{
-    // LoadingButtonUsage();
+    setLoading(true); // Start loading
+
     const imageKey = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
     const res = await imageRemove(imageKey);
     if (res.success)
@@ -101,16 +96,19 @@ type DeleteUserPictureProps = {
 
   return (
     <Dialog>
-      {/* <LoadingButton loading={loading} onClick={onClick}>
-        default
-      </LoadingButton> */}
 
         <Button 
           className="relative left-1/2 flex h-12 w-12 -translate-x-1/2 transform rounded-full border-none text-white"
           onClick={handleRemove}
+          disabled = {loading}
         >
-            {/* <Loader2 className="mr-2 h-4 w-4 animate-spin" /> */}
-          <CircleX className="text-2xl" />
+          {loading? (
+            <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            </> 
+          ):(
+            <CircleX className="text-2xl" />
+          )}
         </Button>
     <DialogContent>
         </DialogContent>
