@@ -22,6 +22,7 @@ import {
   
 import { api, type RouterOutputs } from "~/trpc/react";
 import ProfilePictureDialog from "./ProfilePictureDialog";
+import DeleteUserPicture from "./DeleteUserPicture";
 
 
 
@@ -60,23 +61,28 @@ return(
       <CarouselContent>
       {usersImages && usersImages.length > 0 ? (
         usersImages.map((image, index) => (
+          <>
           <CarouselItem key={index}>
             <div className="p-1">
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
                 <Image
-                    src={usersImages[index]?.url}
+                    src={image?.url}
                     width={300}
                     height={300}
                     alt={"could not fetch the picture..."}
                   />
-                  
                   {/* <span className="text-4xl font-semibold">{index + 1}</span> */}
                 </CardContent>
               </Card>
             </div>
+            <div>
+            <DeleteUserPicture key={index} imageUrl={image.url} />
+            </div>
           </CarouselItem>
+          </>
         ))
+        
       ) : (
         <Image
           src={"https://utfs.io/f/9dc01f95-3ff0-484f-822e-59500be4baeb-x8m314.png"}
@@ -90,7 +96,6 @@ return(
       <CarouselNext />
     </Carousel>
   )
-
   </div>
 <div className="relative max-w-sm overflow-hidden rounded p-4 text-white shadow-lg">
 {/* {session.data?.user.image?(

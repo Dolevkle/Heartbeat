@@ -33,8 +33,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-slot':
-        specifier: ^1.0.2
-        version: 1.0.2(@types/react@18.3.1)(react@18.2.0)
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@18.3.1)(react@18.2.0)
       '@radix-ui/react-switch':
         specifier: ^1.1.0
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -86,6 +86,9 @@ importers:
       framer-motion:
         specifier: ^11.1.9
         version: 11.1.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      install:
+        specifier: ^0.13.0
+        version: 0.13.0
       lucide-react:
         specifier: ^0.378.0
         version: 0.378.0(react@18.2.0)
@@ -107,6 +110,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-dropzone:
+        specifier: ^14.2.3
+        version: 14.2.3(react@18.2.0)
       react-hook-form:
         specifier: ^7.51.4
         version: 7.51.4(react@18.2.0)
@@ -1381,6 +1387,10 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
+  attr-accept@2.2.2:
+    resolution: {integrity: sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==}
+    engines: {node: '>=4'}
+
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
@@ -2085,6 +2095,10 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  install@0.13.0:
+    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
+    engines: {node: '>= 0.10'}
+
   internal-slot@1.0.7:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
     engines: {node: '>= 0.4'}
@@ -2734,6 +2748,12 @@ packages:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
       react: ^18.2.0
+
+  react-dropzone@14.2.3:
+    resolution: {integrity: sha512-O3om8I+PkFKbxCukfIR3QAGftYXDZfOE2N1mr/7qebQJHs7U+/RSL/9xomJNpRg9kM5h9soQSdf0Gc7OHF5Fug==}
+    engines: {node: '>= 10.13'}
+    peerDependencies:
+      react: '>= 16.8 || 18.0.0'
 
   react-hook-form@7.51.4:
     resolution: {integrity: sha512-V14i8SEkh+V1gs6YtD0hdHYnoL4tp/HX/A45wWQN15CYr9bFRmmRdYStSO5L65lCCZRF+kYiSKhm9alqbcdiVA==}
@@ -4548,6 +4568,8 @@ snapshots:
 
   asynckit@0.4.0: {}
 
+  attr-accept@2.2.2: {}
+
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.0.0
@@ -5388,6 +5410,8 @@ snapshots:
 
   inherits@2.0.4: {}
 
+  install@0.13.0: {}
+
   internal-slot@1.0.7:
     dependencies:
       es-errors: 1.3.0
@@ -5948,6 +5972,13 @@ snapshots:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.2
+
+  react-dropzone@14.2.3(react@18.2.0):
+    dependencies:
+      attr-accept: 2.2.2
+      file-selector: 0.6.0
+      prop-types: 15.8.1
+      react: 18.2.0
 
   react-hook-form@7.51.4(react@18.2.0):
     dependencies:
