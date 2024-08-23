@@ -38,13 +38,42 @@ export const imageRouter = createTRPCRouter({
 // });
 
 
+update: protectedProcedure
+.input(
+  z.object({
+    id: z.string(),
+    age: z.number().min(1),
+    sexualPreference: z.string().min(1),
+    gender: z.string().min(1),
+    personality: z.object({
+      Openness: z.string(),
+      Neuroticism: z.string(),
+      Extraversion: z.string(),
+      Conscientiousness: z.string(),
+      Agreeableness: z.string(),
+    }),
+    playlist: z.string(),
+    city: z.string(),
+  }),
+)
+.mutation(async ({ ctx, input }) => {
+  const { id, ...rest } = input;
+  return ctx.db.user.update({
+    where: { id },
+    data: rest,
+  });
+}),
+
+
+
+
 
     deleteOne: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.image.findMany({
+      await ctx.db.image.deleteMany({
         where: {
-            userId : input
+            url : input,
         },
       });
       return { success: true };
