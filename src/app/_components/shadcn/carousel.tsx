@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import { Button } from "@components/button";
+import { useRef } from "react";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -19,6 +20,8 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
   setApi?: (api: CarouselApi) => void;
+  handleNext?: () => void;
+  handlePrevious?: () => void;
 };
 
 type CarouselContextProps = {
@@ -49,6 +52,8 @@ const Carousel = React.forwardRef<
   (
     {
       orientation = "horizontal",
+      handlePrevious,
+      handleNext,
       opts,
       setApi,
       plugins,
@@ -67,11 +72,24 @@ const Carousel = React.forwardRef<
     );
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
     const [canScrollNext, setCanScrollNext] = React.useState(false);
+    const carouselIndex = useRef(0);
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) {
         return;
       }
+
+      const currentIndex = api.selectedScrollSnap();
+
+      if (currentIndex < carouselIndex.current) {
+        handlePrevious && handlePrevious();
+      }
+
+      if (currentIndex > carouselIndex.current) {
+        handleNext && handleNext();
+      }
+
+      carouselIndex.current = currentIndex;
 
       setCanScrollPrev(api.canScrollPrev());
       setCanScrollNext(api.canScrollNext());
@@ -92,6 +110,17 @@ const Carousel = React.forwardRef<
           scrollPrev();
         } else if (event.key === "ArrowRight") {
           event.preventDefault();
+          scrollNext();
+        }
+      },
+      [scrollPrev, scrollNext],
+    );
+
+    const handleWheel = React.useCallback(
+      (event: React.WheelEvent<HTMLDivElement>) => {
+        if (event.deltaY < 0) {
+          scrollPrev();
+        } else if (event.deltaY > 0) {
           scrollNext();
         }
       },
@@ -137,6 +166,7 @@ const Carousel = React.forwardRef<
         <div
           ref={ref}
           onKeyDownCapture={handleKeyDown}
+          onWheel={handleWheel}
           className={cn("relative", className)}
           role="region"
           aria-roledescription="carousel"

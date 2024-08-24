@@ -14,6 +14,7 @@ export const chatRouter = createTRPCRouter({
         where: { users: { has: input.userId } },
       });
     }),
+
   createChat: protectedProcedure
     .input(
       z.object({
@@ -27,6 +28,7 @@ export const chatRouter = createTRPCRouter({
         },
       });
     }),
+
   findChatById: protectedProcedure
     .input(
       z.object({
