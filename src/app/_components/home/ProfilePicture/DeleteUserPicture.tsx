@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Loader2, CircleX } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { Button } from "@components/button";
 import { imageRemove } from "~/app/actions/imageRemove";
 import { api } from "~/trpc/react";
@@ -59,7 +59,7 @@ const DeleteUserPicture: React.FC<DeleteUserPictureProps> = ({ imageUrl, onDelet
       {loading ? (
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : (
-        <CircleX className="text-2xl" />
+        <Trash2 className="text-2xl" />
       )}
     </Button>
   );
