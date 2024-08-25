@@ -18,12 +18,12 @@ const DeleteUserPicture: React.FC<DeleteUserPictureProps> = ({
   const { toast } = useToast();
 
   const { mutate: deleteImage } = api.image.deleteOne.useMutation({
-    onMutate: () => {
-      toast({
-        title: "Deleting",
-        description: "Deleting picture",
-      });
-    },
+    // onMutate: () => {
+    //   toast({
+    //     title: "Deleting",
+    //     description: "Deleting picture",
+    //   });
+    // },
     onSuccess: async () => {
       toast({
         title: "Success",

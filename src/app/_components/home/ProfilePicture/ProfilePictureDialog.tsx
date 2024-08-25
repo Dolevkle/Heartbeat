@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTrigger } from "../../shadcn/dialog";
 import { UploadIcon } from "lucide-react";
 import { Button } from "@components/button";
 import ImageUpload from "../../image-uploader";
+import { useToast } from "../../shadcn/use-toast";
 
 type ProfilePictureDialogProps = {
   onUploadSuccess: () => void;
@@ -11,6 +12,7 @@ type ProfilePictureDialogProps = {
 const ProfilePictureDialog: React.FC<ProfilePictureDialogProps> = ({
   onUploadSuccess,
 }) => {
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,6 +29,10 @@ const ProfilePictureDialog: React.FC<ProfilePictureDialogProps> = ({
         <ImageUpload
           onUploadSuccess={() => {
             onUploadSuccess();
+            toast({
+              title: "Success",
+              description: "Image uploaded successfully",
+            });
             setIsOpen(false);
           }}
         />
