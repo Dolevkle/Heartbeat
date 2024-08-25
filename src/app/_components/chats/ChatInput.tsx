@@ -52,6 +52,7 @@ export default function ChatInput({ chatId }: Props) {
     api.message.createMessage.useMutation();
 
   const onSubmit = async (values: z.infer<typeof messageFormSchema>) => {
+    debugger;
     if (session.data?.user.id) {
       createMessage(
         {
