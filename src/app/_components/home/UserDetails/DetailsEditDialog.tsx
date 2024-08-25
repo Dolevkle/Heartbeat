@@ -145,17 +145,6 @@ const DetailsEditDialog: React.FC = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="text-white sm:max-w-[425px]">
-
-
-
-
-
-
-
-
-
-
-        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>

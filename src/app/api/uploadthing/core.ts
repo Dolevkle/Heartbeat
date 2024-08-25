@@ -33,15 +33,6 @@ export const ourFileRouter = {
         },
       });
 
-      await db.user.update({
-        where: {
-          id : metadata.userId,
-        },
-        data: {
-          image : file.url,
-        },
-      });
-
 
 
 

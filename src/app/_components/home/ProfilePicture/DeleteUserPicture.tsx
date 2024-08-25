@@ -7,30 +7,23 @@ import { useToast } from "../../shadcn/use-toast";
 
 type DeleteUserPictureProps = {
   imageUrl: string;
-  onDeleteSuccess: () => void; // New prop for callback
+  onDeleteSuccess: () => void; 
 };
 
 const DeleteUserPicture: React.FC<DeleteUserPictureProps> = ({
-  imageUrl,
   onDeleteSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const { mutate: deleteImage } = api.image.deleteOne.useMutation({
-    // onMutate: () => {
-    //   toast({
-    //     title: "Deleting",
-    //     description: "Deleting picture",
-    //   });
-    // },
     onSuccess: async () => {
       toast({
         title: "Success",
         description: "Image deleted successfully",
       });
       setLoading(false);
-      onDeleteSuccess(); // Call the callback on success
+      onDeleteSuccess(); 
     },
     onError: () => {
       toast({
