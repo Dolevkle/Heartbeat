@@ -34,12 +34,14 @@ export const messageRouter = createTRPCRouter({
         userId: z.string(),
         chatId: z.string(),
         message: z.string(),
+        isImage: z.boolean()
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const message = await ctx.db.message.create({
         data: {
           content: input.message,
+          isImage: input.isImage,
           chat: {
             connect: {
               id: input.chatId,
