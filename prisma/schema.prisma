@@ -100,4 +100,5 @@ model Message {
   createdAt DateTime @default(now())
   chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId    String
+  isImage Boolean @default(false)
 }
