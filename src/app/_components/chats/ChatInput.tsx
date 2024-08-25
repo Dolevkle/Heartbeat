@@ -45,14 +45,13 @@ export default function ChatInput({ chatId }: Props) {
       imageUrl: "",
     },
   });
-
+  const formRef = useRef<HTMLFormElement>(null);
   const session = useSession();
 
   const { mutate: createMessage, isPending } =
     api.message.createMessage.useMutation();
 
   const onSubmit = async (values: z.infer<typeof messageFormSchema>) => {
-    debugger;
     if (session.data?.user.id) {
       createMessage(
         {
@@ -90,11 +89,14 @@ export default function ChatInput({ chatId }: Props) {
     form.register("imageUrl", { required: false });
   }, [form.register]);
 
-
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState.errors]);
 
   return (
     <Form {...form}>
       <form
+        ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative flex min-h-28 w-full flex-row justify-between overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
       >

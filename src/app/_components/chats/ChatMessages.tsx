@@ -37,7 +37,7 @@ export default function ChatMessages({ messages, chatId }: Props) {
             className={`m-1 h-fit w-fit max-w-xs whitespace-pre-wrap rounded-lg p-2 text-white ${senderId === session.data?.user.id ? "self-end bg-primary" : "self-start bg-secondary"}`}
           >
             {isImage ? (
-              <Image src={content} width={300} height={300} alt="User image" />
+              <Image className="rounded-lg" src={content} width={300} height={300} alt="User image" />
             ) : (
               content
             )}
