@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 import { Button } from "@components/button";
-import { imageRemove } from "~/app/actions/imageRemove";
+import { removeImageFromS3 } from "~/app/actions/removeImageFromS3";
 import { api } from "~/trpc/react";
 import { useToast } from "../../shadcn/use-toast";
 
@@ -11,6 +11,7 @@ type DeleteUserPictureProps = {
 };
 
 const DeleteUserPicture: React.FC<DeleteUserPictureProps> = ({
+  imageUrl,
   onDeleteSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ const DeleteUserPicture: React.FC<DeleteUserPictureProps> = ({
   const handleRemove = async () => {
     setLoading(true); // Start loading
     const imageKey = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-    const res = await imageRemove(imageKey);
+    const res = await removeImageFromS3(imageKey);
     if (res.success) {
       deleteImage(imageUrl);
     }

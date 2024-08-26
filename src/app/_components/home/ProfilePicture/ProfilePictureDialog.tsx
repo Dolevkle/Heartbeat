@@ -9,11 +9,22 @@ type ProfilePictureDialogProps = {
   onUploadSuccess: () => void;
 };
 
+
+
 const ProfilePictureDialog: React.FC<ProfilePictureDialogProps> = ({
   onUploadSuccess,
 }) => {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  
+  const handleUploadSuccess = () =>{
+    onUploadSuccess();
+    toast({
+      title: "Success",
+      description: "Image uploaded successfully",
+    });
+    setIsOpen(false);
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -27,14 +38,7 @@ const ProfilePictureDialog: React.FC<ProfilePictureDialogProps> = ({
       </DialogTrigger>
       <DialogContent>
         <ImageUpload
-          onUploadSuccess={() => {
-            onUploadSuccess();
-            toast({
-              title: "Success",
-              description: "Image uploaded successfully",
-            });
-            setIsOpen(false);
-          }}
+          onUploadSuccess={handleUploadSuccess}
         />
       </DialogContent>
     </Dialog>
