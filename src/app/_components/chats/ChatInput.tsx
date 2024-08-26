@@ -91,7 +91,7 @@ export default function ChatInput({ chatId }: Props) {
       <form
         ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative flex min-h-28 w-full flex-row justify-between overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
+        className="row-span-1 col-span-2 relative flex w-full flex-row justify-between overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
       >
         <FormField
           control={form.control}
@@ -127,7 +127,7 @@ export default function ChatInput({ chatId }: Props) {
               <Button
                 variant="secondary"
                 type="submit"
-                size="sm"
+                size="xs"
                 className="ml-auto gap-1.5"
               >
                 upload image
@@ -136,7 +136,7 @@ export default function ChatInput({ chatId }: Props) {
             }
           />
 
-          <Button type="submit" size="lg" className="ml-auto w-full gap-1.5">
+          <Button type="submit" size="sm" className="ml-auto w-full gap-1.5">
             Send
             <CornerDownLeft className="size-3.5" />
           </Button>
