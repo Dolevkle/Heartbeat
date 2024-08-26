@@ -67,15 +67,6 @@ export default function Chats({ chats }: Props) {
             />
           ),
         )}
-        <Button
-          onClick={() =>
-            createChat({
-              users: ["665654d7880d08ee8cf00c00", "665afaf45971992be6918dce"],
-            })
-          }
-        >
-          Create Test Chat
-        </Button>
       </SideCard>
     </div>
   );
