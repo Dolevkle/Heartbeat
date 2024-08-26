@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { type User } from "@prisma/client";
 import ChatMessages from "~/app/_components/chats/ChatMessages";
+import ChatInfoCard from "~/app/_components/chats/ChatInfoCard";
 
 export default function Page({ params }: { params: { id: string } }) {
   const searchParams = useSearchParams();
@@ -20,6 +21,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <ChatHeader user={parsedUser} />
       <ChatMessages messages={messages} chatId={params.id} />
       <ChatInput chatId={params.id} />
+      <ChatInfoCard user={parsedUser}/>
     </div>
   );
 }
