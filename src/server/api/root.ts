@@ -5,7 +5,7 @@ import { openAiRouter } from "~/server/api/routers/openai/openai";
 import { messageRouter } from "~/server/api/routers/message/message";
 import { chatRouter } from "~/server/api/routers/chat/chat";
 import { matchRouter } from "./routers/match/match";
-
+import {imageRouter} from "./routers/image/image"
 /**
  * This is the primary router for your server.
  *
@@ -18,6 +18,7 @@ export const appRouter = createTRPCRouter({
   spotify: spotifyRouter,
   user: userRouter,
   match: matchRouter,
+  image: imageRouter
 });
 
 // export type definition of API
