@@ -1,7 +1,6 @@
 "use client";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Button } from "@components/button";
-import { CornerDownLeft, Mic, Paperclip } from "lucide-react";
+import { CornerDownLeft, ImageUp } from "lucide-react";
 import { Label } from "@components/label";
 import { Textarea } from "@components/textarea";
 import {
@@ -17,10 +16,20 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
+import {  useRef } from "react";
+import ImageUploadDialog from "./ImageUploadDialog";
 
-export const messageFormSchema = z.object({
-  message: z.string().min(1, { message: "gender cannot be empty" }), // Ensures the last name is not empty
-});
+export const messageFormSchema = z
+  .object({
+    message: z.string(),
+    imageUrl: z.string(),
+  })
+  .refine(
+    (schema) => {
+      return !(schema.imageUrl === "" && schema.message === "");
+    },
+    { message: "Message can not be empty" },
+  );
 
 interface Props {
   chatId: string;
@@ -30,8 +39,12 @@ export default function ChatInput({ chatId }: Props) {
 
   const form = useForm<z.infer<typeof messageFormSchema>>({
     resolver: zodResolver(messageFormSchema),
+    defaultValues: {
+      message: "",
+      imageUrl: "",
+    },
   });
-
+  const formRef = useRef<HTMLFormElement>(null);
   const session = useSession();
 
   const { mutate: createMessage, isPending } =
@@ -41,13 +54,13 @@ export default function ChatInput({ chatId }: Props) {
     if (session.data?.user.id) {
       createMessage(
         {
-          message: values.message,
+          message: values.message || values.imageUrl,
           chatId: chatId,
           userId: session.data?.user.id,
+          isImage: Boolean(values.imageUrl),
         },
         {
           onSuccess: () => {
-            // TODO we might not need invalidation because of websockets, maybe just manage front end state
             void utils.message.getMessages.invalidate();
           },
           onError: (data) => {
@@ -56,21 +69,38 @@ export default function ChatInput({ chatId }: Props) {
         },
       );
     }
-
-    form.reset({ message: "" });
+    form.reset({ message: "", imageUrl: "" });
   };
+
+  const onEnter = (e: React.KeyboardEvent) => {
+    if (e.code == "Enter" && e.shiftKey == false) {
+      e.preventDefault();
+      formRef.current?.requestSubmit();
+    }
+  };
+
+  const onUpload = (url: string) => {
+    form.setValue("imageUrl", url);
+    formRef.current?.requestSubmit();
+  };
+
+    form.register("imageUrl", { required: false });
+
 
   return (
     <Form {...form}>
       <form
+        ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative w-full overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
+        className="relative flex min-h-28 w-full flex-row justify-between overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
       >
         <FormField
           control={form.control}
           name="message"
+          defaultValue=""
+          rules={{ required: false }}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="h-full w-5/6">
               <FormLabel>
                 <Label htmlFor="message" className="sr-only">
                   Message
@@ -80,35 +110,33 @@ export default function ChatInput({ chatId }: Props) {
                 <Textarea
                   id="message"
                   placeholder="Type your message here..."
-                  className="min-h-12 resize-none border-0 p-3 text-white shadow-none focus-visible:ring-0"
+                  className="h-full min-h-12 resize-none border-0 p-3 text-white shadow-none focus-visible:ring-0"
+                  onKeyDown={onEnter}
                   {...field}
+                  required={false}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div className="mr-3 flex flex-col justify-around">
+          <ImageUploadDialog
+            onUploadSuccess={onUpload}
+            Button={
+              <Button
+                variant="secondary"
+                type="submit"
+                size="sm"
+                className="ml-auto gap-1.5"
+              >
+                upload image
+                <ImageUp className="size-3.5" />
+              </Button>
+            }
+          />
 
-        <div className="flex items-center p-3 pt-0">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Paperclip className="size-4" />
-                <span className="sr-only">Attach file</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">Attach File</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Mic className="size-4" />
-                <span className="sr-only">Use Microphone</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">Use Microphone</TooltipContent>
-          </Tooltip>
-          <Button type="submit" size="sm" className="ml-auto gap-1.5">
+          <Button type="submit" size="lg" className="ml-auto w-full gap-1.5">
             Send
             <CornerDownLeft className="size-3.5" />
           </Button>
