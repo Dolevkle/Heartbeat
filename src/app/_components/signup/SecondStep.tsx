@@ -32,6 +32,7 @@ import { useSession } from "next-auth/react";
 import { type UseFormReturn } from "react-hook-form";
 import { Playlist, TrackItem } from "@spotify/web-api-ts-sdk";
 import { api } from "~/trpc/react";
+import ImageGrid from "~/app/_components/signup/ImageGrid";
 
 interface Props {
   form: UseFormReturn<{
@@ -44,86 +45,20 @@ interface Props {
   handlePreviousStep: () => void;
 }
 
-const ImageGrid = ({ imageUrls }: { imageUrls: string[] }) => {
-  // Fallback numbers in case imageUrls is empty or partially filled
-  const defaultContent = ["1", "2", "3", "4", "5", "6", "7"];
-  const defaultComponent = (content: string) => (
-    <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border border-white shadow-md">
-      <span className="text-4xl">{content}</span>
-    </div>
-  );
-  return (
-    <div className="grid max-h-[450px] w-[500px] grid-cols-6 grid-rows-4 gap-4 p-4 ">
-      {defaultContent.map((content, index) => {
-        const url = imageUrls[index] ?? null;
-
-        if (index === 0) {
-          // Large image on the left
-          return (
-            <div key={index} className="col-span-4 row-span-3">
-              {url ? (
-                <img
-                  src={url}
-                  alt={`Image ${index + 1}`}
-                  className="h-full w-full rounded-lg object-cover shadow-md"
-                />
-              ) : (
-                <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border border-white shadow-md">
-                  <span className="text-4xl">{content}</span>
-                </div>
-              )}
-            </div>
-          );
-        } else if (index > 0 && index < 4) {
-          // Three small images in a column on the right
-          return (
-            <div key={index} className="col-span-2 row-span-1">
-              {url ? (
-                <img
-                  src={url}
-                  alt={`Image ${index + 1}`}
-                  className="h-full w-full rounded-lg object-cover shadow-md"
-                />
-              ) : (
-                <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border border-white shadow-md">
-                  <span className="text-4xl">{content}</span>
-                </div>
-              )}
-            </div>
-          );
-        } else {
-          // Two small images in a row at the bottom
-          return (
-            <div key={index} className="col-span-2 row-span-1">
-              {url ? (
-                <img
-                  src={url}
-                  alt={`Image ${index + 1}`}
-                  className="h-full w-full rounded-lg object-cover shadow-md"
-                />
-              ) : (
-                <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border border-white shadow-md">
-                  <span className="text-4xl">{content}</span>
-                </div>
-              )}
-            </div>
-          );
-        }
-      })}
-    </div>
-  );
-};
-
-function FirstStep({ form, handlePreviousStep }: Props) {
+function SecondStep({ form, handlePreviousStep }: Props) {
   const session = useSession();
   const { data: usersImages, refetch: refetchImages } =
     api.image.findMany.useQuery(session.data?.user?.id ?? "", {
       enabled: !!session.data,
     });
+
   return (
     <>
       {usersImages && (
-        <ImageGrid imageUrls={usersImages?.map((img) => img.url)} />
+        <ImageGrid
+          imageUrls={usersImages?.map((img) => img.url)}
+          refetchImages={refetchImages}
+        />
       )}
       <div className="flex gap-x-4">
         <Button
@@ -141,4 +76,4 @@ function FirstStep({ form, handlePreviousStep }: Props) {
   );
 }
 
-export default FirstStep;
+export default SecondStep;
