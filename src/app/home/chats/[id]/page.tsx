@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { id: string } }) {
   });
 
   return (
-    <div className="flex h-full w-full flex-col justify-between">
+    <div className="grid grid-cols-3 grid-rows-12 h-full w-full">
       <ChatHeader user={parsedUser} />
       <ChatMessages messages={messages} chatId={params.id} />
       <ChatInput chatId={params.id} />
