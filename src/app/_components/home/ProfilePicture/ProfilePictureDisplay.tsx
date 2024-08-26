@@ -31,10 +31,8 @@ const ProfilePictureDisplay: React.FC = () => {
     await refetchImages();
   };
 
-  const handleUploadSuccess = async () => {
-    await refetchImages();
-  };
-
+  const handleUploadSuccess = async () => await refetchImages();
+  
   return (
     <div>
       <Carousel className="w-full max-w-xs">
