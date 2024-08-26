@@ -12,6 +12,8 @@ import { Card, CardContent } from "../../shadcn/card";
 import { api } from "~/trpc/react";
 import ProfilePictureDialog from "./ProfilePictureDialog";
 import DeleteUserPicture from "./DeleteUserPicture";
+import { Button } from "@components/button";
+import { UploadIcon } from "lucide-react";
 
 const ProfilePictureDisplay: React.FC = () => {
   const session = useSession();
@@ -32,7 +34,7 @@ const ProfilePictureDisplay: React.FC = () => {
   };
 
   const handleUploadSuccess = async () => await refetchImages();
-  
+
   return (
     <div>
       <Carousel className="w-full max-w-xs">
@@ -58,7 +60,14 @@ const ProfilePictureDisplay: React.FC = () => {
                     onDeleteSuccess={handleDeleteSuccess}
                   />
                 )}
-                <ProfilePictureDialog onUploadSuccess={handleUploadSuccess} />
+                <ProfilePictureDialog
+                  onUploadSuccess={handleUploadSuccess}
+                  trigger={
+                    <Button className="flex h-12 w-12 rounded-full border-none text-white">
+                      <UploadIcon className="text-2xl" />
+                    </Button>
+                  }
+                />
               </div>
             </CarouselItem>
           ))}
