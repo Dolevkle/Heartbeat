@@ -1,58 +1,63 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
-import { Sparkles } from "lucide-react";
-import { api, type RouterOutputs } from "~/trpc/react";
-import { useSession } from "next-auth/react";
-import { Skeleton } from "@components/skeleton";
+import { ChevronRight } from "lucide-react";
 import SideCard from "~/app/_components/SideCard";
-import UserCard from "~/app/_components/UserCard";
-import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
-import { useState } from "react";
-interface Props {
-  matches: RouterOutputs["user"]["getMatches"];
+import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
+import { type User } from "@prisma/client";
+import { Skeleton } from "@components/skeleton";
+
+interface PotentialMatchDisplayProps {
+  user: User | undefined;
+  isInFocus?: boolean;
 }
-export default function Component({ matches }: Props) {
-  const session = useSession();
-  const ids = matches?.map(({ users }) =>
-    users[0] === session.data?.user.id ? users[1] : users[0],
+
+interface Props {
+  potentialMatches: User[];
+  isLoadingUsers: boolean;
+}
+
+export default function Component({ potentialMatches, isLoadingUsers }: Props) {
+  const PotentialMatchSkeleton = () => (
+    <div className="flex items-center space-x-4">
+      {potentialMatches.map((_, index) => (
+        <Skeleton key={index} className="m-1 h-12 w-12 rounded-full" />
+      ))}
+    </div>
   );
 
-  // TODO if you want you can save in match the whole users instead of just the ids and then this request is redundant.
-  const { data: users, isLoading } = api.user.findUsersByIds.useQuery(ids, {
-    enabled: ids !== undefined,
-  });
+  const PotentialMatchDisplay = ({
+    user,
+    isInFocus,
+  }: PotentialMatchDisplayProps) => (
+    <Avatar
+      className={`h-12 w-12 border-2 ${isInFocus ? "border-primary" : "border-transparent"} m-1`}
+    >
+      <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+      <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+    </Avatar>
+  );
 
-  /**
-   * This function maps the user IDs to their corresponding user objects from the fetched users data.
-   * It ensures that the order of the users matches the order of the IDs.
-   */
-  const orderedUsers = ids?.map((id) => users?.find((user) => user.id === id));
-
-  const [selectedId, setSelectedId] = useState<string | undefined>();
-
-  const handleUserCardClick = (id: string | undefined) => setSelectedId(id);
-  // TODO matches and chats components are separate now,
-  //  but in the end the logic may be the same and then it can be one component
-  //  also I deleted the high matching sparkles for now, we can add it later
-  //  the correct way to build the matches including routes can be seen in how chats was built
   return (
     <SideCard title="Matches">
-      {matches?.map((match, i) =>
-        isLoading ? (
-          <UserCardSkeleton key={match.id} />
-        ) : (
-          <UserCard
-            key={match.id}
-            user={orderedUsers?.[i]}
-            isSelected={
-              selectedId ===
-              (orderedUsers?.[i] ? orderedUsers[i]?.id : undefined)
-            }
-            onClick={handleUserCardClick}
-          />
-        ),
-      )}
+      <div className="flex max-w-64 flex-row items-center gap-4">
+        <ScrollArea className="w-full">
+          <div className="mb-2 ml-4 flex w-10/12 flex-row">
+            {potentialMatches?.map((potentialMatch, currentPotentialMatch) =>
+              isLoadingUsers ? (
+                <PotentialMatchSkeleton key={potentialMatch.id} />
+              ) : (
+                <PotentialMatchDisplay
+                  key={potentialMatch.id}
+                  user={potentialMatches?.[currentPotentialMatch]}
+                  isInFocus={currentPotentialMatch == 0}
+                />
+              ),
+            )}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+        <ChevronRight className="mb-1 mr-1 h-8 w-8" />
+      </div>
     </SideCard>
   );
 }

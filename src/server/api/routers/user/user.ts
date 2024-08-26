@@ -1,8 +1,5 @@
 import { z } from "zod";
-
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { db } from "~/server/db";
-import { calculateAndSaveMatches } from "~/server/api/routers/user/service";
 
 export const userRouter = createTRPCRouter({
   /**
@@ -18,11 +15,12 @@ export const userRouter = createTRPCRouter({
    * @param input.sexualPreference - The updated sexual preference of the user.
    * @param input.gender - The updated gender of the user.
    * @param input.personality - An object containing the updated personality traits of the user.
+   * @param input.playlist - The updated playlist of the user.
+   * @param input.city - The updated city of the user.
    *
    * @returns A promise that resolves to the updated {@link User} object.
    *
    * @throws Will throw an error if the user is not authenticated.
-   *
    */
   update: protectedProcedure
     .input(
@@ -49,44 +47,7 @@ export const userRouter = createTRPCRouter({
         data: rest,
       });
     }),
-  /**
-   * Retrieves a list of matches for a given user.
-   *
-   * @remarks
-   * This function is used to fetch a list of matches from the database for a specific user.
-   * It is a protected procedure, meaning it requires authentication to be called.
-   * The matches are calculated and saved in the database using the `calculateAndSaveMatches` function.
-   *
-   * @param input - The ID of the user for whom to retrieve matches.
-   * @returns A promise that resolves to an array of {@link Match} objects, sorted by similarity in descending order.
-   *
-   * @throws Will throw an error if the user is not authenticated.
-   *
-   * @example
-   * ```typescript
-   * const userId = "user1";
-   * const matches = await trpc.procedure.userRouter.getMatches.query(userId);
-   * console.log(matches);
-   * ```
-   */
-  getMatches: protectedProcedure
-    .input(z.string())
-    .query(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findUnique({ where: { id: input } });
-      if (user) {
-        await calculateAndSaveMatches(user);
-        return db.match.findMany({
-          where: {
-            users: {
-              has: input,
-            },
-          },
-          orderBy: {
-            similarity: "desc",
-          },
-        });
-      }
-    }),
+
   /**
    * Retrieves a list of users based on their IDs.
    *
@@ -102,7 +63,7 @@ export const userRouter = createTRPCRouter({
    * @example
    * ```typescript
    * const userIds = ["user1", "user2", "user3"];
-   * const users = await trpc.procedure.userRouter.getMatchUsers.query(userIds);
+   * const users = await trpc.procedure.userRouter.findUsersByIds.query(userIds);
    * console.log(users);
    * ```
    */
@@ -115,6 +76,7 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+
   /**
    * Retrieves a user based on the ID.
    *
@@ -122,15 +84,15 @@ export const userRouter = createTRPCRouter({
    * This function is used to fetch a user from the database based on the ID.
    * It is a protected procedure, meaning it requires authentication to be called.
    *
-   * @param input - user ID.
+   * @param input - User ID.
    * @returns A promise that resolves to the {@link User}.
    *
    * @throws Will throw an error if the user is not authenticated.
    *
    * @example
    * ```typescript
-   * const userIds = "userID";
-   * const user = await trpc.procedure.userRouter.getUser.query(userId);
+   * const userId = "userID";
+   * const user = await trpc.procedure.userRouter.findUserById.query(userId);
    * console.log(user);
    * ```
    */
