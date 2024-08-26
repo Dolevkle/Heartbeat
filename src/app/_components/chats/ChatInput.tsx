@@ -1,7 +1,6 @@
 "use client";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Button } from "@components/button";
-import { CornerDownLeft, ImageUp, Paperclip } from "lucide-react";
+import { CornerDownLeft, ImageUp } from "lucide-react";
 import { Label } from "@components/label";
 import { Textarea } from "@components/textarea";
 import {
@@ -17,7 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import ImageUploadDialog from "./ImageUploadDialog";
 
 export const messageFormSchema = z
@@ -98,7 +97,7 @@ export default function ChatInput({ chatId }: Props) {
       <form
         ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="row-span-1 col-span-2 relative flex w-full flex-row justify-between overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
+        className="relative col-span-2 row-span-1 flex w-full flex-row justify-between overflow-hidden  border-t border-secondary bg-background"
       >
         <FormField
           control={form.control}
