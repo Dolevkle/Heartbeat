@@ -1,7 +1,6 @@
 "use client";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@components/tooltip";
 import { Button } from "@components/button";
-import { CornerDownLeft, ImageUp, Paperclip } from "lucide-react";
+import { CornerDownLeft, ImageUp } from "lucide-react";
 import { Label } from "@components/label";
 import { Textarea } from "@components/textarea";
 import {
@@ -17,7 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
+import {  useRef } from "react";
 import ImageUploadDialog from "./ImageUploadDialog";
 
 export const messageFormSchema = z
@@ -85,13 +84,8 @@ export default function ChatInput({ chatId }: Props) {
     formRef.current?.requestSubmit();
   };
 
-  useEffect(() => {
     form.register("imageUrl", { required: false });
-  }, [form.register]);
 
-  useEffect(() => {
-    console.log(form.formState.errors);
-  }, [form.formState.errors]);
 
   return (
     <Form {...form}>
