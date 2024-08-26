@@ -52,25 +52,32 @@ export default function MatchWindowClient({
     potentialMatches[0]?.userStatuses ?? [],
   );
 
-  const checkIfAMatch =
-    statuses.length > 0 && statuses.every((status) => status === "Yes");
+  const {
+    mutate: updateUserStatus,
+    variables: userStatusVariables,
+    isPending: isUpdatingUserStatus,
+  } = clientApi.match.updateUserStatus.useMutation({
+    onSuccess: async () => {
+      if (checkIfMatch) {
+        createChat({ users: participantsIds });
+      }
+      await refetchPotentialMatches();
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Match status was not updated!",
+      });
+    },
+  });
 
-  const { mutate: updateUserStatus, isPending: isUpdatingUserStatus } =
-    clientApi.match.updateUserStatus.useMutation({
-      onSuccess: async () => {
-        await refetchPotentialMatches();
-        if (checkIfAMatch) {
-          createChat({ users: participantsIds });
-        }
-      },
-      onError: () => {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "Match status was not updated!",
-        });
-      },
-    });
+  const checkIfMatch =
+    statuses.length > 0 &&
+    userStatusVariables?.newStatus === "Yes" &&
+    statuses.some(
+      (status, index) => status === "Yes" && participantsIds[index] !== userId,
+    );
 
   const handleMatchStatusChange = (newStatus: ConsentStatus): void => {
     updateUserStatus({
@@ -80,7 +87,7 @@ export default function MatchWindowClient({
     });
   };
 
-  const isAnyMatchesLeft = ids.length > 0;
+  const isAnyMatchesLeft = users.length > 0;
   const isPageLoading =
     isUpdatingUserStatus || isLoadingPotentialMatches || isLoadingUsers;
 

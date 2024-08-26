@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { calculateAndSaveMatches } from "~/server/api/routers/user/service";
+import { chatRouter } from "~/server/api/routers/chat/chat";
 
 const ConsentStatusSchema = z.enum(["Yes", "No", "Pending"]);
 
@@ -47,7 +48,21 @@ export const matchRouter = createTRPCRouter({
         // Filter matches where userStatuses contains the user ID and the status is "Pending"
         const existingMatches = allMatches.filter((match) => {
           // Type assertion to ensure userStatuses is a dictionary
-          const userStatuses = match.userStatuses as Record<string, string>;
+          const userStatuses = match.userStatuses as Record<
+            string,
+            ConsentStatus
+          >;
+
+          // TODO
+          // const statuses: ConsentStatus[] = Object.values(userStatuses ?? []);
+          // const participantsIds: string[] = Object.keys(userStatuses ?? []);
+
+          // const checkIfMatch =
+          //   statuses.length > 0 && statuses.every((status) => status === "Yes");
+
+          // if (checkIfMatch) {
+          //   await chatRouter.createChat({ users: participantsIds });
+          // }
 
           // Check if userStatuses contains the user ID and the status is "Pending"
           return (
