@@ -16,7 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef } from "react";
+import {  useRef } from "react";
 import ImageUploadDialog from "./ImageUploadDialog";
 
 export const messageFormSchema = z
@@ -84,7 +84,8 @@ export default function ChatInput({ chatId }: Props) {
     formRef.current?.requestSubmit();
   };
 
-  form.register("imageUrl", { required: false });
+    form.register("imageUrl", { required: false });
+
 
   return (
     <Form {...form}>
