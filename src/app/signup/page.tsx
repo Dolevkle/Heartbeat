@@ -38,6 +38,9 @@ import { Loader2 } from "lucide-react";
 import { useToast } from "@components/use-toast";
 import { type Personality, userSchema } from "~/app/signup/types";
 import { genders, sexualPreferences } from "../consts";
+import FirstStep from "~/app/_components/signup/FirstStep";
+import SecondStep from "~/app/_components/signup/SecondStep";
+import React, { useState } from "react";
 
 export default function SignUp() {
   const session = useSession();
@@ -48,6 +51,8 @@ export default function SignUp() {
     resolver: zodResolver(userSchema),
   });
   const { toast } = useToast();
+
+  const [currentStep, setCurrentStep] = useState(1);
 
   //Retrieves the current values of the form fields being watched.
   const formValues = form.watch();
@@ -137,10 +142,26 @@ export default function SignUp() {
     return <span>Create an account</span>;
   };
 
+  const handleNextStep = () => setCurrentStep((currentStep) => currentStep + 1);
+  const handlePreviousStep = () =>
+    setCurrentStep((currentStep) => currentStep - 1);
+
+  const currentStepComponent =
+    {
+      1: (
+        <FirstStep
+          form={form}
+          playlists={playlists}
+          handleNextStep={handleNextStep}
+        />
+      ),
+      2: <SecondStep form={form} handlePreviousStep={handlePreviousStep} />,
+    }[currentStep] ?? null;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="mx-auto mt-16 max-w-sm">
+        <Card className="mx-auto mt-16 w-fit">
           <CardHeader>
             {session.data?.user ? (
               <div className="flex items-center space-x-3">
@@ -168,154 +189,7 @@ export default function SignUp() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="age"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Label htmlFor="age">age</Label>
-                        </FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="18" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Label htmlFor="city">City</Label>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter city" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="sexualPreference"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Label htmlFor="sexualPreference">
-                            sexual preference
-                          </Label>
-                        </FormLabel>
-                        <Select
-                          data-testid="sexual preference select"
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select preference" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {sexualPreferences.map(
-                              (sexualPreference, index) => (
-                                <SelectItem
-                                  key={index}
-                                  value={sexualPreference}
-                                >
-                                  {sexualPreference}
-                                </SelectItem>
-                              ),
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Label htmlFor="gender">gender</Label>
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select gender" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {genders.map((gender, index) => (
-                              <SelectItem key={index} value={gender}>
-                                {gender}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="playlist"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        <Label htmlFor="playlist">playlist</Label>
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select from your playlists" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {playlists?.map((playlist) => (
-                            <SelectItem key={playlist.id} value={playlist.id}>
-                              {playlist.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isAnyFieldEmpty || !tracks}
-              >
-                {renderSubmitButtonContent()}
-              </Button>
-            </div>
+            <div className="grid gap-4">{currentStepComponent}</div>
             <div className="mt-4 text-center text-sm">
               Already have an account?
               <Link
