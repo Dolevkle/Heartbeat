@@ -142,10 +142,10 @@ const PlaylistSelectDialog: React.FC = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="relative left-1/2 flex h-12 w-12 -translate-x-1/2 transform rounded-full border-none text-white"
+          className="absolute left-0 top-0 h-7 w-7 rounded-full p-0"
           onClick={() => setIsOpen(true)}
         >
-          <PenSquareIcon className="text-2xl" />
+          <PenSquareIcon />
         </Button>
       </DialogTrigger>
       <DialogContent className="text-white sm:max-w-[425px]">
