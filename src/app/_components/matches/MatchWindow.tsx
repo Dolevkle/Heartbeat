@@ -12,7 +12,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "../shadcn/resizable";
-import type { User } from "@prisma/client";
+import type { User, Image as PrismaImage } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
 
 const PROGRESS_PERCENTAGE = 100;
@@ -20,12 +20,14 @@ const PROGRESS_PERCENTAGE = 100;
 interface MatchWindowProps {
   currentPotentialMatch: User;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
+  currentPotentialMatchImages: PrismaImage[];
   isLoading: boolean;
 }
 
 const MatchWindow = ({
   currentPotentialMatch,
   handleMatchStatusChange,
+  currentPotentialMatchImages,
   isLoading,
 }: MatchWindowProps) => {
   const [progress, setProgress] = useState<number>(1);
@@ -56,14 +58,11 @@ const MatchWindow = ({
               handleNext={handleNext}
             >
               <CarouselContent className="h-[73vh]">
-                {[
-                  currentPotentialMatch?.image,
-                  currentPotentialMatch?.image,
-                ].map((picture, index) => (
+                {currentPotentialMatchImages?.map((picture, index) => (
                   <CarouselItem key={index}>
                     <AspectRatio>
                       <Image
-                        src={picture ?? ""}
+                        src={picture?.url ?? ""}
                         alt={`Photo of ${currentPotentialMatch?.name}`}
                         objectFit="cover"
                         fill
@@ -94,10 +93,7 @@ const MatchWindow = ({
       </div>
       <Progress
         value={
-          (progress /
-            [currentPotentialMatch?.image, currentPotentialMatch?.image]
-              .length) *
-          PROGRESS_PERCENTAGE
+          (progress / currentPotentialMatchImages?.length) * PROGRESS_PERCENTAGE
         }
         max={PROGRESS_PERCENTAGE}
         orientation="vertical"
