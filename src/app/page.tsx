@@ -10,11 +10,11 @@ import { ScrollArea } from "./_components/shadcn/scroll-area";
 export default function Page() {
   const router = useRouter();
   const session = useSession();
-  const sign = () =>
+  const handleSignUp = () =>
     signIn("spotify", { callbackUrl: "/profile/matches" }, "show_dialog=true");
   const handleLogin = () => {
     if (session.data?.user.personality) router.push("/profile/matches");
-    else void sign();
+    else signIn("spotify", { callbackUrl: "/profile/matches" }, "show_dialog=true");
   };
 
   return (
@@ -52,7 +52,7 @@ export default function Page() {
                   The leading AI personality matcher in the world.
                 </p>
                 <div className="mt-5 flex w-full justify-center space-x-12">
-                  <Button variant="secondary" onClick={sign}>
+                  <Button variant="secondary" onClick={handleSignUp}>
                     Sign Up
                   </Button>
                   <Button onClick={handleLogin}>Log In</Button>
