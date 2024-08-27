@@ -1,14 +1,13 @@
 import {
   Carousel,
+  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  CarouselApi,
 } from "@components/carousel";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
 import React, { forwardRef, useImperativeHandle } from "react";
-import { title } from "process";
 
 const TraitCard = ({
   title,
@@ -70,7 +69,7 @@ export interface CarouselHandle {
 interface Props {}
 
 export default forwardRef<CarouselHandle, Props>(
-  function TraitCarousel(props, ref) {
+  function TraitCarousel(_props, ref) {
     const [api, setApi] = React.useState<CarouselApi>();
 
     useImperativeHandle(ref, () => ({
@@ -81,7 +80,6 @@ export default forwardRef<CarouselHandle, Props>(
     }));
 
     return (
-      // <Card>
       <Carousel
         setApi={setApi}
         opts={{
@@ -100,7 +98,6 @@ export default forwardRef<CarouselHandle, Props>(
         <CarouselPrevious className="text-white" />
         <CarouselNext className="text-white" />
       </Carousel>
-      // </Card>
     );
   },
 );

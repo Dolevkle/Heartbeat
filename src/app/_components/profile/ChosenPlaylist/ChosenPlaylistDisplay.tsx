@@ -3,7 +3,6 @@ import Image from "next/image";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 import PlaylistSelectDialog from "./PlaylistSelectDialog";
-import { Card } from "../../shadcn/card";
 
 const ChosenPlaylistDisplay: React.FC = () => {
   const session = useSession();
@@ -14,7 +13,6 @@ const ChosenPlaylistDisplay: React.FC = () => {
   );
 
   return (
-    // <Card className="flex w-full flex-col  items-center overflow-hidden rounded p-4 text-white shadow-lg">
     <div className="flex w-full flex-col  items-center overflow-hidden rounded p-4 text-white shadow-lg">
       <div className="relative">
         <Image
@@ -29,7 +27,6 @@ const ChosenPlaylistDisplay: React.FC = () => {
         {playlist?.name}
       </div>
     </div>
-    // </Card>
   );
 };
 

@@ -2,14 +2,6 @@
 
 import React from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@components/card";
-import { Skeleton } from "@components/skeleton";
-import {
   FormControl,
   FormField,
   FormItem,
@@ -27,7 +19,6 @@ import {
 } from "@components/select";
 import { genders, sexualPreferences } from "~/app/consts";
 import { Button } from "@components/button";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { type UseFormReturn } from "react-hook-form";
 import { Playlist, TrackItem } from "@spotify/web-api-ts-sdk";
@@ -155,7 +146,7 @@ function FirstStep({ form, playlists, handleNextStep }: Props) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                <Label htmlFor="playlist">playlist</Label>
+                <Label htmlFor="playlist">Playlist</Label>
               </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
