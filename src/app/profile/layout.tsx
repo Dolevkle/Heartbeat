@@ -72,15 +72,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <TooltipContent side="right">Profile</TooltipContent>
           </Tooltip>
         </nav>
-
-
-
-
-
-
-
-
-
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
           <Tooltip>
             <TooltipTrigger asChild>
