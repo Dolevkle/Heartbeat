@@ -155,7 +155,12 @@ export default function SignUp() {
           handleNextStep={handleNextStep}
         />
       ),
-      2: <SecondStep form={form} handlePreviousStep={handlePreviousStep} />,
+      2: (
+        <SecondStep
+          handlePreviousStep={handlePreviousStep}
+          submitButtonContent={renderSubmitButtonContent()}
+        />
+      ),
     }[currentStep] ?? null;
 
   return (
