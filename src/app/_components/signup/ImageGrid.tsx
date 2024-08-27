@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import ProfilePictureDialog from "~/app/_components/home/ProfilePicture/ProfilePictureDialog";
-import { Button } from "@components/button";
-import { Loader2, Trash2, X } from "lucide-react";
 import { api } from "~/trpc/react";
 import { removeImageFromS3 } from "~/app/actions/removeImageFromS3";
 import { useToast } from "@components/use-toast";
@@ -13,13 +11,14 @@ export const EmptyImageLayout = ({ content }: { content: string }) => (
   </div>
 );
 
-const ImageGrid = ({
-  imageUrls,
-  refetchImages,
-}: {
+interface Props {
   imageUrls: string[];
   refetchImages: () => void;
-}) => {
+  width: number;
+  height: number;
+}
+
+const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
   const [loading, setLoading] = useState<boolean[]>(new Array(7).fill(false));
   const currentImage = useRef(-1);
   const { toast } = useToast();
@@ -31,7 +30,6 @@ const ImageGrid = ({
         title: "Success",
         description: "Image deleted successfully",
       });
-      // setLoading((prev) => ({ ...prev, [url]: true }));
       const copy = [...loading];
       copy[currentImage.current] = false;
       setLoading(copy);
@@ -67,7 +65,9 @@ const ImageGrid = ({
   };
 
   return (
-    <div className="grid max-h-[500px] max-w-[500px] grid-cols-6 grid-rows-4 gap-4 p-4 ">
+    <div
+      className={`grid max-h-[${height}px] max-w-[${width}px] grid-cols-6 grid-rows-4 gap-4 p-4 `}
+    >
       {defaultContent.map((content, index) => {
         const url = imageUrls[index] ?? null;
 
