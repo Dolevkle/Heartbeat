@@ -1,51 +1,18 @@
 "use client";
 
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@components/card";
-import { Skeleton } from "@components/skeleton";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@components/form";
-import { Label } from "@components/label";
-import { Input } from "@components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@components/select";
-import { genders, sexualPreferences } from "~/app/consts";
 import { Button } from "@components/button";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { type UseFormReturn } from "react-hook-form";
-import { Playlist, TrackItem } from "@spotify/web-api-ts-sdk";
 import { api } from "~/trpc/react";
 import ImageGrid from "~/app/_components/signup/ImageGrid";
 
 interface Props {
-  form: UseFormReturn<{
-    playlist: string;
-    age: number;
-    city: string;
-    sexualPreference: string;
-    gender: string;
-  }>;
   handlePreviousStep: () => void;
+  submitButtonContent: React.ReactElement;
 }
 
-function SecondStep({ form, handlePreviousStep }: Props) {
+function SecondStep({ handlePreviousStep, submitButtonContent }: Props) {
   const session = useSession();
   const { data: usersImages, refetch: refetchImages } =
     api.image.findMany.useQuery(session.data?.user?.id ?? "", {
@@ -68,8 +35,12 @@ function SecondStep({ form, handlePreviousStep }: Props) {
         >
           Previous
         </Button>
-        <Button type="submit" className="w-full">
-          submit
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={!usersImages || usersImages.length < 1}
+        >
+          {submitButtonContent}
         </Button>
       </div>
     </>
