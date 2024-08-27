@@ -68,12 +68,10 @@ const ImageGrid = ({
           // Two small images in a row at the bottom
           return (
             <ProfilePictureDialog
+              key={index}
               onUploadSuccess={refetchImages}
               trigger={
-                <div
-                  key={index}
-                  className="col-span-2 row-span-1 cursor-pointer"
-                >
+                <div className="col-span-2 row-span-1 cursor-pointer">
                   {url ? (
                     <img
                       src={url}
