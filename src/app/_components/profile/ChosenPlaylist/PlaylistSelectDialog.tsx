@@ -11,8 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../shadcn/dialog";
-import { Label } from "../../shadcn/label";
+} from "@components/dialog";
+import { Label } from "@components/label";
 import {
   Form,
   FormControl,
@@ -20,15 +20,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../shadcn/form";
+} from "@components/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../shadcn/select";
-import { useToast } from "../../shadcn/use-toast";
+} from "@components/select";
+import { useToast } from "@components/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Personality, userSchema } from "~/app/signup/types";
@@ -142,7 +142,7 @@ const PlaylistSelectDialog: React.FC = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="absolute left-0 top-0 h-fit w-fit rounded-full p-1"
+          className="absolute bottom-0 left-0 h-10 w-10 rounded-full p-1"
           onClick={() => setIsOpen(true)}
         >
           <PenSquareIcon />
