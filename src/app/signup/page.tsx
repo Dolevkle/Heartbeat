@@ -69,7 +69,7 @@ export default function SignUp() {
        * It navigates to the profile page and shows a success toast message.
        */
       onSuccess: () => {
-        router.push("/profile");
+        router.push("/profile/matches");
         toast({
           title: "Success",
           description: "User successfully created",
@@ -198,7 +198,7 @@ export default function SignUp() {
             <div className="mt-4 text-center text-sm">
               Already have an account?
               <Link
-                href={`${session.data?.user.personality ? "/profile" : "/"}`}
+                href={`${session.data?.user.personality ? "/profile/matches" : "/"}`}
                 className="underline"
               >
                 Log in
