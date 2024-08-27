@@ -13,13 +13,14 @@ export const EmptyImageLayout = ({ content }: { content: string }) => (
   </div>
 );
 
-const ImageGrid = ({
-  imageUrls,
-  refetchImages,
-}: {
+interface Props {
   imageUrls: string[];
   refetchImages: () => void;
-}) => {
+  width: number;
+  height: number;
+}
+
+const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
   const [loading, setLoading] = useState<boolean[]>(new Array(7).fill(false));
   const currentImage = useRef(-1);
   const { toast } = useToast();
@@ -67,7 +68,9 @@ const ImageGrid = ({
   };
 
   return (
-    <div className="grid max-h-[500px] max-w-[500px] grid-cols-6 grid-rows-4 gap-4 p-4 ">
+    <div
+      className={`grid max-h-[${height}px] max-w-[${width}px] grid-cols-6 grid-rows-4 gap-4 p-4 `}
+    >
       {defaultContent.map((content, index) => {
         const url = imageUrls[index] ?? null;
 

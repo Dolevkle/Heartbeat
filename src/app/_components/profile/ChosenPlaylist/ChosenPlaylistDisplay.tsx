@@ -13,7 +13,7 @@ const ChosenPlaylistDisplay: React.FC = () => {
   );
 
   return (
-    <div className="relative max-w-sm overflow-hidden rounded p-4 text-white shadow-lg">
+    <div className="relative  max-w-lg overflow-hidden rounded p-4 text-white shadow-lg">
       <Image
         src={playlist?.images[0]?.url ?? ""}
         width={300}

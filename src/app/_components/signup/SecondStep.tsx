@@ -25,6 +25,8 @@ function SecondStep({ handlePreviousStep, submitButtonContent }: Props) {
         <ImageGrid
           imageUrls={usersImages?.map((img) => img.url)}
           refetchImages={refetchImages}
+          width={500}
+          height={500}
         />
       )}
       <div className="flex gap-x-4">
