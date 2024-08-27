@@ -109,6 +109,8 @@ const PlaylistSelectDialog: React.FC = () => {
               age: session.data?.user.age ?? 0,
               gender: session.data?.user.gender ?? "",
               sexualPreference: session.data?.user.sexualPreference ?? "",
+              city: session.data?.user.city ?? "",
+              personality: data as Personality,
               ...values,
               personality: data as Personality,
             });
