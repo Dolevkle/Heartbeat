@@ -1,41 +1,25 @@
 import { z } from "zod";
-
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import axios from "axios";
-import { env } from "~/env";
-
-const OPEN_API_URL = "https://api.openai.com/v1/chat/completions";
+import { generateObject } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 export const openAiRouter = createTRPCRouter({
   analyzePersonality: protectedProcedure
     .input(z.object({ songs: z.string().array() }))
     .mutation(async ({ input }) => {
-      const data = {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "you need to analyze users. if user give you a list of songs your return scores about him in the following format: Openness: low/medium/high, Conscientiousness:  low/ medium/high, extraversion:  low/ medium/high, agreeableness:  low/ medium/high,neuroticism:  low/ medium/high. return without additional info",
-          },
-          {
-            role: "user",
-            content: `songs: ${input.songs.join(", ")}`,
-          },
-        ],
-        temperature: 0.7,
-      };
-      const response = await axios.post(OPEN_API_URL, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${env.OPEN_API_KEY}`, // Replace with your OpenAI API key
-        },
+      const { object: personality } = await generateObject({
+        model: openai("gpt-4-turbo"),
+        system:
+          "you need to analyze users. if user give you a list of songs your return scores about him in the following format: Openness: low/medium/high, Conscientiousness:  low/ medium/high, extraversion:  low/ medium/high, agreeableness:  low/ medium/high,neuroticism:  low/ medium/high. return without additional info",
+        prompt: input.songs.join(", "),
+        schema: z.object({
+          Openness: z.string(),
+          Neuroticism: z.string(),
+          Extraversion: z.string(),
+          Conscientiousness: z.string(),
+          Agreeableness: z.string(),
+        }),
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const content = response.data.choices[0].message.content as string;
-      return content.split(", ").reduce((acc, item) => {
-        const [key, value] = item.split(":");
-        return { ...acc, [key!]: value?.trim() };
-      }, {});
+      return personality;
     }),
 });

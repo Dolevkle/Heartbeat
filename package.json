@@ -14,6 +14,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.54",
     "@auth/prisma-adapter": "^1.4.0",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.14.0",
@@ -38,6 +39,7 @@
     "@trpc/react-query": "next",
     "@trpc/server": "next",
     "@uploadthing/react": "^6.6.0",
+    "ai": "^3.3.19",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
