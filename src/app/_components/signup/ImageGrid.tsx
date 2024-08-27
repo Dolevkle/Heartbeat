@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import ProfilePictureDialog from "~/app/_components/home/ProfilePicture/ProfilePictureDialog";
-import { Button } from "@components/button";
-import { Loader2, Trash2, X } from "lucide-react";
 import { api } from "~/trpc/react";
 import { removeImageFromS3 } from "~/app/actions/removeImageFromS3";
 import { useToast } from "@components/use-toast";
@@ -32,7 +30,6 @@ const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
         title: "Success",
         description: "Image deleted successfully",
       });
-      // setLoading((prev) => ({ ...prev, [url]: true }));
       const copy = [...loading];
       copy[currentImage.current] = false;
       setLoading(copy);

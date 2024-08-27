@@ -12,7 +12,6 @@ import {
 import { traitMapping } from "~/app/consts";
 import { RefObject } from "react";
 import { CarouselHandle } from "./TraitCarousel";
-import { Card } from "@components/card";
 
 interface Props {
   personality: Personality;
@@ -41,7 +40,6 @@ const PersonalityRadarChart = ({ personality, carouselRef }: Props) => {
   };
 
   return (
-    // <Card className="h-full w-full max-w-screen-sm">
     <ChartContainer config={chartConfig} className="h-full w-full">
       <RadarChart data={data} onClick={setTraitCarouselItem}>
         <ChartTooltip
@@ -62,7 +60,6 @@ const PersonalityRadarChart = ({ personality, carouselRef }: Props) => {
         />
       </RadarChart>
     </ChartContainer>
-    // </Card>
   );
 };
 
