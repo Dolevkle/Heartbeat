@@ -27,7 +27,7 @@ const UserDetailsDisplay: React.FC = () => {
   ];
 
   return (
-    <Card>
+    <Card className="max-w-screen-sm">
       <CardHeader>
         <CardTitle>{`${userDetails?.name}, ${userDetails?.age}`}</CardTitle>
         <CardDescription>{userDetails?.email}</CardDescription>

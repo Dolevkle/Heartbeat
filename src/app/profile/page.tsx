@@ -14,14 +14,14 @@ export default function Page() {
   const carouselRef = useRef<CarouselHandle>(null);
   return (
     // <ScrollArea className="rounded-md">
-    <div className="grid max-h-screen grid-cols-4 p-6">
+    <div className="grid max-h-screen grid-cols-4 gap-y-5 p-6">
       <div className="col-span-2 h-fit justify-start ">
         <UserDetailsDisplay />
       </div>
       {/*<div className="flex h-fit justify-start ">*/}
       {/*  <ProfilePictureDisplay />*/}
       {/*</div>*/}
-      <div className="col-span-2 row-start-2 mt-5 flex h-fit  justify-self-center	">
+      <div className="col-span-2 row-start-2 w-full	justify-self-center">
         <ChosenPlaylistDisplay />
       </div>
       <div className="col-span-2  h-full">
@@ -32,7 +32,7 @@ export default function Page() {
           />
         )}
       </div>
-      <div className="col-span-2 col-start-3 flex h-fit  w-full items-center justify-center">
+      <div className="col-span-2 col-start-3 flex h-fit w-full  items-center justify-center">
         <TraitCarousel ref={carouselRef} />
       </div>
     </div>

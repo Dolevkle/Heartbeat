@@ -81,6 +81,7 @@ export default forwardRef<CarouselHandle, Props>(
     }));
 
     return (
+      // <Card>
       <Carousel
         setApi={setApi}
         opts={{
@@ -99,6 +100,7 @@ export default forwardRef<CarouselHandle, Props>(
         <CarouselPrevious className="text-white" />
         <CarouselNext className="text-white" />
       </Carousel>
+      // </Card>
     );
   },
 );
