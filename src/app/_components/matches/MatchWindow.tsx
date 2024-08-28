@@ -14,12 +14,13 @@ import {
 } from "../shadcn/resizable";
 import type { User, Image as PrismaImage } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
+import { analyzeBestQuality } from "./utils";
+import type { Personality } from "~/server/api/routers/user/service";
 
 const PROGRESS_PERCENTAGE = 100;
 
 interface MatchWindowProps {
   currentPotentialMatch: User;
-  analaizedPersonalityDescription: string;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
   currentPotentialMatchImages: PrismaImage[];
   isLoading: boolean;
@@ -27,7 +28,6 @@ interface MatchWindowProps {
 
 const MatchWindow = ({
   currentPotentialMatch,
-  analaizedPersonalityDescription,
   handleMatchStatusChange,
   currentPotentialMatchImages,
   isLoading,
@@ -41,6 +41,10 @@ const MatchWindow = ({
   const handlePrevious = (): void => {
     setProgress((prev) => prev - 1);
   };
+
+  const analaizedPersonalityDescription = analyzeBestQuality(
+    currentPotentialMatch.personality as Personality,
+  );
 
   return (
     <div className="h-8/12 relative m-24 flex w-8/12">

@@ -9,18 +9,15 @@ import Matches from "./matches";
 import { getPotentialMatchesIds } from "./utils";
 import Image from "next/image";
 import NoMatchesImage from "../../../../public/assets/chats.jpg";
-import { useEffect } from "react";
 
 interface MatchWindowClientProps {
   userId: string;
-  analaizedPersonalityDescription: string;
   initialPotentialMatches: Match[];
   initialUsers: User[];
 }
 
 export default function MatchWindowClient({
   userId,
-  analaizedPersonalityDescription,
   initialPotentialMatches,
   initialUsers,
 }: MatchWindowClientProps) {
@@ -111,12 +108,6 @@ export default function MatchWindowClient({
     </div>
   );
 
-  useEffect(() => {
-    console.log(potentialMatches);
-    console.log(ids);
-    console.log(users);
-  }, [users]);
-
   return (
     <div className="flex h-full w-full flex-row">
       <Matches
@@ -127,7 +118,6 @@ export default function MatchWindowClient({
       {isAnyMatchesLeft ? (
         <MatchWindow
           currentPotentialMatch={currentPotentialMatch}
-          analaizedPersonalityDescription={analaizedPersonalityDescription}
           currentPotentialMatchImages={matchImages[currentPotentialMatch?.id]}
           isLoading={isPageLoading}
           handleMatchStatusChange={handleMatchStatusChange}
