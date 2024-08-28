@@ -36,7 +36,12 @@ import { type z } from "zod";
 import { genders, sexualPreferences } from "~/app/consts";
 import { Input } from "../../shadcn/input";
 
-const DetailsEditDialog: React.FC = () => {
+
+type DetailsEditDialogProps = {
+  onDetailsUpdated: () => void; 
+};
+
+const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({onDetailsUpdated}) => {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
   const { update: updateSession } = useSession();
@@ -86,6 +91,7 @@ const DetailsEditDialog: React.FC = () => {
         });
         setIsOpen(false);
         await updateSession();
+        onDetailsUpdated();
       },
       onError: () => {
         toast({

@@ -15,7 +15,7 @@ import ProfilePictureDisplay from "~/app/_components/home/ProfilePicture/Profile
 const UserDetailsDisplay: React.FC = () => {
   const session = useSession();
 
-  const { data: userDetails } = api.user.findUserById.useQuery(
+  const { data: userDetails, refetch: refetchUserDetails } = api.user.findUserById.useQuery(
     session.data?.user?.id ?? "",
     { enabled: !!session.data },
   );
@@ -51,7 +51,7 @@ const UserDetailsDisplay: React.FC = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <DetailsEditDialog />
+        <DetailsEditDialog onDetailsUpdated={refetchUserDetails}/>
       </CardFooter>
     </Card>
   );
