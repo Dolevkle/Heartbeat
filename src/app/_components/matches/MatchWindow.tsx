@@ -14,6 +14,7 @@ import {
 } from "../shadcn/resizable";
 import type { User } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 const PROGRESS_PERCENTAGE = 100;
 
@@ -37,9 +38,32 @@ const MatchWindow = ({
   const handlePrevious = (): void => {
     setProgress((prev) => prev - 1);
   };
+  // Create a motion value to track the x position
+  const x = useMotionValue(0);
+
+  // Create a rotation value that maps the x position to a degree of rotation
+  const rotate = useTransform(x, [-200, 0, 200], [-15, 0, 15]);
 
   return (
-    <div className="h-8/12 relative m-24 flex w-8/12">
+    <motion.div
+      className="h-8/12 relative m-24 flex w-8/12"
+      style={{ x, rotate }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={(event, info) => {
+        if (info.offset.x > 100) {
+          handleMatchStatusChange("Yes");
+        } else if (info.offset.x < -100) {
+          handleMatchStatusChange("No");
+        }
+        // Reset the position and rotation after the swipe
+        x.set(0);
+      }}
+      animate={{
+        x: 0,
+        transition: { type: "spring", stiffness: 300, damping: 20 },
+      }}
+    >
       <div className="flex h-full w-full rounded-md border-4 border-primary">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
@@ -123,7 +147,7 @@ const MatchWindow = ({
           <CheckIcon />
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
