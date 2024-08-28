@@ -34,21 +34,24 @@ const UserDetailsDisplay: React.FC = () => {
     enabled: !!session.data,
   });
 
+  const renderCardHeader = () => {
+    if (isLoadingUserDetails || !userDetails)
+      return (
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-1/5 rounded-md" />
+          <Skeleton className="h-4 w-1/6 rounded-md" />
+        </div>
+      );
+    return (
+      <>
+        <CardTitle>{`${userDetails?.name}, ${userDetails?.age}`}</CardTitle>
+        <CardDescription>{userDetails?.email}</CardDescription>
+      </>
+    );
+  };
   return (
     <Card className="max-w-screen-sm">
-      <CardHeader>
-        {isLoadingUserDetails || !userDetails ? (
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-1/5 rounded-md" />
-            <Skeleton className="h-4 w-1/6 rounded-md" />
-          </div>
-        ) : (
-          <>
-            <CardTitle>{`${userDetails?.name}, ${userDetails?.age}`}</CardTitle>
-            <CardDescription>{userDetails?.email}</CardDescription>
-          </>
-        )}
-      </CardHeader>
+      <CardHeader>{renderCardHeader()}</CardHeader>
       <CardContent>
         <div className="flex justify-between">
           {isLoadingUserDetails || isLoadingImages || !session.data ? (
