@@ -12,15 +12,17 @@ interface Props {
 
 export default function ChatMessages({ messages, chatId }: Props) {
   const session = useSession();
-  const [msgs, setMsgs] = useState<RouterOutputs["message"]["getMessages"] | undefined>(messages);
+  const [msgs, setMsgs] = useState<
+    RouterOutputs["message"]["getMessages"] | undefined
+  >(messages);
 
   useEffect(() => {
     const channel = pusherClient
       .subscribe(chatId)
       .bind(`new-message-chat-${chatId}`, (data) => {
-        console.log("test", data.content);
-        if (data) setMsgs([...msgs, data]);
-        else setMsgs([data]);
+        console.log("test", data);
+        if (data.content) setMsgs([...(msgs || []), data]);
+        else setMsgs([...(msgs || [])]);
       });
 
     return () => {
@@ -38,7 +40,13 @@ export default function ChatMessages({ messages, chatId }: Props) {
             className={`m-1 h-fit w-fit max-w-xs whitespace-pre-wrap rounded-lg p-2 text-white ${senderId === session.data?.user.id ? "self-end bg-primary" : "self-start bg-secondary"}`}
           >
             {isImage ? (
-              <Image className="rounded-lg" src={content} width={300} height={300} alt="User image" />
+              <Image
+                className="rounded-lg"
+                src={content}
+                width={300}
+                height={300}
+                alt="User image"
+              />
             ) : (
               content
             )}
