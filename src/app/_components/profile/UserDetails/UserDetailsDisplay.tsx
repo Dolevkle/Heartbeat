@@ -37,7 +37,7 @@ const UserDetailsDisplay: React.FC = () => {
   return (
     <Card className="max-w-screen-sm">
       <CardHeader>
-        {isLoadingUserDetails ? (
+        {isLoadingUserDetails || !userDetails ? (
           <div className="space-y-2">
             <Skeleton className="h-8 w-1/5 rounded-md" />{" "}
             <Skeleton className="h-4 w-1/6 rounded-md" />{" "}
