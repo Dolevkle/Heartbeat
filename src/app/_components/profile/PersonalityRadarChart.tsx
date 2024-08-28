@@ -4,14 +4,14 @@ import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 import { type Personality } from "~/app/signup/types";
 
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@components/chart";
 import { traitMapping } from "~/app/consts";
-import { RefObject } from "react";
-import { CarouselHandle } from "./TraitCarousel";
+import { type RefObject } from "react";
+import { type CarouselHandle } from "./TraitCarousel";
 
 interface Props {
   personality: Personality;
@@ -47,12 +47,17 @@ const PersonalityRadarChart = ({ personality, carouselRef }: Props) => {
           cursor={false}
           content={<ChartTooltipContent />}
         />
-        <PolarAngleAxis dataKey="trait" onClick={setTraitCarouselItem} />
-        <PolarGrid />
+        <PolarAngleAxis
+          dataKey="trait"
+          onClick={setTraitCarouselItem}
+          cursor="pointer"
+        />
+        <PolarGrid cursor="pointer" />
         <Radar
           dataKey="value"
           fill="hsl(var(--primary)"
           fillOpacity={0.3}
+          cursor="pointer"
           dot={{
             r: 4,
             fillOpacity: 1,
