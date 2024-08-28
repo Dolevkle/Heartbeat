@@ -12,12 +12,12 @@ const ProfilePictureDisplay: React.FC = () => {
     });
 
   return (
-    <ImageGrid
-      imageUrls={usersImages?.map((image) => image.url) ?? []}
-      refetchImages={refetchImages}
-      width={350}
-      height={300}
-    />
+    <div className="max-h-[400px] max-w-[400px]">
+      <ImageGrid
+        imageUrls={usersImages?.map((image) => image.url) ?? []}
+        refetchImages={refetchImages}
+      />
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import { api } from "~/trpc/react";
 import { removeImageFromS3 } from "~/app/actions/removeImageFromS3";
 import { useToast } from "@components/use-toast";
 import ProfileImage from "~/app/_components/signup/ProfileImage";
+import { Skeleton } from "@components/skeleton";
 
 export const EmptyImageLayout = ({ content }: { content: string }) => (
   <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border border-white shadow-md">
@@ -12,13 +13,11 @@ export const EmptyImageLayout = ({ content }: { content: string }) => (
 );
 
 interface Props {
-  imageUrls: string[];
+  imageUrls: string[] | undefined;
   refetchImages: () => void;
-  width: number;
-  height: number;
 }
 
-const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
+const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
   const [loading, setLoading] = useState<boolean[]>(new Array(7).fill(false));
   const currentImage = useRef(-1);
   const { toast } = useToast();
@@ -65,20 +64,23 @@ const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
   };
 
   return (
-    <div
-      className={`grid max-h-[${height}px] max-w-[${width}px] grid-cols-6 grid-rows-4 gap-4 p-4 `}
-    >
+    <div className="grid h-full w-full grid-cols-6 grid-rows-4 gap-4 p-4">
       {defaultContent.map((content, index) => {
-        const url = imageUrls[index] ?? null;
+        const url = imageUrls?.[index] ?? null;
 
         if (index === 0) {
           // Large image on the left
-          return (
+          return !imageUrls?.length ? (
+            <Skeleton
+              key={index}
+              className="col-span-4 row-span-3 h-full w-full rounded-lg"
+            />
+          ) : (
             <ProfilePictureDialog
               key={index}
               onUploadSuccess={refetchImages}
               trigger={
-                <div className="relative col-span-4 row-span-3 cursor-pointer">
+                <div className="relative col-span-4 row-span-3 h-full w-full cursor-pointer">
                   <ProfileImage
                     handleRemove={handleRemove}
                     index={index}
@@ -92,12 +94,17 @@ const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
           );
         } else if (index > 0 && index < 4) {
           // Three small images in a column on the right
-          return (
+          return !imageUrls?.length ? (
+            <Skeleton
+              key={index}
+              className="col-span-2 row-span-1 h-full w-full rounded-lg"
+            />
+          ) : (
             <ProfilePictureDialog
               key={index}
               onUploadSuccess={refetchImages}
               trigger={
-                <div className=" relative col-span-2 row-span-1 cursor-pointer">
+                <div className=" relative col-span-2 row-span-1 h-full w-full cursor-pointer">
                   <ProfileImage
                     handleRemove={handleRemove}
                     index={index}
@@ -111,12 +118,17 @@ const ImageGrid = ({ imageUrls, refetchImages, width, height }: Props) => {
           );
         } else {
           // Two small images in a row at the bottom
-          return (
+          return !imageUrls?.length ? (
+            <Skeleton
+              key={index}
+              className="col-span-2 row-span-1 h-full w-full rounded-lg"
+            />
+          ) : (
             <ProfilePictureDialog
               key={index}
               onUploadSuccess={refetchImages}
               trigger={
-                <div className=" relative col-span-2 row-span-1 cursor-pointer">
+                <div className=" relative col-span-2 row-span-1 h-full w-full cursor-pointer">
                   <ProfileImage
                     handleRemove={handleRemove}
                     index={index}
