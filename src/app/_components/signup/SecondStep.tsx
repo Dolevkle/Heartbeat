@@ -21,12 +21,12 @@ function SecondStep({ handlePreviousStep, handleNextStep }: Props) {
   return (
     <>
       {usersImages && (
-        <ImageGrid
-          imageUrls={usersImages?.map((img) => img.url)}
-          refetchImages={refetchImages}
-          width={500}
-          height={500}
-        />
+        <div className="h-[400px] w-[400px]">
+          <ImageGrid
+            imageUrls={usersImages?.map((img) => img.url)}
+            refetchImages={refetchImages}
+          />
+        </div>
       )}
       <div className="flex gap-x-4">
         <Button
