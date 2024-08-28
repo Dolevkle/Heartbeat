@@ -52,3 +52,6 @@ To set up the project locally, follow these steps:
 4. **start project**:
    ```bash
    pnpm run dev
+
+## How do I deploy this?
+Follow t3 stack deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
