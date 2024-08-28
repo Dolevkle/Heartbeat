@@ -6,15 +6,19 @@ import React, { useState } from "react";
 
 type ImageUploadProps = {
   onUploadSuccess: (imageUrl: string) => void;
+  uploadEndpoint?: string;
 };
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onUploadSuccess }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({
+  onUploadSuccess,
+  uploadEndpoint = "imageUploader",
+}) => {
   const [imageUrl, setImageUrl] = useState<string>("");
 
   return (
     <div>
       <UploadDropzone
-        endpoint="imageUploader"
+        endpoint={uploadEndpoint}
         onClientUploadComplete={(res) => {
           const url = res[0].url;
           setImageUrl(url);
