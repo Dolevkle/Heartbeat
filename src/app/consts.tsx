@@ -1,4 +1,4 @@
-export const genders = ["male", "female", "non binary"];
+export const genders = ["male", "female"];
 
 export const sexualPreferences = ["male", "female", "both"];
 
