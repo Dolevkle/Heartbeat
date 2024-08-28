@@ -2,7 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { ChevronRight } from "lucide-react";
 import SideCard from "~/app/_components/SideCard";
-import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
+import { ScrollArea, ScrollBar } from "../shadcn/scroll-area";
 import { type User, type Image } from "@prisma/client";
 import { Skeleton } from "@components/skeleton";
 

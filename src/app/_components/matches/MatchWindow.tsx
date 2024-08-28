@@ -19,6 +19,7 @@ const PROGRESS_PERCENTAGE = 100;
 
 interface MatchWindowProps {
   currentPotentialMatch: User;
+  analaizedPersonalityDescription: string;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
   currentPotentialMatchImages: PrismaImage[];
   isLoading: boolean;
@@ -26,6 +27,7 @@ interface MatchWindowProps {
 
 const MatchWindow = ({
   currentPotentialMatch,
+  analaizedPersonalityDescription,
   handleMatchStatusChange,
   currentPotentialMatchImages,
   isLoading,
@@ -85,6 +87,13 @@ const MatchWindow = ({
                 <div className="flex items-end text-2xl">
                   <MapPin className="h-8 w-8" />
                   {currentPotentialMatch?.city}
+                </div>
+                <div className="text-md mt-1">
+                  You are both{" "}
+                  <span className="rounded bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 bg-clip-text px-4 py-2 text-2xl font-extrabold text-transparent shadow-lg">
+                    {analaizedPersonalityDescription}
+                  </span>
+                  .
                 </div>
               </div>
             </AspectRatio>

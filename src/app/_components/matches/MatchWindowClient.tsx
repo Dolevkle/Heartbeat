@@ -5,19 +5,21 @@ import type { Match, User } from "@prisma/client";
 import { api as clientApi } from "~/trpc/react";
 import { toast } from "~/app/_components/shadcn/use-toast";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
-import Matches from "../matches";
+import Matches from "./matches";
 import { getPotentialMatchesIds } from "./utils";
 import Image from "next/image";
 import NoMatchesImage from "../../../../public/assets/chats.jpg";
 
 interface MatchWindowClientProps {
   userId: string;
+  analaizedPersonalityDescription: string;
   initialPotentialMatches: Match[];
   initialUsers: User[];
 }
 
 export default function MatchWindowClient({
   userId,
+  analaizedPersonalityDescription,
   initialPotentialMatches,
   initialUsers,
 }: MatchWindowClientProps) {
@@ -118,6 +120,7 @@ export default function MatchWindowClient({
       {isAnyMatchesLeft ? (
         <MatchWindow
           currentPotentialMatch={currentPotentialMatch}
+          analaizedPersonalityDescription={analaizedPersonalityDescription}
           currentPotentialMatchImages={matchImages[currentPotentialMatch?.id]}
           isLoading={isPageLoading}
           handleMatchStatusChange={handleMatchStatusChange}
