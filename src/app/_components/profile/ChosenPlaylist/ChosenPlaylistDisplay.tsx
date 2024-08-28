@@ -16,7 +16,7 @@ const ChosenPlaylistDisplay: React.FC = () => {
     <div className="flex w-full flex-col  items-center overflow-hidden rounded p-4 text-white shadow-lg">
       <div className="relative">
         <Image
-          src={playlist?.images[0]?.url ?? ""}
+          src={playlist?.images[0]?.url ?? "/assets/defaultPlaylist.png"}
           width={200}
           height={100}
           alt={"could not fetch the picture..."}
