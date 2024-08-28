@@ -9,6 +9,7 @@ import Matches from "./matches";
 import { getPotentialMatchesIds } from "./utils";
 import Image from "next/image";
 import NoMatchesImage from "../../../../public/assets/chats.jpg";
+import { useEffect } from "react";
 
 interface MatchWindowClientProps {
   userId: string;
@@ -109,6 +110,12 @@ export default function MatchWindowClient({
       </div>
     </div>
   );
+
+  useEffect(() => {
+    console.log(potentialMatches);
+    console.log(ids);
+    console.log(users);
+  }, [users]);
 
   return (
     <div className="flex h-full w-full flex-row">

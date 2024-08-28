@@ -89,11 +89,11 @@ const MatchWindow = ({
                   {currentPotentialMatch?.city}
                 </div>
                 <div className="text-md mt-1">
-                  You are both{" "}
-                  <span className="rounded bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 bg-clip-text px-4 py-2 text-2xl font-extrabold text-transparent shadow-lg">
+                  {`You are both `}
+                  <span className="rounded bg-gradient-to-r from-yellow-100 via-yellow-300 to-blue-100 bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
                     {analaizedPersonalityDescription}
                   </span>
-                  .
+                  {` .`}
                 </div>
               </div>
             </AspectRatio>
