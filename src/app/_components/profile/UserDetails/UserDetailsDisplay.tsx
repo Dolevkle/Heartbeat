@@ -5,12 +5,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../shadcn/card";
-import { cn } from "~/lib/utils";
+} from "@components/card";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 import DetailsEditDialog from "./DetailsEditDialog";
-import ProfilePictureDisplay from "~/app/_components/home/ProfilePicture/ProfilePictureDisplay";
 import ImageGrid from "~/app/_components/signup/ImageGrid";
 import React from "react";
 import { Skeleton } from "@components/skeleton";
