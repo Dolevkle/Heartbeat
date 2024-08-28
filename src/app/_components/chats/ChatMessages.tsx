@@ -12,7 +12,7 @@ interface Props {
 
 export default function ChatMessages({ messages, chatId }: Props) {
   const session = useSession();
-  const [msgs, setMsgs] = useState(messages);
+  const [msgs, setMsgs] = useState<RouterOutputs["message"]["getMessages"] | undefined>(messages);
 
   useEffect(() => {
     const channel = pusherClient
@@ -27,10 +27,11 @@ export default function ChatMessages({ messages, chatId }: Props) {
       channel.unbind();
     };
   }, []);
+
   return (
     <ScrollArea>
       <div className="flex flex-1 flex-col p-2">
-        {messages?.map(({ senderId, content, id, isImage }, index) => (
+        {msgs?.map(({ senderId, content, id, isImage }, index) => (
           <p
             dir="auto"
             key={id}
