@@ -9,15 +9,18 @@ import Matches from "./matches";
 import { getPotentialMatchesIds } from "./utils";
 import Image from "next/image";
 import NoMatchesImage from "../../../../public/assets/chats.jpg";
+import { Personality } from "~/server/api/routers/user/service";
 
 interface MatchWindowClientProps {
   userId: string;
+  userPersonality: Personality;
   initialPotentialMatches: Match[];
   initialUsers: User[];
 }
 
 export default function MatchWindowClient({
   userId,
+  userPersonality,
   initialPotentialMatches,
   initialUsers,
 }: MatchWindowClientProps) {
@@ -118,6 +121,7 @@ export default function MatchWindowClient({
       {isAnyMatchesLeft ? (
         <MatchWindow
           currentPotentialMatch={currentPotentialMatch}
+          userPersonality={userPersonality}
           currentPotentialMatchImages={matchImages[currentPotentialMatch?.id]}
           isLoading={isPageLoading}
           handleMatchStatusChange={handleMatchStatusChange}

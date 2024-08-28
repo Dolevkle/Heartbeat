@@ -30,21 +30,37 @@ const calculateTraitScores = (
   );
 };
 
-// Find the highest score
-const findHighestScore = (
-  traitScores: Record<keyof Personality, number>,
+// Find the highest score among shared traits
+const findHighestSharedScore = (
+  traitScores1: Record<keyof Personality, number>,
+  traitScores2: Record<keyof Personality, number>,
 ): number => {
-  return Math.max(...Object.values(traitScores));
+  return Math.max(
+    ...Object.keys(traitScores1)
+      .filter((trait) => trait in traitScores2)
+      .map((trait) =>
+        Math.min(
+          traitScores1[trait as keyof Personality],
+          traitScores2[trait as keyof Personality],
+        ),
+      ),
+  );
 };
 
-// Find traits with the highest score
-const findBestTraits = (
-  traitScores: Record<keyof Personality, number>,
-  highestScore: number,
+// Find common traits with the highest score
+const findBestSharedTraits = (
+  traitScores1: Record<keyof Personality, number>,
+  traitScores2: Record<keyof Personality, number>,
+  highestSharedScore: number,
 ): (keyof Personality)[] => {
-  return Object.entries(traitScores)
-    .filter(([_, score]) => score === highestScore)
-    .map(([trait]) => trait as keyof Personality);
+  return Object.keys(traitScores1).filter(
+    (trait) =>
+      trait in traitScores2 &&
+      Math.min(
+        traitScores1[trait as keyof Personality],
+        traitScores2[trait as keyof Personality],
+      ) === highestSharedScore,
+  ) as (keyof Personality)[];
 };
 
 // Get the description of a trait from the dictionary
@@ -52,15 +68,24 @@ const getTraitDescription = (trait: keyof Personality): string => {
   return traitDictionary[trait];
 };
 
-// Main function to analyze the best quality
-export const analyzeBestQuality = (personality: Personality): string => {
-  const traitScores = calculateTraitScores(personality);
-  const highestScore = findHighestScore(traitScores);
-  const bestTraits = findBestTraits(traitScores, highestScore);
+// Main function to analyze the best shared quality
+export const analyzeBestSharedQuality = (
+  personality1: Personality,
+  personality2: Personality,
+): string => {
+  const traitScores1 = calculateTraitScores(personality1);
+  const traitScores2 = calculateTraitScores(personality2);
 
-  // Ensure bestTraits is not empty and handle cases properly
-  if (bestTraits.length > 0 && bestTraits[0]) {
-    return getTraitDescription(bestTraits[0]);
+  const highestSharedScore = findHighestSharedScore(traitScores1, traitScores2);
+  const bestSharedTraits = findBestSharedTraits(
+    traitScores1,
+    traitScores2,
+    highestSharedScore,
+  );
+
+  // Ensure bestSharedTraits is not empty and handle cases properly
+  if (bestSharedTraits.length > 0 && bestSharedTraits[0]) {
+    return getTraitDescription(bestSharedTraits[0]);
   }
 
   return "";
