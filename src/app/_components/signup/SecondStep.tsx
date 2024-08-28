@@ -3,16 +3,15 @@
 import React from "react";
 import { Button } from "@components/button";
 import { useSession } from "next-auth/react";
-import { type UseFormReturn } from "react-hook-form";
 import { api } from "~/trpc/react";
 import ImageGrid from "~/app/_components/signup/ImageGrid";
 
 interface Props {
   handlePreviousStep: () => void;
-  submitButtonContent: React.ReactElement;
+  handleNextStep: () => void;
 }
 
-function SecondStep({ handlePreviousStep, submitButtonContent }: Props) {
+function SecondStep({ handlePreviousStep, handleNextStep }: Props) {
   const session = useSession();
   const { data: usersImages, refetch: refetchImages } =
     api.image.findMany.useQuery(session.data?.user?.id ?? "", {
@@ -38,11 +37,11 @@ function SecondStep({ handlePreviousStep, submitButtonContent }: Props) {
           Previous
         </Button>
         <Button
-          type="submit"
           className="w-full"
           disabled={!usersImages || usersImages.length < 1}
+          onClick={handleNextStep}
         >
-          {submitButtonContent}
+          Continue
         </Button>
       </div>
     </>

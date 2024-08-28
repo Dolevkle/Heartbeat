@@ -41,6 +41,7 @@ import { genders, sexualPreferences } from "../consts";
 import FirstStep from "~/app/_components/signup/FirstStep";
 import SecondStep from "~/app/_components/signup/SecondStep";
 import React, { useState } from "react";
+import ThirdStep from "~/app/_components/signup/ThirdStep";
 
 export default function SignUp() {
   const session = useSession();
@@ -139,7 +140,7 @@ export default function SignUp() {
         </div>
       );
     // If none of the above conditions are met, show the default text for the submit button
-    return <span>Create an account</span>;
+    return <span> Discover Your Match</span>;
   };
 
   const handleNextStep = () => setCurrentStep((currentStep) => currentStep + 1);
@@ -157,6 +158,12 @@ export default function SignUp() {
       ),
       2: (
         <SecondStep
+          handlePreviousStep={handlePreviousStep}
+          handleNextStep={handleNextStep}
+        />
+      ),
+      3: (
+        <ThirdStep
           handlePreviousStep={handlePreviousStep}
           submitButtonContent={renderSubmitButtonContent()}
         />
