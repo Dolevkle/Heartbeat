@@ -67,7 +67,6 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
     <div className="grid h-full w-full grid-cols-6 grid-rows-4 gap-4 p-4">
       {defaultContent.map((content, index) => {
         const url = imageUrls?.[index] ?? null;
-        console.log(imageUrls);
 
         if (index === 0) {
           // Large image on the left
