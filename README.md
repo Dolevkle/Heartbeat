@@ -9,6 +9,18 @@ Welcome to **Heartbeat**, a unique dating application that matches users based o
 - **Matchmaking**: Find potential matches with similar or complementary personalities.
 - **Real-Time Chat**: Connect instantly with your matches through the in-app chat.
 
+## Technology Stack
+
+Heartbeat is built using the **T3 Stack**, a modern and powerful stack that includes:
+
+- **Next.js**: A powerful React framework that enables server-side rendering, static site generation, and client-side rendering, providing flexibility in building fast and scalable web applications.
+- **TypeScript**: A superset of JavaScript that adds static typing, helping developers catch errors early in the development process and improving overall code quality and maintainability.
+- **Tailwind CSS**: A utility-first CSS framework that allows for rapid styling of components with predefined classes, promoting consistency and reducing the need for custom CSS.
+- **tRPC**: A framework for building typesafe APIs with TypeScript. tRPC allows you to define your API routes with full type safety, ensuring that your front end and back end are always in sync.
+- **Prisma**: An Object-Relational Mapping (ORM) tool that simplifies database management and ensures type safety across your database operations. Prisma allows you to interact with your database using a TypeScript-friendly API.
+- **NextAuth.js**: A complete authentication solution for Next.js applications. It supports multiple authentication providers and ensures secure handling of user sessions and authentication flows.
+- **ShadCN**: A component library built on top of Tailwind CSS, providing a set of accessible and customizable UI components that seamlessly integrate with the Tailwind ecosystem, enhancing the visual and functional aspects of the application.
+
 
 ## Prerequisites
 
