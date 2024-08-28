@@ -1,29 +1,42 @@
-# Create T3 App
+# Heartbeat: A Music Based Dating Application
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to **Heartbeat**, a unique dating application that matches users based on their Music playlists. Using the power of AI, Heartbeat analyzes playlists to generate personality profiles based on the Big Five personality traits, helping you find your perfect match.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **Spotify Integration**: Connect your Spotify account to generate your personalized playlist.
+- **Personality Analysis**: Leverage the power of OpenAI to analyze playlists and generate personality profiles based on the Big Five personality traits (Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism).
+- **Matchmaking**: Find potential matches with similar or complementary personalities.
+- **Real-Time Chat**: Connect instantly with your matches through the in-app chat.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Prerequisites
 
-## Learn More
+Before you begin, ensure you have met the following requirements:
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- **Node.js**: Ensure you have Node.js installed (v14.x or later recommended).
+- **pnpm**: Install pnpm globally using `npm install -g pnpm`.
+- **Spotify Developer Account**: You'll need to set up a Spotify Developer account to obtain API credentials.
+- **OpenAI API Key**: Obtain your OpenAI API key for generating personality profiles.
+- **Uploadthing account**: Obtain your Uploadthing env variables via setting account. used for uploading files to S3.
+- **Pusher account**: Obtain your Pusher env variables via setting account. hosted websockets used for live chats.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Installation
 
-## How do I deploy this?
+To set up the project locally, follow these steps:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/your-username/heartbeat.git
+   cd heartbeat
+
+2. **Set up env variables from .env.example in .env**:
+
+3. **install packages**:
+   ```bash
+   pnpm i
+
+4. **start project**:
+   ```bash
+   pnpm run dev
