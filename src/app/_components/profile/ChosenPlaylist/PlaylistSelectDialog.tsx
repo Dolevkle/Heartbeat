@@ -126,6 +126,8 @@ const PlaylistSelectDialog: React.FC = () => {
   };
 
   const renderSubmitButtonContent = () => {
+    if (!formValues?.playlist) return <span>Save</span>;
+
     if (!isAnyFieldEmpty && !tracks)
       return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
 
