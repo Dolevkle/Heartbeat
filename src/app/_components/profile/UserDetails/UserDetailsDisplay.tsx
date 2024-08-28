@@ -51,7 +51,7 @@ const UserDetailsDisplay: React.FC = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <DetailsEditDialog onDetailsUpdated={refetchUserDetails}/>
+        <DetailsEditDialog refetchUserDetails={refetchUserDetails}/>
       </CardFooter>
     </Card>
   );

@@ -38,10 +38,10 @@ import { Input } from "../../shadcn/input";
 
 
 type DetailsEditDialogProps = {
-  onDetailsUpdated: () => void; 
+  refetchUserDetails: () => void; 
 };
 
-const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({onDetailsUpdated}) => {
+const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({refetchUserDetails}) => {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
   const { update: updateSession } = useSession();
@@ -91,7 +91,7 @@ const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({onDetailsUpdated})
         });
         setIsOpen(false);
         await updateSession();
-        onDetailsUpdated();
+        refetchUserDetails();
       },
       onError: () => {
         toast({
