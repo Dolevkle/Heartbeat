@@ -15,20 +15,22 @@ export default function ChatMessages({ messages, chatId }: Props) {
   const [msgs, setMsgs] = useState<
     RouterOutputs["message"]["getMessages"] | undefined
   >(messages);
+  const updateMessages = (data) => {
+    console.log("test", data);
+    console.log
+    if (data.content) setMsgs([...(msgs || []), data]);
+    else setMsgs([...(msgs || [])]);
+  };
 
   useEffect(() => {
     const channel = pusherClient
       .subscribe(chatId)
-      .bind(`new-message-chat-${chatId}`, (data) => {
-        console.log("test", data);
-        if (data.content) setMsgs([...(msgs || []), data]);
-        else setMsgs([...(msgs || [])]);
-      });
+      .bind(`new-message-chat-${chatId}`, updateMessages);
 
     return () => {
       channel.unbind();
     };
-  }, []);
+  }, [msgs]);
 
   return (
     <ScrollArea>
