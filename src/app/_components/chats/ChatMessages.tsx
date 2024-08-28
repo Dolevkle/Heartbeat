@@ -26,7 +26,7 @@ export default function ChatMessages({ messages, chatId }: Props) {
     return () => {
       channel.unbind();
     };
-  }, [messages]);
+  }, []);
   return (
     <ScrollArea>
       <div className="flex flex-1 flex-col p-2">
