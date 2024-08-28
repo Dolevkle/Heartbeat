@@ -2,42 +2,18 @@
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@components/button";
 
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@components/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@components/form";
-import { Input } from "@components/input";
-import { Label } from "@components/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@components/card";
+import { Form } from "@components/form";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectItem,
-  SelectValue,
-} from "@components/select";
 import { Skeleton } from "@components/skeleton";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@components/use-toast";
 import { type Personality, userSchema } from "~/app/signup/types";
-import { genders, sexualPreferences } from "../consts";
 import FirstStep from "~/app/_components/signup/FirstStep";
 import SecondStep from "~/app/_components/signup/SecondStep";
 import React, { useState } from "react";
@@ -154,6 +130,7 @@ export default function SignUp() {
           form={form}
           playlists={playlists}
           handleNextStep={handleNextStep}
+          isAnyFieldEmpty={isAnyFieldEmpty}
         />
       ),
       2: (
@@ -195,10 +172,6 @@ export default function SignUp() {
                 </div>
               </div>
             )}
-
-            <CardDescription>
-              Enter additional information to finish creating an account
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">{currentStepComponent}</div>

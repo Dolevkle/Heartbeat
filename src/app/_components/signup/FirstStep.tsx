@@ -21,7 +21,7 @@ import { genders, sexualPreferences } from "~/app/consts";
 import { Button } from "@components/button";
 import { useSession } from "next-auth/react";
 import { type UseFormReturn } from "react-hook-form";
-import { Playlist, TrackItem } from "@spotify/web-api-ts-sdk";
+import { type Playlist, type TrackItem } from "@spotify/web-api-ts-sdk";
 
 interface Props {
   form: UseFormReturn<{
@@ -33,9 +33,15 @@ interface Props {
   }>;
   playlists: Playlist<TrackItem>[] | undefined;
   handleNextStep: () => void;
+  isAnyFieldEmpty: boolean;
 }
-function FirstStep({ form, playlists, handleNextStep }: Props) {
-  const session = useSession();
+function FirstStep({
+  form,
+  playlists,
+  handleNextStep,
+  isAnyFieldEmpty,
+}: Props) {
+  useSession();
   return (
     <>
       <div className="grid grid-cols-2 gap-4">
@@ -167,7 +173,11 @@ function FirstStep({ form, playlists, handleNextStep }: Props) {
           )}
         />
       </div>
-      <Button className="w-full" onClick={handleNextStep}>
+      <Button
+        className="w-full"
+        onClick={handleNextStep}
+        disabled={isAnyFieldEmpty}
+      >
         Continue
       </Button>
     </>
