@@ -3,12 +3,14 @@ import { SexualPreference } from "~/app/consts";
 import { db } from "~/server/db";
 import type { ParticipantDict } from "../match/match";
 
+export type Level = "high" | "low" | "medium";
+
 export type Personality = {
-  Openness: "high" | "low" | "medium";
-  Neuroticism: "high" | "low" | "medium";
-  Extraversion: "high" | "low" | "medium";
-  Conscientiousness: "high" | "low" | "medium";
-  Agreeableness: "high" | "low" | "medium";
+  Openness: Level;
+  Neuroticism: Level;
+  Extraversion: Level;
+  Conscientiousness: Level;
+  Agreeableness: Level;
 };
 
 const LOW_VALUE = 1;

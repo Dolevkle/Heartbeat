@@ -14,11 +14,14 @@ import {
 } from "../shadcn/resizable";
 import type { User, Image as PrismaImage } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
+import { analyzeBestSharedQuality } from "./utils";
+import type { Personality } from "~/server/api/routers/user/service";
 
 const PROGRESS_PERCENTAGE = 100;
 
 interface MatchWindowProps {
   currentPotentialMatch: User;
+  userPersonality: Personality;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
   currentPotentialMatchImages: PrismaImage[];
   isLoading: boolean;
@@ -26,6 +29,7 @@ interface MatchWindowProps {
 
 const MatchWindow = ({
   currentPotentialMatch,
+  userPersonality,
   handleMatchStatusChange,
   currentPotentialMatchImages,
   isLoading,
@@ -39,6 +43,11 @@ const MatchWindow = ({
   const handlePrevious = (): void => {
     setProgress((prev) => prev - 1);
   };
+
+  const analaizedPersonalityDescription = analyzeBestSharedQuality(
+    currentPotentialMatch.personality as Personality,
+    userPersonality,
+  );
 
   return (
     <div className="h-8/12 relative m-24 flex w-8/12">
@@ -85,6 +94,13 @@ const MatchWindow = ({
                 <div className="flex items-end text-2xl">
                   <MapPin className="h-8 w-8" />
                   {currentPotentialMatch?.city}
+                </div>
+                <div className="text-md mt-1">
+                  {`You are both `}
+                  <span className="rounded bg-gradient-to-r from-yellow-100 via-yellow-300 to-blue-100 bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
+                    {analaizedPersonalityDescription}
+                  </span>
+                  {` .`}
                 </div>
               </div>
             </AspectRatio>
