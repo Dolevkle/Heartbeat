@@ -16,7 +16,7 @@ import { Skeleton } from "@components/skeleton";
 const UserDetailsDisplay: React.FC = () => {
   const session = useSession();
 
-  const { data: userDetails, isLoading: isLoadingUserDetails } =
+  const { data: userDetails, isLoading: isLoadingUserDetails, refetch: refetchUserDetails } =
     api.user.findUserById.useQuery(session.data?.user?.id ?? "", {
       enabled: !!session.data,
     });
@@ -92,7 +92,7 @@ const UserDetailsDisplay: React.FC = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <DetailsEditDialog />
+        <DetailsEditDialog refetchUserDetails={refetchUserDetails}/>
       </CardFooter>
     </Card>
   );

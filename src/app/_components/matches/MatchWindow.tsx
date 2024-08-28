@@ -12,21 +12,27 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "../shadcn/resizable";
-import type { User } from "@prisma/client";
+import type { User, Image as PrismaImage } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import { analyzeBestSharedQuality } from "./utils";
+import type { Personality } from "~/server/api/routers/user/service";
 
 const PROGRESS_PERCENTAGE = 100;
 
 interface MatchWindowProps {
   currentPotentialMatch: User;
+  userPersonality: Personality;
   handleMatchStatusChange: (newStatus: ConsentStatus) => void;
+  currentPotentialMatchImages: PrismaImage[];
   isLoading: boolean;
 }
 
 const MatchWindow = ({
   currentPotentialMatch,
+  userPersonality,
   handleMatchStatusChange,
+  currentPotentialMatchImages,
   isLoading,
 }: MatchWindowProps) => {
   const [progress, setProgress] = useState<number>(1);
@@ -43,6 +49,11 @@ const MatchWindow = ({
 
   // Create a rotation value that maps the x position to a degree of rotation
   const rotate = useTransform(x, [-200, 0, 200], [-15, 0, 15]);
+
+  const analaizedPersonalityDescription = analyzeBestSharedQuality(
+    currentPotentialMatch.personality as Personality,
+    userPersonality,
+  );
 
   return (
     <motion.div
@@ -80,14 +91,11 @@ const MatchWindow = ({
               handleNext={handleNext}
             >
               <CarouselContent className="h-[73vh]">
-                {[
-                  currentPotentialMatch?.image,
-                  currentPotentialMatch?.image,
-                ].map((picture, index) => (
+                {currentPotentialMatchImages?.map((picture, index) => (
                   <CarouselItem key={index}>
                     <AspectRatio>
                       <Image
-                        src={picture ?? ""}
+                        src={picture?.url ?? ""}
                         alt={`Photo of ${currentPotentialMatch?.name}`}
                         objectFit="cover"
                         fill
@@ -111,6 +119,13 @@ const MatchWindow = ({
                   <MapPin className="h-8 w-8" />
                   {currentPotentialMatch?.city}
                 </div>
+                <div className="text-md mt-1">
+                  {`You are both `}
+                  <span className="rounded bg-gradient-to-r from-yellow-100 via-yellow-300 to-blue-100 bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
+                    {analaizedPersonalityDescription}
+                  </span>
+                  {` .`}
+                </div>
               </div>
             </AspectRatio>
           </ResizablePanel>
@@ -118,10 +133,7 @@ const MatchWindow = ({
       </div>
       <Progress
         value={
-          (progress /
-            [currentPotentialMatch?.image, currentPotentialMatch?.image]
-              .length) *
-          PROGRESS_PERCENTAGE
+          (progress / currentPotentialMatchImages?.length) * PROGRESS_PERCENTAGE
         }
         max={PROGRESS_PERCENTAGE}
         orientation="vertical"

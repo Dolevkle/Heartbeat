@@ -2,8 +2,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
 import { ChevronRight } from "lucide-react";
 import SideCard from "~/app/_components/SideCard";
-import { ScrollArea, ScrollBar } from "./shadcn/scroll-area";
-import { type User } from "@prisma/client";
+import { ScrollArea, ScrollBar } from "../shadcn/scroll-area";
+import { type User, type Image } from "@prisma/client";
 import { Skeleton } from "@components/skeleton";
 
 interface PotentialMatchDisplayProps {
@@ -13,10 +13,15 @@ interface PotentialMatchDisplayProps {
 
 interface Props {
   potentialMatches: User[];
+  potentialMatchesImages: Record<string, Image[]>;
   isLoadingUsers: boolean;
 }
 
-export default function Component({ potentialMatches, isLoadingUsers }: Props) {
+export default function Component({
+  potentialMatches,
+  potentialMatchesImages,
+  isLoadingUsers,
+}: Props) {
   const PotentialMatchSkeleton = () => (
     <div className="flex items-center space-x-4">
       {potentialMatches.map((_, index) => (
@@ -28,14 +33,17 @@ export default function Component({ potentialMatches, isLoadingUsers }: Props) {
   const PotentialMatchDisplay = ({
     user,
     isInFocus,
-  }: PotentialMatchDisplayProps) => (
-    <Avatar
-      className={`h-12 w-12 border-2 ${isInFocus ? "border-primary" : "border-transparent"} m-1`}
-    >
-      <AvatarImage src={user?.image ?? ""} alt="Avatar" />
-      <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
-    </Avatar>
-  );
+  }: PotentialMatchDisplayProps) => {
+    const userImages = potentialMatchesImages[user?.id ?? ""];
+    return (
+      <Avatar
+        className={`h-12 w-12 border-2 ${isInFocus ? "border-primary" : "border-transparent"} m-1`}
+      >
+        <AvatarImage src={userImages ? userImages[0]?.url : ""} alt="Avatar" />
+        <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+      </Avatar>
+    );
+  };
 
   return (
     <SideCard title="Matches">
