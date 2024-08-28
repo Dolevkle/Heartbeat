@@ -66,11 +66,12 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
   return (
     <div className="grid h-full w-full grid-cols-6 grid-rows-4 gap-4 p-4">
       {defaultContent.map((content, index) => {
-        const url = imageUrls?.[index];
+        const url = imageUrls?.[index] ?? null;
+        console.log(imageUrls);
 
         if (index === 0) {
           // Large image on the left
-          return !url ? (
+          return !imageUrls?.length ? (
             <Skeleton
               key={index}
               className="col-span-4 row-span-3 h-full w-full rounded-lg"
@@ -94,7 +95,7 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
           );
         } else if (index > 0 && index < 4) {
           // Three small images in a column on the right
-          return !url ? (
+          return !imageUrls?.length ? (
             <Skeleton
               key={index}
               className="col-span-2 row-span-1 h-full w-full rounded-lg"
@@ -118,7 +119,7 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
           );
         } else {
           // Two small images in a row at the bottom
-          return !url ? (
+          return !imageUrls?.length ? (
             <Skeleton
               key={index}
               className="col-span-2 row-span-1 h-full w-full rounded-lg"
