@@ -50,8 +50,8 @@ const UserDetailsDisplay: React.FC = () => {
         )}
       </CardHeader>
       <CardContent>
-        {isLoadingUserDetails || isLoadingImages || !session.data ? (
-          <div className="flex justify-between">
+        <div className="flex justify-between">
+          {isLoadingUserDetails || isLoadingImages || !session.data ? (
             <div>
               {facts.map((_, index) => (
                 <div
@@ -65,12 +65,7 @@ const UserDetailsDisplay: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="mx-4 h-[400px] w-[400px]">
-              <Skeleton className="h-full w-full rounded-lg" />
-            </div>
-          </div>
-        ) : (
-          <div className="flex justify-between">
+          ) : (
             <div>
               {facts.map((fact, index) => (
                 <div
@@ -84,14 +79,14 @@ const UserDetailsDisplay: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="max-h-[400px] max-w-[400px]">
-              <ImageGrid
-                imageUrls={usersImages?.map((image) => image.url) ?? []}
-                refetchImages={refetchImages}
-              />
-            </div>
+          )}
+          <div className="h-[400px] w-[400px]">
+            <ImageGrid
+              imageUrls={usersImages?.map((image) => image.url) ?? []}
+              refetchImages={refetchImages}
+            />
           </div>
-        )}
+        </div>
       </CardContent>
       <CardFooter>
         <DetailsEditDialog />

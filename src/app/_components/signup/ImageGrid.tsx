@@ -4,6 +4,7 @@ import { api } from "~/trpc/react";
 import { removeImageFromS3 } from "~/app/actions/removeImageFromS3";
 import { useToast } from "@components/use-toast";
 import ProfileImage from "~/app/_components/signup/ProfileImage";
+import { Skeleton } from "@components/skeleton";
 
 export const EmptyImageLayout = ({ content }: { content: string }) => (
   <div className="flex h-full w-full cursor-pointer items-center justify-center rounded-lg border border-white shadow-md">
@@ -12,7 +13,7 @@ export const EmptyImageLayout = ({ content }: { content: string }) => (
 );
 
 interface Props {
-  imageUrls: string[];
+  imageUrls: string[] | undefined;
   refetchImages: () => void;
 }
 
@@ -65,11 +66,16 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
   return (
     <div className="grid h-full w-full grid-cols-6 grid-rows-4 gap-4 p-4">
       {defaultContent.map((content, index) => {
-        const url = imageUrls[index] ?? null;
+        const url = imageUrls?.[index];
 
         if (index === 0) {
           // Large image on the left
-          return (
+          return !url ? (
+            <Skeleton
+              key={index}
+              className="col-span-4 row-span-3 h-full w-full rounded-lg"
+            />
+          ) : (
             <ProfilePictureDialog
               key={index}
               onUploadSuccess={refetchImages}
@@ -88,7 +94,12 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
           );
         } else if (index > 0 && index < 4) {
           // Three small images in a column on the right
-          return (
+          return !url ? (
+            <Skeleton
+              key={index}
+              className="col-span-2 row-span-1 h-full w-full rounded-lg"
+            />
+          ) : (
             <ProfilePictureDialog
               key={index}
               onUploadSuccess={refetchImages}
@@ -107,7 +118,12 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
           );
         } else {
           // Two small images in a row at the bottom
-          return (
+          return !url ? (
+            <Skeleton
+              key={index}
+              className="col-span-2 row-span-1 h-full w-full rounded-lg"
+            />
+          ) : (
             <ProfilePictureDialog
               key={index}
               onUploadSuccess={refetchImages}

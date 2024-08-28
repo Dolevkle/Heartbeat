@@ -5,6 +5,7 @@ import { Button } from "@components/button";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import ImageGrid from "~/app/_components/signup/ImageGrid";
+import { Skeleton } from "@components/skeleton";
 
 interface Props {
   handlePreviousStep: () => void;
@@ -20,14 +21,13 @@ function SecondStep({ handlePreviousStep, handleNextStep }: Props) {
 
   return (
     <>
-      {usersImages && (
-        <div className="h-[400px] w-[400px]">
-          <ImageGrid
-            imageUrls={usersImages?.map((img) => img.url)}
-            refetchImages={refetchImages}
-          />
-        </div>
-      )}
+      <div className="h-[400px] w-[400px]">
+        <ImageGrid
+          imageUrls={usersImages?.map((img) => img.url)}
+          refetchImages={refetchImages}
+        />
+      </div>
+
       <div className="flex gap-x-4">
         <Button
           variant="outline"
