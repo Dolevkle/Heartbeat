@@ -7,39 +7,34 @@ import { useToast } from "../../shadcn/use-toast";
 
 type ProfilePictureDialogProps = {
   onUploadSuccess: () => void;
+  trigger: React.ReactElement;
 };
-
-
 
 const ProfilePictureDialog: React.FC<ProfilePictureDialogProps> = ({
   onUploadSuccess,
+  trigger,
 }) => {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
-  
-  const handleUploadSuccess = () =>{
+
+  const handleUploadSuccess = () => {
     onUploadSuccess();
     toast({
       title: "Success",
       description: "Image uploaded successfully",
     });
     setIsOpen(false);
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button
-          className="flex h-12 w-12 rounded-full border-none text-white"
-          onClick={() => setIsOpen(true)}
-        >
-          <UploadIcon className="text-2xl" />
-        </Button>
+        {React.cloneElement(trigger, {
+          onClick: () => setIsOpen(true),
+        })}
       </DialogTrigger>
       <DialogContent>
-        <ImageUpload
-          onUploadSuccess={handleUploadSuccess}
-        />
+        <ImageUpload onUploadSuccess={handleUploadSuccess} />
       </DialogContent>
     </Dialog>
   );

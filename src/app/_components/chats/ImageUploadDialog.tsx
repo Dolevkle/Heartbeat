@@ -5,12 +5,14 @@ import ImageUpload from "@components/../image-uploader";
 
 interface ImageUploadDialogProps {
   onUploadSuccess: (url: string) => void;
+  uploadEndpoint:string;
   Button: ReactNode;
 }
 
 const ImageUploadDialog: React.FC<ImageUploadDialogProps> = ({
   onUploadSuccess,
   Button,
+  uploadEndpoint
 }: ImageUploadDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +25,7 @@ const ImageUploadDialog: React.FC<ImageUploadDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{Button}</DialogTrigger>
       <DialogContent>
-        <ImageUpload onUploadSuccess={handleUploadSuccess} />
+        <ImageUpload onUploadSuccess={handleUploadSuccess} uploadEndpoint={uploadEndpoint} />
       </DialogContent>
     </Dialog>
   );

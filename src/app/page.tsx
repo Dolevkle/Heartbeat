@@ -14,7 +14,8 @@ export default function Page() {
     signIn("spotify", { callbackUrl: "/signup" }, "show_dialog=true");
   const handleLogin = () => {
     if (session.data?.user.personality) router.push("/profile");
-    else signIn("spotify", { callbackUrl: "/profile" }, "show_dialog=true");
+    else signIn("spotify", { callbackUrl: "/profile/matches" }, "show_dialog=true");
+
   };
 
   return (
