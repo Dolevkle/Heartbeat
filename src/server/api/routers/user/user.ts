@@ -70,11 +70,18 @@ export const userRouter = createTRPCRouter({
   findUsersByIds: protectedProcedure
     .input(z.string().array())
     .query(async ({ ctx, input }) => {
-      return ctx.db.user.findMany({
+      // Fetch records matching the input IDs
+      const users = await ctx.db.user.findMany({
         where: {
           id: { in: input },
         },
       });
+
+      // Create a map of IDs to user records
+      const userMap = new Map(users.map((user) => [user.id, user]));
+
+      // Return users in the same order as the input IDs
+      return input.map((id) => userMap.get(id));
     }),
 
   /**

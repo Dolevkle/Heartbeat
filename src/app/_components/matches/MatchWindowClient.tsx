@@ -5,17 +5,22 @@ import type { Match, User } from "@prisma/client";
 import { api as clientApi } from "~/trpc/react";
 import { toast } from "~/app/_components/shadcn/use-toast";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
-import Matches from "../matches";
+import Matches from "./matches";
 import { getPotentialMatchesIds } from "./utils";
+import Image from "next/image";
+import NoMatchesImage from "../../../../public/assets/chats.jpg";
+import { Personality } from "~/server/api/routers/user/service";
 
 interface MatchWindowClientProps {
   userId: string;
+  userPersonality: Personality;
   initialPotentialMatches: Match[];
   initialUsers: User[];
 }
 
 export default function MatchWindowClient({
   userId,
+  userPersonality,
   initialPotentialMatches,
   initialUsers,
 }: MatchWindowClientProps) {
@@ -34,6 +39,11 @@ export default function MatchWindowClient({
     clientApi.user.findUsersByIds.useQuery(ids, {
       initialData: initialUsers,
     });
+
+  const { data: matchImages } = clientApi.image.groupImagesByIds.useQuery(ids, {
+    enabled: !!ids,
+    initialData: {},
+  });
 
   const { mutate: createChat } = clientApi.chat.createChat.useMutation({
     onError: () => {
@@ -90,21 +100,34 @@ export default function MatchWindowClient({
   const isAnyMatchesLeft = users.length > 0;
   const isPageLoading =
     isUpdatingUserStatus || isLoadingPotentialMatches || isLoadingUsers;
+  const currentPotentialMatch = users[0];
+
+  const NoMatchesDisplay = () => (
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <Image src={NoMatchesImage} alt="No matches" width={512} height={512} />
+      <div className="mt-4 text-center text-2xl text-white">
+        no matches. come back later...
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex h-full w-full flex-row">
       <Matches
         potentialMatches={isAnyMatchesLeft ? users : []}
+        potentialMatchesImages={matchImages}
         isLoadingUsers={isPageLoading}
       />
       {isAnyMatchesLeft ? (
         <MatchWindow
-          currentPotentialMatch={users[0]}
+          currentPotentialMatch={currentPotentialMatch}
+          userPersonality={userPersonality}
+          currentPotentialMatchImages={matchImages[currentPotentialMatch?.id]}
           isLoading={isPageLoading}
           handleMatchStatusChange={handleMatchStatusChange}
         />
       ) : (
-        "No matches"
+        <NoMatchesDisplay />
       )}
     </div>
   );
