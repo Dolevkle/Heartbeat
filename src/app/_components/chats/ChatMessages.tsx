@@ -18,8 +18,8 @@ export default function ChatMessages({ messages, chatId }: Props) {
     const channel = pusherClient
       .subscribe(chatId)
       .bind(`new-message-chat-${chatId}`, (data) => {
-        console.log("test", data);
-        if (msgs) setMsgs([...msgs, data]);
+        console.log("test", data.content);
+        if (data) setMsgs([...msgs, data]);
         else setMsgs([data]);
       });
 
