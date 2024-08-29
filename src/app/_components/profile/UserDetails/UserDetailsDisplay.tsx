@@ -16,15 +16,18 @@ import { Skeleton } from "@components/skeleton";
 const UserDetailsDisplay: React.FC = () => {
   const session = useSession();
 
-  const { data: userDetails, isLoading: isLoadingUserDetails, refetch: refetchUserDetails } =
-    api.user.findUserById.useQuery(session.data?.user?.id ?? "", {
-      enabled: !!session.data,
-    });
+  const {
+    data: userDetails,
+    isLoading: isLoadingUserDetails,
+    refetch: refetchUserDetails,
+  } = api.user.findUserById.useQuery(session.data?.user?.id ?? "", {
+    enabled: !!session.data,
+  });
 
   const facts = [
-    `I live in ${userDetails?.city}`,
-    `I am a ${userDetails?.gender}.`,
-    `I am looking for a ${userDetails?.sexualPreference}!`,
+    `${userDetails?.city} vibes`,
+    `Music loving ${userDetails?.gender}`,
+    `Searching for a ${userDetails?.sexualPreference} who matches my beat`,
   ];
   const {
     data: usersImages,
@@ -92,7 +95,7 @@ const UserDetailsDisplay: React.FC = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <DetailsEditDialog refetchUserDetails={refetchUserDetails}/>
+        <DetailsEditDialog refetchUserDetails={refetchUserDetails} />
       </CardFooter>
     </Card>
   );
