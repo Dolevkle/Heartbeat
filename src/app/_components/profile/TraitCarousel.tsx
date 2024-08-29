@@ -1,6 +1,6 @@
 import {
   Carousel,
-  CarouselApi,
+  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -28,38 +28,28 @@ const TraitCard = ({
 const traits = [
   {
     title: "Openness",
-    description: `personality trait that involves being curious, imaginative, and open
-            to new experiences. People high in openness enjoy exploring new
-            ideas, creative activities, and embracing change and variety in
-            life.`,
+    description: `Driven by curiosity and imagination, people high in openness are always exploring new ideas and creative pursuits. 
+    They embrace change and thrive on the thrill of new experiences and the unexpected.`,
   },
   {
     title: "Neuroticism",
-    description: `personality trait that involves a tendency to experience negative
-    emotions like anxiety, sadness, and irritability. People high in
-    neuroticism may feel stressed or worried more easily and often have
-    mood swings.`,
+    description: `Navigating life’s challenges with heightened sensitivity, people high in neuroticism often feel emotions more intensely. 
+    They’re more prone to anxiety, stress, and mood swings, making them attuned to the emotional undercurrents around them.`,
   },
   {
     title: "Extraversion",
-    description: `personality trait characterized by a preference for social
-    interaction, high energy, and enthusiasm. Extroverts are often
-    outgoing, talkative, and enjoy being around people, drawing energy
-    from social activities and external environments.`,
+    description: `Fueled by social vibes and high energy, extroverts thrive in the spotlight. 
+    These people are outgoing, talkative, and draw their spark from being around people and lively environments.`,
   },
   {
     title: "Conscientiousness",
-    description: `personality trait that reflects how organized, responsible, and
-    dependable a person is. People high in conscientiousness are
-    careful, disciplined, and goal-oriented, often excelling in tasks
-    that require attention to detail and persistence.`,
+    description: `Always on top of their game, people high in conscientiousness are organized, reliable, and laser-focused. 
+    They’re the disciplined go-getters who excel in anything requiring detail and determination.`,
   },
   {
     title: "Agreeableness",
-    description: `personality trait that reflects how kind, compassionate, and
-    cooperative a person is. People high in agreeableness are friendly,
-    empathetic, and enjoy helping others, often putting others’ needs
-    before their own.`,
+    description: `Naturally warm and compassionate, those high in agreeableness are the friendly, empathetic souls who always have your back. 
+    They’re the ones who put others first and make the world a kinder place.`,
   },
 ];
 export interface CarouselHandle {
