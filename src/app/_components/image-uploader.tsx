@@ -20,7 +20,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       <UploadDropzone
         endpoint={uploadEndpoint}
         appearance={{
-          button: "bg-primary",
+          button:
+            "ut-ready:bg-primary ut-uploading:bg-rose-500 bg-none after:bg-primary ut-readying:bg-primary",
           label: "text-white hover:text-slate-400",
         }}
         onClientUploadComplete={(res) => {
