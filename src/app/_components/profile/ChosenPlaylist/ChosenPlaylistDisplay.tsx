@@ -21,7 +21,7 @@ const ChosenPlaylistDisplay: React.FC = () => {
           height={100}
           alt={"could not fetch the picture..."}
         />
-        <PlaylistSelectDialog />
+        {playlist && <PlaylistSelectDialog />}
       </div>
       <div className="mt-3 flex items-center justify-center text-xl font-bold">
         {playlist?.name}
