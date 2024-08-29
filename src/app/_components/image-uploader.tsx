@@ -19,7 +19,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     <div>
       <UploadDropzone
         endpoint={uploadEndpoint}
-        appearance={{ button: "bg-primary", label: "text-white" }}
+        appearance={{
+          button: "bg-primary",
+          label: "text-white hover:text-slate-400",
+        }}
         onClientUploadComplete={(res) => {
           const url = res[0].url;
           setImageUrl(url);
