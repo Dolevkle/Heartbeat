@@ -106,7 +106,7 @@ export default function MatchWindowClient({
     <div className="flex h-full w-full flex-col items-center justify-center">
       <Image src={NoMatchesImage} alt="No matches" width={512} height={512} />
       <div className="mt-4 text-center text-2xl text-white">
-        no matches. come back later...
+        All matched for now. New tunes coming soon...
       </div>
     </div>
   );
