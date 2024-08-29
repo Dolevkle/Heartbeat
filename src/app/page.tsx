@@ -11,7 +11,7 @@ export default function Page() {
   const router = useRouter();
   const session = useSession();
   const handleSignUp = () =>
-    signIn("spotify", { callbackUrl: "/profile/matches" }, "show_dialog=true");
+    signIn("spotify", { callbackUrl: "/signup" }, "show_dialog=true");
   const handleLogin = () => {
     if (session.data?.user.personality) router.push("/profile/matches");
     else signIn("spotify", { callbackUrl: "/profile/matches" }, "show_dialog=true");
