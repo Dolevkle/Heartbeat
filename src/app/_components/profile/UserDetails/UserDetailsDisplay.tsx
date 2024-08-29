@@ -57,35 +57,30 @@ const UserDetailsDisplay: React.FC = () => {
       <CardHeader>{renderCardHeader()}</CardHeader>
       <CardContent>
         <div className="flex justify-between">
-          {isLoadingUserDetails || isLoadingImages || !session.data ? (
-            <div>
-              {facts.map((_, index) => (
-                <div
-                  key={index}
-                  className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                >
-                  <Skeleton className="h-2 w-2 translate-y-1 rounded-full" />
-                  <div className="space-y-1">
-                    <Skeleton className="h-4 w-48" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              {facts.map((fact, index) => (
-                <div
-                  key={index}
-                  className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                >
-                  <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">{fact}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <div>
+            {facts.map((fact, index) => (
+              <div
+                key={index}
+                className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+              >
+                {isLoadingUserDetails || isLoadingImages || !session.data ? (
+                  <>
+                    <Skeleton className="h-2 w-2 translate-y-1 rounded-full" />
+                    <div className="space-y-1">
+                      <Skeleton className="h-4 w-48" />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary" />
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none">{fact}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
           <div className="h-[400px] w-[400px]">
             <ImageGrid
               imageUrls={usersImages?.map((image) => image.url) ?? []}
