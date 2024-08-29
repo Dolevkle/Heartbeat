@@ -121,10 +121,9 @@ const MatchWindow = ({
                 </div>
                 <div className="text-md mt-1">
                   {`You are both `}
-                  <span className="rounded bg-gradient-to-r from-yellow-100 via-yellow-300 to-blue-100 bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
+                  <span className="rounded bg-white bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
                     {analaizedPersonalityDescription}
                   </span>
-                  {` .`}
                 </div>
               </div>
             </AspectRatio>
