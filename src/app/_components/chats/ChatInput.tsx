@@ -107,7 +107,7 @@ export default function ChatInput({ chatId }: Props) {
               <FormControl>
                 <Textarea
                   id="message"
-                  placeholder="Type your message here..."
+                  placeholder="Tune your message..."
                   className="min-h-12 resize-none border-0 p-3 text-white shadow-none focus-visible:ring-0"
                   onKeyDown={onEnter}
                   {...field}
@@ -131,7 +131,7 @@ export default function ChatInput({ chatId }: Props) {
           />
 
           <Button type="submit" className="ml-auto gap-1.5">
-            Send Message
+            Send tune
             <CornerDownLeft className="size-4" />
           </Button>
         </div>
