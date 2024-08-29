@@ -131,7 +131,7 @@ export default function ChatInput({ chatId }: Props) {
           />
 
           <Button type="submit" className="ml-auto gap-1.5">
-            Send tune
+            Send message
             <CornerDownLeft className="size-4" />
           </Button>
         </div>
