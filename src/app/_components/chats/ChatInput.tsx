@@ -129,6 +129,7 @@ export default function ChatInput({ chatId }: Props) {
           )}
         />
         <div className="flex items-center mr-3">
+
           <Button type="submit" className="ml-auto gap-1.5">
             Send message
             <CornerDownLeft className="size-4" />
