@@ -46,7 +46,7 @@ export default function SignUp() {
        * It navigates to the profile page and shows a success toast message.
        */
       onSuccess: () => {
-        router.push("/profile/matches");
+        router.push("/profile");
         toast({
           title: "Success",
           description: "User successfully created",
