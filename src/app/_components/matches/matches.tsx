@@ -55,7 +55,7 @@ export default function Component({
                 <PotentialMatchSkeleton key={potentialMatch.id} />
               ) : (
                 <PotentialMatchDisplay
-                  key={potentialMatch.id}
+                  key={potentialMatch?.id}
                   user={potentialMatches?.[currentPotentialMatch]}
                   isInFocus={currentPotentialMatch == 0}
                 />
