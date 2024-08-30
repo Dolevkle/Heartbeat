@@ -5,5 +5,5 @@ export default async function Page() {
   const session = await getServerAuthSession();
   const user = session?.user;
 
-  return <ProfileClient user={user} />;
+  return <ProfileClient authUser={user} />;
 }

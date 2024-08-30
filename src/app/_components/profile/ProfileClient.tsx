@@ -9,13 +9,18 @@ import type { User } from "@prisma/client";
 import type { Personality } from "~/app/signup/types";
 import UserDetailsDisplay from "./UserDetails/UserDetailsDisplay";
 import ChosenPlaylistDisplay from "./ChosenPlaylist/ChosenPlaylistDisplay";
+import { useSession } from "next-auth/react";
 
 interface ProfileClientProps {
-  user: User;
+  authUser: User;
 }
 
-export default function ProfileClient({ user }: ProfileClientProps) {
+export default function ProfileClient({ authUser }: ProfileClientProps) {
+  const session = useSession();
   const carouselRef = useRef<CarouselHandle>(null);
+  const user = session?.data?.user;
+  const isUserDetailsUpdated = user?.personality && user?.playlist;
+  const updatedUser = isUserDetailsUpdated ? user : authUser;
 
   return (
     <ScrollArea className="rounded-md">
@@ -24,12 +29,12 @@ export default function ProfileClient({ user }: ProfileClientProps) {
           <UserDetailsDisplay />
         </div>
         <div className="col-span-2 row-start-2 w-full	justify-self-center">
-          <ChosenPlaylistDisplay user={user} />
+          <ChosenPlaylistDisplay user={updatedUser} />
         </div>
         <div className="col-span-2  h-full">
-          {user?.personality && (
+          {updatedUser?.personality && (
             <PersonalityRadarChart
-              personality={user?.personality as Personality}
+              personality={updatedUser?.personality as Personality}
               carouselRef={carouselRef}
             />
           )}
