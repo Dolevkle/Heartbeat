@@ -1,17 +1,18 @@
-"use client";
 import PersonalityRadarChart from "~/app/_components/profile/PersonalityRadarChart";
 import { useSession } from "next-auth/react";
+import { getServerAuthSession } from "~/server/auth";
 import TraitCarousel, {
   CarouselHandle,
 } from "~/app/_components/profile/TraitCarousel";
 import ChosenPlaylistDisplay from "../_components/profile/ChosenPlaylist/ChosenPlaylistDisplay";
 import UserDetailsDisplay from "../_components/profile/UserDetails/UserDetailsDisplay";
-import { useRef } from "react";
+import {useRef } from "react";
 import { ScrollArea } from "@components/scroll-area";
 
-export default function Page() {
-  const session = useSession();
+export default async function Page() {
+  const session = await getServerAuthSession();
   const carouselRef = useRef<CarouselHandle>(null);
+
   return (
     <ScrollArea className="rounded-md">
       <div className="grid max-h-screen grid-cols-4 gap-y-5 p-6">
@@ -22,9 +23,9 @@ export default function Page() {
           <ChosenPlaylistDisplay />
         </div>
         <div className="col-span-2  h-full">
-          {session?.data?.user.personality && (
+          {session?.user.personality && (
             <PersonalityRadarChart
-              personality={session.data.user.personality}
+              personality={session.user.personality}
               carouselRef={carouselRef}
             />
           )}

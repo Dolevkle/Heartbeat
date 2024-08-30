@@ -39,6 +39,8 @@ const PersonalityRadarChart = ({ personality, carouselRef }: Props) => {
     e?.value && carouselRef.current?.setItem(e["value"]);
   };
 
+  
+
   return (
     <ChartContainer config={chartConfig} className="h-full w-full">
       <RadarChart data={data} onClick={setTraitCarouselItem}>
