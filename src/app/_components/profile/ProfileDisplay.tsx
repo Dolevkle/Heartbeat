@@ -15,7 +15,7 @@ interface ProfileClientProps {
   authUser: User;
 }
 
-export default function ProfileClient({ authUser }: ProfileClientProps) {
+export default function ProfileDisplay({ authUser }: ProfileClientProps) {
   const session = useSession();
   const carouselRef = useRef<CarouselHandle>(null);
   const user = session?.data?.user;

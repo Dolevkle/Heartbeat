@@ -1,9 +1,9 @@
 import { getServerAuthSession } from "~/server/auth";
-import ProfileClient from "../_components/profile/ProfileClient";
+import ProfileDisplay from "../_components/profile/ProfileDisplay";
 
 export default async function Page() {
   const session = await getServerAuthSession();
   const user = session?.user;
 
-  return <ProfileClient authUser={user} />;
+  return <ProfileDisplay authUser={user} />;
 }
