@@ -1,15 +1,17 @@
 import React from "react";
 import Image from "next/image";
 import { api } from "~/trpc/react";
-import { useSession } from "next-auth/react";
 import PlaylistSelectDialog from "./PlaylistSelectDialog";
+import type { User } from "@prisma/client";
 
-const ChosenPlaylistDisplay: React.FC = () => {
-  const session = useSession();
-
+interface ChosenPlaylistDisplayProps {
+  user: User;
+}
+const ChosenPlaylistDisplay: React.FC<ChosenPlaylistDisplayProps> = ({user}: ChosenPlaylistDisplayProps) => {
+  
   const { data: playlist } = api.spotify.playlistInfo.useQuery(
-    { id: session.data?.user?.playlist ?? "" },
-    { enabled: !!session.data },
+    { id: user?.playlist ?? "" },
+    { enabled: !!user },
   );
 
   return (
