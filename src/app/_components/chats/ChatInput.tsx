@@ -90,15 +90,25 @@ export default function ChatInput({ chatId }: Props) {
       <form
         ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
+        className="relative  col-span-2 row-span-1 flex w-full flex-row justify-between overflow-hidden items-center  border-t border-secondary bg-background"
       >
+          <ImageUploadDialog
+            onUploadSuccess={onUpload}
+            uploadEndpoint="chatImageUploader"
+            Button={
+              <Button variant="outline" size="icon" type="submit" className="ml-3">
+                <Image className="size-5 text-white" />
+                <span className="sr-only">Attach file</span>
+              </Button>
+            }
+          />
         <FormField
           control={form.control}
           name="message"
           defaultValue=""
           rules={{ required: false }}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex-grow">
               <FormLabel>
                 <Label htmlFor="message" className="sr-only">
                   Message
@@ -118,17 +128,7 @@ export default function ChatInput({ chatId }: Props) {
             </FormItem>
           )}
         />
-        <div className="flex items-center p-3 pt-0">
-          <ImageUploadDialog
-            onUploadSuccess={onUpload}
-            uploadEndpoint="chatImageUploader"
-            Button={
-              <Button variant="outline" size="icon" type="submit">
-                <Image className="size-5 text-white" />
-                <span className="sr-only">Attach file</span>
-              </Button>
-            }
-          />
+        <div className="flex items-center mr-3">
 
           <Button type="submit" className="ml-auto gap-1.5">
             Send message
