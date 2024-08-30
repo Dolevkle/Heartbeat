@@ -5,7 +5,6 @@ import { Button } from "@components/button";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import ImageGrid from "~/app/_components/signup/ImageGrid";
-import { Skeleton } from "@components/skeleton";
 
 interface Props {
   handlePreviousStep: () => void;
@@ -14,15 +13,19 @@ interface Props {
 
 function SecondStep({ handlePreviousStep, handleNextStep }: Props) {
   const session = useSession();
-  const { data: usersImages, refetch: refetchImages } =
-    api.image.findMany.useQuery(session.data?.user?.id ?? "", {
-      enabled: !!session.data,
-    });
+  const {
+    data: usersImages,
+    refetch: refetchImages,
+    isLoading: isLoadingImages,
+  } = api.image.findMany.useQuery(session.data?.user?.id ?? "", {
+    enabled: !!session.data,
+  });
 
   return (
     <>
       <div className="h-[400px] w-[400px]">
         <ImageGrid
+          isLoading={isLoadingImages}
           imageUrls={usersImages?.map((img) => img.url)}
           refetchImages={refetchImages}
         />
