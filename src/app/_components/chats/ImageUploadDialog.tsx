@@ -21,6 +21,7 @@ const ImageUploadDialog: React.FC<ImageUploadDialogProps> = ({
     setIsOpen(false); // Close the dialog
   };
 
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{Button}</DialogTrigger>
