@@ -13,11 +13,12 @@ export const EmptyImageLayout = ({ content }: { content: string }) => (
 );
 
 interface Props {
+  isLoading: boolean;
   imageUrls: string[] | undefined;
   refetchImages: () => void;
 }
 
-const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
+const ImageGrid = ({ isLoading, imageUrls, refetchImages }: Props) => {
   const [loading, setLoading] = useState<boolean[]>(new Array(7).fill(false));
   const currentImage = useRef(-1);
   const { toast } = useToast();
@@ -70,7 +71,7 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
 
         if (index === 0) {
           // Large image on the left
-          return !imageUrls?.length ? (
+          return isLoading ? (
             <Skeleton
               key={index}
               className="col-span-4 row-span-3 h-full w-full rounded-lg"
@@ -94,7 +95,7 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
           );
         } else if (index > 0 && index < 4) {
           // Three small images in a column on the right
-          return !imageUrls?.length ? (
+          return isLoading ? (
             <Skeleton
               key={index}
               className="col-span-2 row-span-1 h-full w-full rounded-lg"
@@ -118,7 +119,7 @@ const ImageGrid = ({ imageUrls, refetchImages }: Props) => {
           );
         } else {
           // Two small images in a row at the bottom
-          return !imageUrls?.length ? (
+          return isLoading ? (
             <Skeleton
               key={index}
               className="col-span-2 row-span-1 h-full w-full rounded-lg"

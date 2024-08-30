@@ -83,6 +83,7 @@ const UserDetailsDisplay: React.FC = () => {
           </div>
           <div className="h-[400px] w-[400px]">
             <ImageGrid
+              isLoading={isLoadingImages}
               imageUrls={usersImages?.map((image) => image.url) ?? []}
               refetchImages={refetchImages}
             />
