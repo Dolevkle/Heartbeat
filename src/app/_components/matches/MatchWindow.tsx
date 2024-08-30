@@ -77,11 +77,7 @@ const MatchWindow = ({
     >
       <div className="flex h-full w-full rounded-md border-4 border-primary">
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel
-            className="h-[2000px] w-6/12"
-            defaultSize={52}
-            minSize={40}
-          >
+          <ResizablePanel className="w-6/12" defaultSize={52} minSize={40}>
             <Carousel
               opts={{
                 align: "start",
