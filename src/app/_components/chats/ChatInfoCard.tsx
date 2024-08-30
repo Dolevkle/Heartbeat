@@ -1,6 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem } from "@components/carousel";
 import Image from "next/image";
-import { type User } from "@prisma/client";
+import { type User, type Image as ImageType } from "@prisma/client";
 import { Heart, MapPin, PersonStanding } from "lucide-react";
 import { Badge } from "~/app/_components/shadcn/badge";
 import {
@@ -13,9 +13,10 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
 interface ChatInfoCardProps {
   user: User;
+  images: ImageType[] | undefined;
 }
 
-const ChatInfoCard: React.FC<ChatInfoCardProps> = ({ user }) => {
+const ChatInfoCard: React.FC<ChatInfoCardProps> = ({ user, images }) => {
   return (
     <div className="col-span-1 col-start-3 row-span-full flex flex-col border-l border-secondary ">
       <div>
@@ -27,17 +28,20 @@ const ChatInfoCard: React.FC<ChatInfoCardProps> = ({ user }) => {
           className="w-full "
         >
           <CarouselContent className={`-mt-1 h-[66vh]`}>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index} className="h-full p-1 pt-1 md:basis-full flex flex-col justify-center">
-                  <AspectRatio>
-                    <Image
-                      src={user.image ?? ""}
-                      alt={`Photo of ${user?.name}`}
-                      objectFit="cover"
-                      className="rounded-lg	"
-                      fill
-                    />
-                  </AspectRatio>
+            {images?.map((image, index) => (
+              <CarouselItem
+                key={index}
+                className="flex h-full flex-col justify-center p-1 pt-1 md:basis-full"
+              >
+                <AspectRatio>
+                  <Image
+                    src={image.url ?? ""}
+                    alt={`Photo of ${user?.name}`}
+                    objectFit="cover"
+                    className="rounded-lg	"
+                    fill
+                  />
+                </AspectRatio>
               </CarouselItem>
             ))}
           </CarouselContent>

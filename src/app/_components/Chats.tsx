@@ -2,8 +2,6 @@
 import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 import SideCard from "~/app/_components/SideCard";
-import { Button } from "@components/button";
-import { toast } from "@components/use-toast";
 import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
 import { useState } from "react";
@@ -19,6 +17,15 @@ export default function Chats({ chats }: Props) {
   const chatUserIds = chats?.map(({ users }) =>
     users[0] === session.data?.user.id ? users[1] : users[0],
   );
+
+  const { data: usersImages } = api.image.groupImagesByIds.useQuery(
+    chatUserIds,
+    {
+      enabled: !!chatUserIds,
+      initialData: {},
+    },
+  );
+
   const { data: users, isLoading } = api.user.findUsersByIds.useQuery(
     chatUserIds,
     {
@@ -29,18 +36,14 @@ export default function Chats({ chats }: Props) {
    * This function maps the user IDs to their corresponding user objects from the fetched users data.
    * It ensures that the order of the users matches the order of the IDs.
    */
-  const orderedUsers = chatUserIds?.map((id) =>
-    users?.find((user) => user.id === id),
-  );
-
-  const { mutate: createChat, isPending } = api.chat.createChat.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Test chat successfully created",
-      });
-    },
+  const orderedUsers = chatUserIds?.map((id) => {
+    let user = users?.find((user) => user?.id === id);
+    if (user !== undefined && usersImages[user.id] !== undefined) {
+      user.image = usersImages[user.id][0]?.url || null;
+    }
+    return user
   });
+
   const [selectedId, setSelectedId] = useState<string | undefined>();
 
   const handleUserCardClick = (user: User, chatId: string) => {
