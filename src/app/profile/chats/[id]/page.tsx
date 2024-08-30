@@ -3,7 +3,7 @@ import ChatInput from "~/app/_components/chats/ChatInput";
 import ChatHeader from "~/app/_components/chats/ChatHeader";
 import { useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
-import { type User } from "@prisma/client";
+import { type User  } from "@prisma/client";
 import ChatMessages from "~/app/_components/chats/ChatMessages";
 import ChatInfoCard from "~/app/_components/chats/ChatInfoCard";
 
@@ -16,12 +16,18 @@ export default function Page({ params }: { params: { id: string } }) {
     chatId: params.id,
   });
 
+  const {
+    data: usersImages,
+  } = api.image.findMany.useQuery(parsedUser.id ?? "");
+
+  
+
   return (
     <div className="grid grid-cols-3 grid-rows-12 h-full w-full">
-      <ChatHeader user={parsedUser} />
+      <ChatHeader user={parsedUser} image={usersImages &&  usersImages[0] ? usersImages[0].url: parsedUser.image} />
       <ChatMessages messages={messages} chatId={params.id} />
       <ChatInput chatId={params.id} />
-      <ChatInfoCard user={parsedUser}/>
+      <ChatInfoCard user={parsedUser} images={usersImages} />
     </div>
   );
 }
