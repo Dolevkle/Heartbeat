@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@components/button";
-import { CornerDownLeft, ImageUp } from "lucide-react";
+import { CornerDownLeft, Image } from "lucide-react";
 import { Label } from "@components/label";
 import { Textarea } from "@components/textarea";
 import {
@@ -16,7 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import ImageUploadDialog from "./ImageUploadDialog";
 
 export const messageFormSchema = z
@@ -47,8 +47,7 @@ export default function ChatInput({ chatId }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const session = useSession();
 
-  const { mutate: createMessage, isPending } =
-    api.message.createMessage.useMutation();
+  const { mutate: createMessage } = api.message.createMessage.useMutation();
 
   const onSubmit = async (values: z.infer<typeof messageFormSchema>) => {
     if (session.data?.user.id) {
@@ -63,7 +62,7 @@ export default function ChatInput({ chatId }: Props) {
           onSuccess: () => {
             void utils.message.getMessages.invalidate();
           },
-          onError: (data) => {
+          onError: () => {
             console.log("Failed to create message");
           },
         },
@@ -73,7 +72,7 @@ export default function ChatInput({ chatId }: Props) {
   };
 
   const onEnter = (e: React.KeyboardEvent) => {
-    if (e.code == "Enter" && e.shiftKey == false) {
+    if (e.code == "Enter" && !e.shiftKey) {
       e.preventDefault();
       formRef.current?.requestSubmit();
     }
@@ -91,15 +90,25 @@ export default function ChatInput({ chatId }: Props) {
       <form
         ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative col-span-2 row-span-1 flex w-full flex-row justify-between overflow-hidden  border-t border-secondary bg-background"
+        className="relative  col-span-2 row-span-1 flex w-full flex-row justify-between overflow-hidden items-center  border-t border-secondary bg-background"
       >
+          <ImageUploadDialog
+            onUploadSuccess={onUpload}
+            uploadEndpoint="chatImageUploader"
+            Button={
+              <Button variant="outline" size="icon" type="submit" className="ml-3">
+                <Image className="size-5 text-white" />
+                <span className="sr-only">Attach file</span>
+              </Button>
+            }
+          />
         <FormField
           control={form.control}
           name="message"
           defaultValue=""
           rules={{ required: false }}
           render={({ field }) => (
-            <FormItem className="h-full w-5/6">
+            <FormItem className="flex-grow">
               <FormLabel>
                 <Label htmlFor="message" className="sr-only">
                   Message
@@ -108,8 +117,8 @@ export default function ChatInput({ chatId }: Props) {
               <FormControl>
                 <Textarea
                   id="message"
-                  placeholder="Type your message here..."
-                  className="h-full min-h-12 resize-none border-0 p-3 text-white shadow-none focus-visible:ring-0"
+                  placeholder="Tune your message..."
+                  className="min-h-12 resize-none border-0 p-3 text-white shadow-none focus-visible:ring-0"
                   onKeyDown={onEnter}
                   {...field}
                   required={false}
@@ -119,26 +128,10 @@ export default function ChatInput({ chatId }: Props) {
             </FormItem>
           )}
         />
-        <div className="mr-3 flex flex-col justify-around">
-          <ImageUploadDialog
-            onUploadSuccess={onUpload}
-            uploadEndpoint="chatImageUploader"
-            Button={
-              <Button
-                variant="secondary"
-                type="submit"
-                size="xs"
-                className="ml-auto gap-1.5"
-              >
-                upload image
-                <ImageUp className="size-3.5" />
-              </Button>
-            }
-          />
-
-          <Button type="submit" size="sm" className="ml-auto w-full gap-1.5">
-            Send
-            <CornerDownLeft className="size-3.5" />
+        <div className="flex items-center mr-3">
+          <Button type="submit" className="ml-auto gap-1.5">
+            Send message
+            <CornerDownLeft className="size-4" />
           </Button>
         </div>
       </form>
