@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PenSquareIcon, Loader2 } from "lucide-react";
+import { Loader2, PenSquareIcon } from "lucide-react";
 import { Button } from "@components/button";
 import { api } from "~/trpc/react";
 import { useSession } from "next-auth/react";
@@ -11,8 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../shadcn/dialog";
-import { Label } from "../../shadcn/label";
+} from "@components/dialog";
+import { Label } from "@components/label";
 import {
   Form,
   FormControl,
@@ -20,28 +20,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../shadcn/form";
+} from "@components/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../shadcn/select";
-import { useToast } from "../../shadcn/use-toast";
+} from "@components/select";
+import { useToast } from "@components/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Personality, userSchema } from "~/app/signup/types";
 import { type z } from "zod";
 import { genders, sexualPreferences } from "~/app/consts";
-import { Input } from "../../shadcn/input";
-
+import { Input } from "@components/input";
 
 type DetailsEditDialogProps = {
-  refetchUserDetails: () => void; 
+  refetchUserDetails: () => void;
 };
 
-const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({refetchUserDetails}) => {
+const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({
+  refetchUserDetails,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
   const { update: updateSession } = useSession();
@@ -147,7 +148,7 @@ const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({refetchUserDetails
           onClick={() => setIsOpen(true)}
         >
           <PenSquareIcon className="mr-2 h-4 w-4 text-2xl" />
-          Edit Details
+          Remix Profile
         </Button>
       </DialogTrigger>
       <DialogContent className="text-white sm:max-w-[425px]">
@@ -156,7 +157,7 @@ const DetailsEditDialog: React.FC<DetailsEditDialogProps> = ({refetchUserDetails
             <DialogHeader>
               <DialogTitle>Edit Details</DialogTitle>
               <DialogDescription>
-                Changing your details will affect your current matches.
+                Updating your info might remix your matches.
               </DialogDescription>
             </DialogHeader>
             <div className="mb-4 mt-4 grid grid-cols-2 gap-4">
