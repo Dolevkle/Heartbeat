@@ -146,7 +146,7 @@ const PlaylistSelectDialog: React.FC = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="absolute bottom-0 left-0 h-10 w-10 rounded-full p-1"
+          className="absolute bottom-0 left-0 h-9 w-9 rounded-full p-2 m-1"
           onClick={() => setIsOpen(true)}
         >
           <PenSquareIcon />
