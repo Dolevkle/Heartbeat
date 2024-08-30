@@ -2,7 +2,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@components/carousel";
 import Image from "next/image";
 import { type User } from "@prisma/client";
 import { Heart, MapPin, PersonStanding } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "~/app/_components/shadcn/badge";
 import {
   Tooltip,
   TooltipContent,
