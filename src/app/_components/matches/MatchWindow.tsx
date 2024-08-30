@@ -78,7 +78,7 @@ const MatchWindow = ({
       <div className="flex h-full w-full rounded-md border-4 border-primary">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
-            className="h-full w-6/12"
+            className="h-[2000px] w-6/12"
             defaultSize={52}
             minSize={40}
           >
