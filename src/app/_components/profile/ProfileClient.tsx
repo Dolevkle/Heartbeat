@@ -24,7 +24,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
           <UserDetailsDisplay />
         </div>
         <div className="col-span-2 row-start-2 w-full	justify-self-center">
-          <ChosenPlaylistDisplay />
+          <ChosenPlaylistDisplay user={user} />
         </div>
         <div className="col-span-2  h-full">
           {user?.personality && (

@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { api } from "~/trpc/react";
-import { useSession } from "next-auth/react";
 import PlaylistSelectDialog from "./PlaylistSelectDialog";
-import {Spinner} from "~/app/_components/Spinner";
+import type { User } from "@prisma/client";
 
-
-const ChosenPlaylistDisplay: React.FC = () => {
-  const session = useSession();
-  const [isLoaded, setIsLoaded] = useState(false);
-
-
-  const { data: playlist, isFetching } = api.spotify.playlistInfo.useQuery(
-    { id: session.data?.user?.playlist ?? "" },
-    { enabled: !!session.data },
+interface ChosenPlaylistDisplayProps {
+  user: User;
+}
+const ChosenPlaylistDisplay: React.FC<ChosenPlaylistDisplayProps> = ({user}: ChosenPlaylistDisplayProps) => {
+  
+  const { data: playlist } = api.spotify.playlistInfo.useQuery(
+    { id: user?.playlist ?? "" },
+    { enabled: !!user },
   );
-  useEffect(() => {
-    if (!isFetching && playlist) {
-      setIsLoaded(true);
-    }
-  }, [isFetching, playlist]);
-
-  if (!isLoaded) {
-    return (
-      <Spinner className="my-20" size="large"/>
-    );
-  }
 
   return (
     <div className="flex w-full flex-col  items-center overflow-hidden rounded p-4 text-white shadow-lg">
