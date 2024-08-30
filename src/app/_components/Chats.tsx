@@ -2,11 +2,9 @@
 import { api, type RouterOutputs } from "~/trpc/react";
 import { useSession } from "next-auth/react";
 import SideCard from "~/app/_components/SideCard";
-import { Button } from "@components/button";
-import { toast } from "@components/use-toast";
 import UserCard from "~/app/_components/UserCard";
 import UserCardSkeleton from "~/app/_components/UserCardSkeleton";
-import { use, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@prisma/client";
 interface Props {
