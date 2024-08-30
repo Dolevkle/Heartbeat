@@ -1,18 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import { AspectRatio } from "../shadcn/aspect-ratio";
-import { CheckIcon, MapPin } from "lucide-react";
+import { CheckIcon, MapPin, XIcon } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem } from "../shadcn/carousel";
 import { Button } from "../shadcn/button";
-import { XIcon } from "lucide-react";
 import { Progress } from "../shadcn/progress";
 import {
-  ResizablePanelGroup,
-  ResizablePanel,
   ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
 } from "../shadcn/resizable";
-import type { User, Image as PrismaImage } from "@prisma/client";
+import type { Image as PrismaImage, User } from "@prisma/client";
 import type { ConsentStatus } from "~/server/api/routers/match/match";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { analyzeBestSharedQuality } from "./utils";
@@ -76,8 +74,12 @@ const MatchWindow = ({
       }}
     >
       <div className="flex h-full w-full rounded-md border-4 border-primary">
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel className="w-6/12" defaultSize={52} minSize={40}>
+        <ResizablePanelGroup direction="horizontal" className="h-full">
+          <ResizablePanel
+            className="h-full w-6/12"
+            defaultSize={52}
+            minSize={40}
+          >
             <Carousel
               opts={{
                 align: "start",
@@ -85,18 +87,18 @@ const MatchWindow = ({
               orientation="vertical"
               handlePrevious={handlePrevious}
               handleNext={handleNext}
+              className="h-full"
             >
-              <CarouselContent className="h-[73vh]">
+              <CarouselContent className="m-0 h-full p-0">
                 {currentPotentialMatchImages?.map((picture, index) => (
-                  <CarouselItem key={index}>
-                    <AspectRatio>
-                      <Image
-                        src={picture?.url ?? ""}
-                        alt={`Photo of ${currentPotentialMatch?.name}`}
-                        objectFit="cover"
-                        fill
-                      />
-                    </AspectRatio>
+                  <CarouselItem key={index} className="h-full p-0">
+                    {/*<AspectRatio className="h-full">*/}
+                    <img
+                      className="h-full"
+                      src={picture?.url ?? ""}
+                      alt={`Photo of ${currentPotentialMatch?.name}`}
+                    />
+                    {/*</AspectRatio>*/}
                   </CarouselItem>
                 ))}
               </CarouselContent>
