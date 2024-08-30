@@ -4,10 +4,11 @@ import { useRef } from "react";
 
 interface Props {
   user: User | undefined;
+  imageUrl?: string
   onClick?: (user: User) => void;
   isSelected?: boolean;
 }
-export default function UserCard({ user, onClick, isSelected }: Props) {
+export default function UserCard({ user, onClick, isSelected, imageUrl=user?.image }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -17,7 +18,7 @@ export default function UserCard({ user, onClick, isSelected }: Props) {
       onClick={() => (onClick && user ? onClick(user) : null)}
     >
       <Avatar className="hidden h-9 w-9 sm:flex">
-        <AvatarImage src={user?.image ?? ""} alt="Avatar" />
+        <AvatarImage src={imageUrl ?? ""} alt="Avatar" />
         <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
       </Avatar>
       <div className="grid gap-1">
