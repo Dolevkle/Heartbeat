@@ -26,13 +26,13 @@ interface Props {
   images: string[];
 }
 export default function ChatHeader({ user, images }: Props) {
-  user.image = images? images[0] :null
+  const image = images? images[0] :null
   return (
     <Card className="col-span-2 row-span-1 w-full rounded-none border-0 border-b border-secondary">
       <CardHeader className={" p-0"}>
         <Sheet>
           <SheetTrigger asChild>
-            <UserCard user={user} />
+            <UserCard user={user} imageUrl={image} />
           </SheetTrigger>
           <SheetContent
             className="border-none"
