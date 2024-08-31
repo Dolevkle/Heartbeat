@@ -4,7 +4,7 @@ import { Button } from "@components/button";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { Vortex } from "~/app/_components/ui/Vortex";
-import { CanvasShowcase } from "~/app/_components/canvas-showcase";
+import { CanvasShowcase } from "~/app/_components/ui/canvas-showcase";
 import { ScrollArea } from "./_components/shadcn/scroll-area";
 
 export default function Page() {
@@ -14,7 +14,12 @@ export default function Page() {
     signIn("spotify", { callbackUrl: "/signup" }, "show_dialog=true");
   const handleLogin = () => {
     if (session.data?.user.personality) router.push("/profile/matches");
-    else signIn("spotify", { callbackUrl: "/profile/matches" }, "show_dialog=true");
+    else
+      signIn(
+        "spotify",
+        { callbackUrl: "/profile/matches" },
+        "show_dialog=true",
+      );
   };
 
   return (

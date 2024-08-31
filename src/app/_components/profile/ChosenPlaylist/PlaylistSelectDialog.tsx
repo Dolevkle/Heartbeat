@@ -110,7 +110,6 @@ const PlaylistSelectDialog: React.FC = () => {
               gender: session.data?.user.gender ?? "",
               sexualPreference: session.data?.user.sexualPreference ?? "",
               city: session.data?.user.city ?? "",
-              personality: data as Personality,
               ...values,
               personality: data as Personality,
             });
@@ -146,7 +145,7 @@ const PlaylistSelectDialog: React.FC = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="absolute bottom-0 left-0 h-9 w-9 rounded-full p-2 m-1"
+          className="absolute bottom-0 left-0 m-1 h-9 w-9 rounded-full p-2"
           onClick={() => setIsOpen(true)}
         >
           <PenSquareIcon />
@@ -158,8 +157,8 @@ const PlaylistSelectDialog: React.FC = () => {
             <DialogHeader>
               <DialogTitle>Select Playlist</DialogTitle>
               <DialogDescription>
-                The playlist you select will shape your user personality and
-                affect your matches.
+                Your playlist sets the tone for your personality and influences
+                your matches.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
