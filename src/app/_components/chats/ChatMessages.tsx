@@ -16,8 +16,6 @@ export default function ChatMessages({ messages, chatId }: Props) {
     RouterOutputs["message"]["getMessages"] | undefined
   >(messages);
   const updateMessages = (data) => {
-    console.log("test", data);
-    console.log
     if (data.content) setMsgs([...(msgs || []), data]);
     else setMsgs([...(msgs || [])]);
   };
@@ -32,8 +30,12 @@ export default function ChatMessages({ messages, chatId }: Props) {
     };
   }, [msgs]);
 
+  useEffect(() => {
+    setMsgs(messages);
+  }, [messages]);
+
   return (
-    <ScrollArea className="row-span-10 col-span-2">
+    <ScrollArea className="col-span-2 row-span-10">
       <div className="flex flex-1 flex-col p-2">
         {msgs?.map(({ senderId, content, id, isImage }, index) => (
           <p
