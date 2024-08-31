@@ -24,7 +24,11 @@ export const env = createEnv({
     ),
     SPOTIFY_CLIENT_ID: z.string(),
     SPOTIFY_CLIENT_SECRET: z.string(),
-    OPEN_API_KEY: z.string(),
+    OPENAI_API_KEY: z.string(),
+    UPLOADTHING_SECRET: z.string(),
+    UPLOADTHING_APP_ID: z.string(),
+    PUSHER_SECRET: z.string(),
+    PUSHER_APP_ID: z.string(),
   },
 
   /**
@@ -34,6 +38,8 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_PUSHER_KEY: z.string(),
+    NEXT_PUBLIC_PUSHER_CLUSTER: z.string(),
   },
 
   /**
@@ -47,7 +53,13 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
-    OPEN_API_KEY: process.env.OPEN_API_KEY,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+    UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
+    NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
+    NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+    PUSHER_APP_ID: process.env.PUSHER_APP_ID,
+    PUSHER_SECRET: process.env.PUSHER_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

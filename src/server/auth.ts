@@ -6,17 +6,10 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-import SpotifyProvider from "next-auth/providers/spotify";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { type JWT } from "next-auth/jwt";
-import { AUTH_URL } from "~/lib/spotify";
-import SpotifyProfile, {
-  refreshAccessToken,
-} from "~/app/api/auth/[...nextauth]/SpotifyProfile";
-// import {type JWT} from "next-auth/jwt";
-// import spotifyApi from "~/app/_lib/spotify";
+import SpotifyProfile from "~/app/api/auth/[...nextauth]/SpotifyProfile";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -25,19 +18,38 @@ import SpotifyProfile, {
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
+  // TODO might need to change type
   interface Session extends DefaultSession {
     user: {
-      id: string;
-      spotifyId: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+      id: string;
+      access_token?: string;
+      token_type?: string;
+      expires_at?: number;
+      refresh_token?: string;
+      scope?: string;
+    } & User;
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    // role: UserRole;
+    spotifyId: string;
+    profileImage: string | null | undefined;
+    age?: number;
+    gender?: string;
+    sexualPreference?: string;
+    personality?: {
+      Openness: string;
+      Neuroticism: string;
+      Extraversion: string;
+      Conscientiousness: string;
+      Agreeableness: string;
+    };
+    playlist: string;
+    city: string;
+  }
 }
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -46,19 +58,35 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    async session({ session, token, user }) {
+    /**
+     * Callback function for the `session` option in NextAuth.js.
+     * This function is called whenever a session is created or updated.
+     * It retrieves the user's account information from the database and adds it to the session object.
+     *
+     * @param session - The current session object.
+     * @param user - The user object associated with the session.
+     * @returns The updated session object with the user's account information.
+     */
+    async session({ session, user }) {
       const account = (await db.account.findFirst({
         where: { userId: user.id },
       })) as Account;
       session.user = {
         ...session.user,
-        access_token: account.access_token!,
+        access_token: account.access_token,
         token_type: account.token_type,
         expires_at: account.expires_at,
         refresh_token: account.refresh_token,
         scope: account.scope,
         id: user.id,
         spotifyId: account.providerAccountId,
+        profileImage: user?.image,
+        personality: user?.personality,
+        age: user?.age,
+        gender: user?.gender,
+        sexualPreference: user?.sexualPreference,
+        playlist: user?.playlist,
+        city: user?.city,
       };
       return session;
     },
@@ -66,7 +94,7 @@ export const authOptions: NextAuthOptions = {
   // session: { strategy: "jwt" },
   adapter: PrismaAdapter(db) as Adapter,
   secret: env.NEXTAUTH_SECRET,
-
+  debug: true,
   providers: [
     SpotifyProfile,
     /**
