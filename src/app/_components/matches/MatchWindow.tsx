@@ -87,18 +87,16 @@ const MatchWindow = ({
               orientation="vertical"
               handlePrevious={handlePrevious}
               handleNext={handleNext}
-              className="h-full"
+              className="h-full w-full"
             >
               <CarouselContent className="m-0 h-full p-0">
                 {currentPotentialMatchImages?.map((picture, index) => (
                   <CarouselItem key={index} className="h-full p-0">
-                    {/*<AspectRatio className="h-full">*/}
                     <img
-                      className="h-full"
+                      className="h-full w-full"
                       src={picture?.url ?? ""}
                       alt={`Photo of ${currentPotentialMatch?.name}`}
                     />
-                    {/*</AspectRatio>*/}
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -110,21 +108,19 @@ const MatchWindow = ({
             defaultSize={50}
             minSize={40}
           >
-            <AspectRatio>
-              <div className="flex h-full w-full flex-col justify-center gap-1 object-cover font-bold">
-                <div className="text-4xl">{`${currentPotentialMatch?.name}, ${currentPotentialMatch?.age}`}</div>
-                <div className="flex items-end text-2xl">
-                  <MapPin className="h-8 w-8" />
-                  {currentPotentialMatch?.city}
-                </div>
-                <div className="text-md mt-1">
-                  {`You are both `}
-                  <span className="rounded bg-white bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
-                    {analaizedPersonalityDescription}
-                  </span>
-                </div>
+            <div className="flex h-full w-full flex-col justify-center gap-1 object-cover font-bold">
+              <div className="text-4xl">{`${currentPotentialMatch?.name}, ${currentPotentialMatch?.age}`}</div>
+              <div className="flex items-end text-2xl">
+                <MapPin className="h-8 w-8" />
+                {currentPotentialMatch?.city}
               </div>
-            </AspectRatio>
+              <div className="text-md mt-1">
+                {`You are both `}
+                <span className="rounded bg-white bg-clip-text px-2 py-2 text-lg font-extrabold text-transparent shadow-md">
+                  {analaizedPersonalityDescription}
+                </span>
+              </div>
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
