@@ -8,7 +8,8 @@ import { useState } from "react";
 import SuperJSON from "superjson";
 
 import { type AppRouter } from "~/server/api/root";
-import {SessionProvider} from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
+import { TooltipProvider } from "@components/tooltip";
 
 const createQueryClient = () => new QueryClient();
 
@@ -59,18 +60,17 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           },
         }),
       ],
-    })
+    }),
   );
 
   return (
-      <SessionProvider>
-        <QueryClientProvider client={queryClient}>
-          <api.Provider client={trpcClient} queryClient={queryClient}>
-            {props.children}
-          </api.Provider>
-        </QueryClientProvider>
-      </SessionProvider>
-
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <api.Provider client={trpcClient} queryClient={queryClient}>
+          <TooltipProvider>{props.children}</TooltipProvider>
+        </api.Provider>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
 
