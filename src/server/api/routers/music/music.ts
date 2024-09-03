@@ -1,9 +1,11 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
-  MusicServiceFactory,
+  MusicServiceResolver,
   MusicServiceType,
-} from "~/server/api/routers/music/services/musicServiceFactory";
+} from "~/server/api/routers/music/services/musicServiceResolver";
+
+const resolver = new MusicServiceResolver();
 
 export const musicRouter = createTRPCRouter({
   userPlaylists: protectedProcedure
@@ -15,7 +17,7 @@ export const musicRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { serviceType, playlistId } = input;
-      const service = MusicServiceFactory.create(serviceType);
+      const service = resolver.getService(serviceType);
       return await service.getPlaylist(playlistId);
     }),
 });
