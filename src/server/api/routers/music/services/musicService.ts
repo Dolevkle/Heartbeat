@@ -1,3 +1,3 @@
 export type MusicService = {
-  getPlaylist: (playlistId: string) => Promise<any>;
+  getPlaylist: (playlistId: string) => Promise<unknown>;
 };
