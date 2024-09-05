@@ -4,12 +4,13 @@ import { MusicServiceResolver } from "~/server/api/routers/music/services/musicS
 import { SpotifyService } from "~/server/api/routers/music/services/spotifyService";
 import { AppleMusicService } from "~/server/api/routers/music/services/appleMusicService";
 
-export type MusicServiceType = "spotify" | "appleMusic";
+const musicServices = [
+  { type: "spotify" as const, service: new SpotifyService() },
+  { type: "appleMusic" as const, service: new AppleMusicService() },
+];
+export type MusicServiceType = (typeof musicServices)[number]["type"];
 
-const resolver = new MusicServiceResolver([
-  { type: "spotify", service: new SpotifyService() },
-  { type: "appleMusic", service: new AppleMusicService() },
-]);
+const resolver = new MusicServiceResolver(musicServices);
 
 export const musicRouter = createTRPCRouter({
   userPlaylists: protectedProcedure
