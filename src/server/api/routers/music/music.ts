@@ -1,11 +1,15 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import {
-  MusicServiceResolver,
-  MusicServiceType,
-} from "~/server/api/routers/music/services/musicServiceResolver";
+import { MusicServiceResolver } from "~/server/api/routers/music/services/musicServiceResolver";
+import { SpotifyService } from "~/server/api/routers/music/services/spotifyService";
+import { AppleMusicService } from "~/server/api/routers/music/services/appleMusicService";
 
-const resolver = new MusicServiceResolver();
+export type MusicServiceType = "spotify" | "appleMusic";
+
+const resolver = new MusicServiceResolver([
+  { type: "spotify", service: new SpotifyService() },
+  { type: "appleMusic", service: new AppleMusicService() },
+]);
 
 export const musicRouter = createTRPCRouter({
   userPlaylists: protectedProcedure
@@ -17,7 +21,7 @@ export const musicRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { serviceType, playlistId } = input;
-      const service = resolver.getService(serviceType);
-      return await service.getPlaylist(playlistId);
+      const musicService = resolver.getService(serviceType);
+      return await musicService.getPlaylist(playlistId);
     }),
 });
