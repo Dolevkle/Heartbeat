@@ -1,3 +1,3 @@
-export abstract class MusicService {
-  abstract getPlaylist(playlistId: string): Promise<any>;
-}
+export type MusicService = {
+  getPlaylist: (playlistId: string) => Promise<any>;
+};

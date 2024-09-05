@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { MusicServiceResolver } from "~/server/api/routers/music/services/musicServiceResolver";
-import { SpotifyService } from "~/server/api/routers/music/services/spotifyService";
-import { AppleMusicService } from "~/server/api/routers/music/services/appleMusicService";
+import { spotifyService } from "~/server/api/routers/music/services/spotifyService";
+import { appleMusicService } from "~/server/api/routers/music/services/appleMusicService";
 
 const musicServices = [
-  { type: "spotify" as const, service: new SpotifyService() },
-  { type: "appleMusic" as const, service: new AppleMusicService() },
+  { type: "spotify" as const, service: appleMusicService },
+  { type: "appleMusic" as const, service: spotifyService },
 ];
 export type MusicServiceType = (typeof musicServices)[number]["type"];
 

@@ -1,7 +1,7 @@
-import { MusicService } from "~/server/api/routers/music/services/musicService";
+import { type MusicService } from "~/server/api/routers/music/services/musicService";
 
-export class AppleMusicService extends MusicService {
-  getPlaylist(playlistId: string): Promise<any> {
+export const appleMusicService: MusicService = {
+  getPlaylist: (playlistId: string) => {
     return Promise.resolve(undefined);
-  }
-}
+  },
+};
