@@ -2,7 +2,6 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { calculateAndSaveMatches } from "~/server/api/routers/user/service";
-import { chatRouter } from "~/server/api/routers/chat/chat";
 import kafka from "~/server/kafka";
 
 const ConsentStatusSchema = z.enum(["Yes", "No", "Pending"]);
@@ -181,7 +180,7 @@ export const matchRouter = createTRPCRouter({
       );
       if (secondUserId && newStatus === "Yes") {
         // Produce a Kafka message to notify the second user
-        await producer.produce("notification", {
+        await producer.produce("notifications", {
           matchId,
           userId: secondUserId,
           message: `Your match has been approved by ${userId}`,
