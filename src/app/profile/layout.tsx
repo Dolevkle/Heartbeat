@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { userId: session.data?.user.id ?? "" },
     {
       enabled: !!session.data,
-      refetchInterval: 30000, // every minute
+      refetchInterval: 30000, // every half minute
     },
   );
 
