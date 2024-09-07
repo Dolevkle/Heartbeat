@@ -21,4 +21,14 @@ export const notificationRouter = createTRPCRouter({
 
       return { notifications };
     }),
+  deleteNotifications: protectedProcedure
+    .input(z.object({ userId: z.string() })) // Ensure we receive the userId as input
+    .mutation(async ({ input }) => {
+      const { userId } = input;
+
+      // Delete notifications for the specific user from Redis
+      await redis.del(`notifications:${userId}`);
+
+      return { success: true };
+    }),
 });

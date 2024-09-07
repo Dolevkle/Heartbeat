@@ -47,6 +47,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
   };
 
+  console.log(notifications);
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col bg-background sm:flex">
@@ -89,18 +91,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/profile/notifications"
+                href={{
+                  pathname: "/profile/notifications",
+                  query: { notifications: JSON.stringify(data?.notifications) },
+                }}
                 className={getLinkClassname("/profile/notifications")}
               >
                 <>
-                  {notifications && notifications > 0 && (
-                    <Badge
-                      className="absolute -right-2 -top-2  flex h-5 w-5 justify-center rounded-full text-center"
-                      variant="secondary"
-                    >
-                      {notifications}
-                    </Badge>
-                  )}
+                  <Badge
+                    className="absolute -right-2 -top-2  flex h-5 w-5 justify-center rounded-full text-center"
+                    variant="secondary"
+                  >
+                    {notifications}
+                  </Badge>
+
                   <Bell className="h-5 w-5" />
                   <span className="sr-only">Notifications</span>
                 </>
