@@ -9,6 +9,7 @@ export const notificationRouter = createTRPCRouter({
       const { userId } = input;
 
       // Fetch notifications from Redis
+
       const notifications = await redis.lrange(
         `notifications:${userId}`,
         0,
@@ -16,7 +17,7 @@ export const notificationRouter = createTRPCRouter({
       );
 
       // Optionally clear the notifications after fetching them
-      await redis.del(`notifications:${userId}`);
+      // await redis.del(`notifications:${userId}`);
 
       return { notifications };
     }),

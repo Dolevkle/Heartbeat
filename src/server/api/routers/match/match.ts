@@ -48,7 +48,7 @@ export const matchRouter = createTRPCRouter({
         });
 
         // Filter matches where userStatuses contains the user ID and the status is "Pending"
-        const existingMatches = allMatches.filter((match) => {
+        return allMatches.filter((match) => {
           // Type assertion to ensure userStatuses is a dictionary
           const userStatuses = match.userStatuses as Record<
             string,
@@ -73,7 +73,6 @@ export const matchRouter = createTRPCRouter({
             userStatuses[input] === "Pending"
           );
         });
-        return existingMatches;
       }
 
       return [];
@@ -183,7 +182,7 @@ export const matchRouter = createTRPCRouter({
         await producer.produce("notifications", {
           matchId,
           userId: secondUserId,
-          message: `Your match has been approved by ${userId}`,
+          approverId: userId,
         });
       }
 

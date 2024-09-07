@@ -3,10 +3,11 @@ import kafka from "~/server/kafka";
 import redis from "~/server/redis";
 import { NextResponse } from "next/server";
 
-// Set up Upstash Kafka
 const consumer = kafka.consumer();
 
 export async function POST() {
+  const [SECONDS, MINUTES, HOURS, DAYS] = [60, 6, 24, 7];
+  const ONE_WEEK = SECONDS * MINUTES * HOURS * DAYS;
   try {
     // Consume messages from Kafka
     const messages = await consumer.consume({
@@ -17,35 +18,34 @@ export async function POST() {
     });
 
     for (const message of messages) {
-      const secondUserId = message.key?.toString();
       const notificationData = JSON.parse(
         message.value?.toString() || "{}",
-      ) as { matchId: string; userId: string; message: string };
+      ) as { matchId: string; userId: string; approverId: string };
+      const { userId, approverId } = notificationData;
+      console.log(userId);
+      console.log(approverId);
 
       // Check if the message already exists in Redis
-      if (secondUserId) {
+      if (userId) {
         const existingMessages = await redis.lrange(
-          `notifications:${secondUserId}`,
+          `notifications:${userId}`,
           0,
           -1,
         );
 
-        if (existingMessages.includes(notificationData.message)) {
+        if (existingMessages.includes(approverId)) {
           console.log(
-            `Message for user ${secondUserId} already exists in Redis.`,
+            `Message for user ${userId} by ${approverId} already exists in Redis.`,
           );
-          continue; // Skip saving the message if it's already in Redis
+          continue;
         }
 
         // Store the notification in Redis for the user if not already present
-        await redis.lpush(`notifications:${secondUserId}`, notificationData);
+        await redis.lpush(`notifications:${userId}`, approverId);
 
         // Set expiration time for the Redis key (same as Kafka retention)
-        const kafkaRetentionInSeconds = 60 * 60 * 24 * 7; // Example: 1 week (adjust to match Kafka retention)
-        await redis.expire(
-          `notifications:${secondUserId}`,
-          kafkaRetentionInSeconds,
-        );
+        // Example: 1 week (adjust to match Kafka retention)
+        await redis.expire(`notifications:${userId}`, ONE_WEEK);
       }
     }
 
