@@ -6,8 +6,7 @@ import { NextResponse } from "next/server";
 const consumer = kafka.consumer();
 
 export async function POST() {
-  const [SECONDS, MINUTES, HOURS, DAYS] = [60, 6, 24, 7];
-  const ONE_WEEK = SECONDS * MINUTES * HOURS * DAYS;
+  const SECONDS_IN_WEEK = 60 * 60 * 24 * 7;
   try {
     // Consume messages from Kafka
     const messages = await consumer.consume({
@@ -45,7 +44,7 @@ export async function POST() {
 
         // Set expiration time for the Redis key (same as Kafka retention)
         // Example: 1 week (adjust to match Kafka retention)
-        await redis.expire(`notifications:${userId}`, ONE_WEEK);
+        await redis.expire(`notifications:${userId}`, SECONDS_IN_WEEK);
       }
     }
 
