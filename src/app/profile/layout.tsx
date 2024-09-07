@@ -93,12 +93,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className={getLinkClassname("/profile/notifications")}
               >
                 <>
-                  <Badge
-                    className="absolute -right-2 -top-2  flex h-5 w-5 justify-center rounded-full text-center"
-                    variant="secondary"
-                  >
-                    {notifications}
-                  </Badge>
+                  {notifications && notifications > 0 && (
+                    <Badge
+                      className="absolute -right-2 -top-2  flex h-5 w-5 justify-center rounded-full text-center"
+                      variant="secondary"
+                    >
+                      {notifications}
+                    </Badge>
+                  )}
                   <Bell className="h-5 w-5" />
                   <span className="sr-only">Notifications</span>
                 </>
