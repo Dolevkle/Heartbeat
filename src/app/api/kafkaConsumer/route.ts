@@ -21,8 +21,6 @@ export async function POST() {
         message.value?.toString() || "{}",
       ) as { matchId: string; userId: string; approverId: string };
       const { userId, approverId } = notificationData;
-      console.log(userId);
-      console.log(approverId);
 
       // Check if the message already exists in Redis
       if (userId) {

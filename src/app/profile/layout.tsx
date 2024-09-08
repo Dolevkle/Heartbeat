@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { userId: session.data?.user.id ?? "" },
     {
       enabled: !!session.data,
-      refetchInterval: 30000, // every half minute
+      refetchInterval: 60000, // every 1 minute
     },
   );
 
@@ -46,8 +46,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       });
     }
   };
-
-  console.log(notifications);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
