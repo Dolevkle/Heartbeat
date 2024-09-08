@@ -29,6 +29,11 @@ export const env = createEnv({
     UPLOADTHING_APP_ID: z.string(),
     PUSHER_SECRET: z.string(),
     PUSHER_APP_ID: z.string(),
+    UPSTASH_KAFKA_REST_URL: z.string(),
+    UPSTASH_KAFKA_REST_USERNAME: z.string(),
+    UPSTASH_KAFKA_REST_PASSWORD: z.string(),
+    UPSTASH_REDIS_REST_URL: z.string(),
+    UPSTASH_REDIS_REST_TOKEN: z.string(),
   },
 
   /**
@@ -60,6 +65,11 @@ export const env = createEnv({
     NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
     PUSHER_APP_ID: process.env.PUSHER_APP_ID,
     PUSHER_SECRET: process.env.PUSHER_SECRET,
+    UPSTASH_KAFKA_REST_URL: process.env.UPSTASH_KAFKA_REST_URL,
+    UPSTASH_KAFKA_REST_USERNAME: process.env.UPSTASH_KAFKA_REST_USERNAME,
+    UPSTASH_KAFKA_REST_PASSWORD: process.env.UPSTASH_KAFKA_REST_PASSWORD,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

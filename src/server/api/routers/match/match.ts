@@ -2,13 +2,15 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { calculateAndSaveMatches } from "~/server/api/routers/user/service";
-import { chatRouter } from "~/server/api/routers/chat/chat";
+import kafka from "~/server/kafka";
 
 const ConsentStatusSchema = z.enum(["Yes", "No", "Pending"]);
 
 export type ConsentStatus = z.infer<typeof ConsentStatusSchema>;
 
 export type ParticipantDict = Record<string, ConsentStatus>;
+
+const producer = kafka.producer();
 
 export const matchRouter = createTRPCRouter({
   /**
@@ -46,7 +48,7 @@ export const matchRouter = createTRPCRouter({
         });
 
         // Filter matches where userStatuses contains the user ID and the status is "Pending"
-        const existingMatches = allMatches.filter((match) => {
+        return allMatches.filter((match) => {
           // Type assertion to ensure userStatuses is a dictionary
           const userStatuses = match.userStatuses as Record<
             string,
@@ -71,7 +73,6 @@ export const matchRouter = createTRPCRouter({
             userStatuses[input] === "Pending"
           );
         });
-        return existingMatches;
       }
 
       return [];
@@ -171,6 +172,19 @@ export const matchRouter = createTRPCRouter({
           },
         },
       });
+
+      // Identify the second user (the one who did not update the status)
+      const secondUserId = Object.keys(userStatuses).find(
+        (id) => id !== userId,
+      );
+      if (secondUserId && newStatus === "Yes") {
+        // Produce a Kafka message to notify the second user
+        await producer.produce("notifications", {
+          matchId,
+          userId: secondUserId,
+          approverId: userId,
+        });
+      }
 
       return updatedMatch;
     }),
